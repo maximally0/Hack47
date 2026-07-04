@@ -18,7 +18,7 @@ const fontMono = IBM_Plex_Mono({
 })
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://hack47.com"),
+  metadataBase: new URL("https://hack47.org"),
   title: {
     default: "Hack47",
     template: "%s | Hack47",
@@ -42,7 +42,7 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     locale: "en_IN",
-    url: "https://hack47.com",
+    url: "https://hack47.org",
     siteName: "Hack47",
     title: "Hack47 — Delhi's First Hacker House",
     description: "30 days. 16 builders. One Delhi villa. No distractions, just shipping. Apply now.",

@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://hack47.com/sitemap.xml
+Sitemap: https://hack47.org/sitemap.xml
