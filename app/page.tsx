@@ -25,7 +25,7 @@ const SHIELD_SVG = "https://cdn.jsdelivr.net/npm/game-icons-transparent@latest/s
  */
 function computeWindowLayout() {
   if (typeof window === "undefined") {
-    return { main: { x: 100, y: 30 }, perks: { x: 550, y: 30 }, photos: { x: 550, y: 350 }, error: { x: 100, y: 400 }, soul: { x: 350, y: 180 }, residents: { x: 350, y: 120 }, specs: { x: 300, y: 200 } };
+    return { main: { x: 100, y: 30 }, perks: { x: 550, y: 30 }, photos: { x: 550, y: 350 }, error: { x: 100, y: 400 }, soul: { x: 350, y: 180 }, team: { x: 250, y: 100 }, residents: { x: 350, y: 120 }, specs: { x: 300, y: 200 } };
   }
 
   const vw = window.innerWidth;
@@ -59,6 +59,7 @@ function computeWindowLayout() {
     photos: { x: col2X, y: row2Y },
     error: { x: col1X, y: row2Y },
     soul: { x: soulX, y: soulY },
+    team: { x: centerX - 20, y: centerY },
     residents: { x: centerX + 30, y: centerY + 40 },
     specs: { x: centerX + 60, y: centerY + 80 },
   };
@@ -119,10 +120,11 @@ function DesktopView() {
     photos: true,
     error: true,
     soul: true,
+    team: false,
     residents: false,
     specs: false,
   });
-  const [windowOrder, setWindowOrder] = useState<string[]>(["soul", "main", "perks", "photos", "error", "residents", "specs"]);
+  const [windowOrder, setWindowOrder] = useState<string[]>(["soul", "main", "perks", "photos", "error", "team", "residents", "specs"]);
   const [clippyVisible, setClippyVisible] = useState(false);
   const [showForm, setShowForm] = useState(false);
   const [layout, setLayout] = useState(computeWindowLayout);
@@ -164,6 +166,7 @@ function DesktopView() {
       case "photos": return "HOUSE_PHOTOS.EXE";
       case "error": return "System Error";
       case "soul": return "⚠ SELL_YOUR_SOUL.EXE";
+      case "team": return "ARCHDEMONS.SYS";
       case "residents": return "RESIDENTS.DAT";
       case "specs": return "SYSTEM_SPECS.INF";
       default: return id;
@@ -193,7 +196,7 @@ function DesktopView() {
       <div className="desktop-icons absolute top-4 left-3 flex flex-col gap-3 z-20">
         <DesktopIcon icon={Monitor} label="My Computer" onClick={() => toggleWindow("specs", true)} />
         <DesktopIcon icon={Trash2} label="Recycle Bin" onClick={() => alert("Emptying bin...")} />
-        <DesktopIcon icon={Globe} label="Builder Portal" onClick={() => window.open("https://tally.so/r/hack47", "_blank")} />
+        <DesktopIcon icon={Globe} label="The Devils" onClick={() => toggleWindow("team", true)} />
         <DesktopIcon icon={Folder} label="House_Photos" onClick={() => toggleWindow("photos", true)} />
         <DesktopIcon icon={Users} label="Residents" onClick={() => toggleWindow("residents", true)} />
         <DesktopIcon icon={Globe} label="LinkedIn" onClick={() => window.open("https://www.linkedin.com/company/hack47", "_blank")} />
@@ -344,6 +347,24 @@ function DesktopView() {
 
       {/* ═══════ EXTRA WINDOWS (open from desktop icons) ═══════ */}
 
+      {openWindows.team && (
+        <WinWindow
+          id="team"
+          title="ARCHDEMONS.SYS"
+          startX={layout.team.x}
+          startY={layout.team.y}
+          className="w-[40vw] min-w-[280px] max-w-[360px]"
+          titleBarClassName="bg-[#4a0000]"
+          isActive={windowOrder[0] === "team"}
+          zIndex={getZIndex("team")}
+          onActivate={() => bringToFront("team")}
+          onClose={() => toggleWindow("team", false)}
+          floating={true}
+        >
+          <TheDevils />
+        </WinWindow>
+      )}
+
       {openWindows.residents && (
         <WinWindow
           id="residents"
@@ -433,6 +454,59 @@ function HousePhotosGallery() {
         <button onClick={next} className="px-2 py-0.5 bg-win-grey win-border-outset text-[10px] font-bold active:translate-x-px active:translate-y-px">Next ▶</button>
       </div>
       <p className="px-2 py-1.5 text-[9px] font-mono italic text-gray-600 bg-gray-50 border-t border-gray-200">{photo.caption}</p>
+    </div>
+  );
+}
+
+// ─── The Devils (Team) ───────────────────────────────────────────────────────
+
+function TheDevils() {
+  return (
+    <div className="p-4 font-mono bg-[#ffffff]">
+      <div className="text-center mb-4">
+        <p className="text-xs font-bold uppercase tracking-widest text-red-700 mb-1">👹 THE ARCHDEMONS 👹</p>
+        <p className="text-[9px] text-gray-500 italic">The ones who summoned this chaos into existence</p>
+      </div>
+
+      <div className="space-y-4">
+        {/* Rishul */}
+        <div className="flex gap-3 items-start p-2 border border-gray-300 bg-[#f8f8f8]">
+          <img
+            src="/rishul.jpeg"
+            alt="Rishul Chanana"
+            className="w-16 h-16 object-cover border-2 border-red-800"
+          />
+          <div className="flex-1 min-w-0">
+            <p className="font-bold text-[11px]">Rishul Chanana</p>
+            <p className="text-[9px] text-red-700 uppercase tracking-wider mb-1.5">Archdemon I</p>
+            <div className="flex gap-2">
+              <a href="https://www.linkedin.com/in/rishul-chanana/" target="_blank" rel="noopener noreferrer" className="text-[9px] text-blue-600 hover:underline">LinkedIn ↗</a>
+              <a href="https://x.com/rishhul" target="_blank" rel="noopener noreferrer" className="text-[9px] text-gray-700 hover:underline">𝕏 ↗</a>
+            </div>
+          </div>
+        </div>
+
+        {/* Pratyush */}
+        <div className="flex gap-3 items-start p-2 border border-gray-300 bg-[#f8f8f8]">
+          <img
+            src="/pratyush.jpeg"
+            alt="Pratyush Pandey"
+            className="w-16 h-16 object-cover border-2 border-red-800"
+          />
+          <div className="flex-1 min-w-0">
+            <p className="font-bold text-[11px]">Pratyush Pandey</p>
+            <p className="text-[9px] text-red-700 uppercase tracking-wider mb-1.5">Archdemon II</p>
+            <div className="flex gap-2">
+              <a href="https://www.linkedin.com/in/pratyush-pandey-09b35b219" target="_blank" rel="noopener noreferrer" className="text-[9px] text-blue-600 hover:underline">LinkedIn ↗</a>
+              <a href="https://x.com/P_Pratyush7" target="_blank" rel="noopener noreferrer" className="text-[9px] text-gray-700 hover:underline">𝕏 ↗</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div className="mt-4 pt-3 border-t border-gray-300 text-center">
+        <p className="text-[8px] text-gray-400 italic">These two traded their souls first. Now they collect yours.</p>
+      </div>
     </div>
   );
 }

@@ -68,12 +68,10 @@ export const WinWindow: React.FC<WinWindowProps> = ({
     });
 
     // Entrance
-    gsap.from(el, {
-      scale: 0.9,
-      opacity: 0,
-      duration: 0.3,
-      ease: "back.out(1.7)",
-    });
+    gsap.fromTo(el,
+      { scale: 0.9, opacity: 0 },
+      { scale: 1, opacity: 1, duration: 0.3, ease: "back.out(1.7)" }
+    );
 
     // Floating bob
     if (floating) {
@@ -99,17 +97,17 @@ export const WinWindow: React.FC<WinWindowProps> = ({
     <div
       ref={windowRef}
       className={cn(
-        "win-window absolute flex flex-col bg-win-grey win-border-outset select-none shadow-[4px_4px_12px_rgba(0,0,0,0.3)]",
+        "win-window absolute flex flex-col bg-[#c0c0c0] win-border-outset select-none shadow-[4px_4px_12px_rgba(0,0,0,0.3)]",
         className
       )}
-      style={{ zIndex: computedZ }}
+      style={{ zIndex: computedZ, opacity: 1 }}
       onMouseDown={onActivate}
     >
       <div
         ref={titleBarRef}
         className={cn(
           "win-titlebar flex items-center justify-between p-1 bg-linear-to-r from-[#0058ee] to-[#3789f8] text-white cursor-grab active:cursor-grabbing shrink-0",
-          !isActive && "from-[#7a96c8] to-[#a0b8dc]",
+          !isActive && !titleBarClassName && "from-[#7a96c8] to-[#a0b8dc]",
           titleBarClassName
         )}
       >
@@ -143,8 +141,8 @@ export const WinWindow: React.FC<WinWindowProps> = ({
           </button>
         </div>
       </div>
-      <div className="win-content m-[3px] p-0.5 win-border-inset bg-white text-black overflow-y-auto max-h-[calc(100vh-120px)]">
-        <div className="bg-white min-h-full">
+      <div className="win-content m-[3px] p-0.5 win-border-inset bg-[#ffffff] text-black overflow-y-auto max-h-[calc(100vh-120px)]">
+        <div className="bg-[#ffffff] min-h-full">
           {children}
         </div>
       </div>
