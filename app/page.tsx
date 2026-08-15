@@ -76,39 +76,120 @@ export default function DesktopPage() {
   }, []);
 
   if (isMobile) {
-    return <MobileBlock />;
+    return <MobileView />;
   }
 
   return <DesktopView />;
 }
 
-function MobileBlock() {
+function MobileView() {
+  const [showForm, setShowForm] = useState(false);
+
   return (
-    <div className="fixed inset-0 bg-black flex flex-col items-center justify-center p-8 text-center font-mono">
-      <div className="absolute inset-0 opacity-20" style={{ background: "radial-gradient(ellipse at center, #4a0000 0%, transparent 70%)" }} />
-      <div className="relative z-10">
-        <p className="text-5xl mb-6">👹</p>
-        <p className="text-red-500 text-xl font-bold uppercase tracking-widest mb-4">ACCESS DENIED</p>
-        <p className="text-white text-sm leading-relaxed mb-6 max-w-xs">
-          The devil does not negotiate with mobile users.
+    <div
+      className="min-h-screen font-mono p-3 pb-24"
+      style={{ background: "linear-gradient(180deg, #3a0505 0%, #120000 55%, #000000 100%)" }}
+    >
+      {/* Header */}
+      <div className="mb-4 p-4 bg-black/40 backdrop-blur-sm border border-red-900/50 rounded">
+        <h1 className="font-anton text-6xl leading-none tracking-tight text-white uppercase mb-2 select-none">
+          HACK<a href="https://en.wikipedia.org/wiki/Indian_independence_movement" target="_blank" rel="noopener noreferrer" className="text-electric-yellow">47</a>
+        </h1>
+        <p className="text-[11px] text-red-200/80 leading-snug">
+          Delhi&apos;s first hacker house. A 30-day residency for 16 builders who care more about their Git history than their sleep schedule.
         </p>
-        <p className="text-gray-400 text-xs leading-relaxed mb-6 max-w-xs">
-          This experience was forged for real screens. Desktops. Laptops. Tablets. Machines with keyboards and ambition.
-        </p>
-        <p className="text-gray-400 text-xs leading-relaxed mb-8 max-w-xs">
-          You want to join a hacker house but you can&apos;t be bothered to open a laptop? Go get your computer. We&apos;ll wait.
-        </p>
-        <div className="border border-red-900/50 p-4 max-w-xs">
-          <p className="text-red-400/80 text-[10px] leading-relaxed">
-            &gt; ERROR: screen.width too pathetic<br/>
-            &gt; MINIMUM_REQUIREMENT: 768px<br/>
-            &gt; YOUR_SCREEN: disappointing<br/>
-            &gt; SOLUTION: use a real computer<br/>
-            &gt; STATUS: waiting for you to try harder
-          </p>
+        <div className="mt-3 bg-black text-electric-yellow p-2 font-mono text-[10px] border-l-4 border-electric-yellow">
+          <p>&gt; LOCATION: DELHI VILLA</p>
+          <p>&gt; SEPT 15 - OCT 15</p>
+          <p>&gt; STATUS: PURE CHAOS DETECTED</p>
         </div>
-        <p className="text-gray-600 text-[9px] mt-6 italic">Hack47 respects builders who put in effort. This is the first test.</p>
       </div>
+
+      {/* Apply CTA — the whole point of the mobile page */}
+      <MobileCard title="⚠ SELL_YOUR_SOUL.EXE">
+        <div className="p-3 text-center font-mono">
+          <p className="text-xl font-bold mb-1">👹</p>
+          <p className="font-bold text-sm uppercase tracking-wide mb-2">SELL US YOUR SOUL</p>
+          <p className="text-[10px] text-gray-600 mb-3 leading-relaxed">
+            30 days. No distractions. Pure building.<br />
+            In exchange, we take your soul (and your sleep schedule).
+          </p>
+          <button
+            onClick={() => setShowForm(true)}
+            className="w-full bg-red-600 text-white py-2.5 font-bold text-xs uppercase tracking-wider hover:bg-red-700 active:translate-y-px transition-all shadow-[3px_3px_0px_rgba(0,0,0,0.3)]"
+          >
+            ✦ I ACCEPT — APPLY NOW ✦
+          </button>
+          <p className="text-[8px] text-gray-400 mt-2 italic">Terms: No refunds on sleep lost.</p>
+        </div>
+      </MobileCard>
+
+      {/* House protocols */}
+      <MobileCard title="README_FIRST.TXT">
+        <div className="p-3 font-mono text-[11px] text-black">
+          <p className="font-bold underline mb-3 uppercase">HOUSE PROTOCOLS:</p>
+          <ul className="space-y-3 mb-4">
+            <li>- <span className="font-bold">LAUNDRY.SYS</span>: We wash the socks. You build the robots.</li>
+            <li>- <span className="font-bold">FOOD.EXE</span>: High-protein fuel. Optimized for latency.</li>
+            <li>- <span className="font-bold">SLEEP.DLL</span>: Optional. Not recommended during demo day.</li>
+          </ul>
+          <div className="p-3 border-2 border-dashed border-red-500 bg-red-50/70">
+            <p className="text-[11px] leading-relaxed">Highly addictive environment. May cause sudden career pivots.</p>
+          </div>
+        </div>
+      </MobileCard>
+
+      {/* The devils */}
+      <MobileCard title="ARCHDEMONS.SYS">
+        <TheDevils />
+      </MobileCard>
+
+      {/* Residents */}
+      <MobileCard title="RESIDENTS.DAT">
+        <ResidentsPanel />
+      </MobileCard>
+
+      {/* Specs */}
+      <MobileCard title="SYSTEM_SPECS.INF">
+        <SystemSpecs />
+      </MobileCard>
+
+      {/* House photos — horizontal strip */}
+      <div className="mt-4 mb-4 overflow-x-auto flex gap-2 pb-2">
+        {HOUSE_PHOTOS.map((p, i) => (
+          <img
+            key={i}
+            src={p.src}
+            alt={p.caption}
+            className="h-28 w-auto object-cover rounded border-2 border-white/30 shrink-0 shadow-lg"
+            style={{ transform: `rotate(${(i % 2 === 0 ? -1 : 1) * (2 + i)}deg)` }}
+          />
+        ))}
+      </div>
+
+      {/* Footer */}
+      <div className="mt-4 text-center text-[9px] text-red-200/40 border-t border-red-900/30 pt-4">
+        <p>HACK47 © 2026 — Delhi&apos;s first hacker house</p>
+        <a
+          href="https://www.linkedin.com/company/hack47"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="inline-block mt-2 text-red-300/70 hover:text-red-200 underline"
+        >
+          LinkedIn ↗
+        </a>
+      </div>
+
+      {showForm && <SoulForm onClose={() => setShowForm(false)} />}
+    </div>
+  );
+}
+
+function MobileCard({ title, children }: { title: string; children: React.ReactNode }) {
+  return (
+    <div className="mb-3 bg-[#c0c0c0] win-border-outset overflow-hidden">
+      <div className="bg-gradient-to-r from-[#800000] to-[#cc0000] px-2 py-1 text-[11px] font-bold text-white">{title}</div>
+      <div className="p-0.5 m-[3px] win-border-inset bg-white text-black">{children}</div>
     </div>
   );
 }
@@ -705,7 +786,7 @@ function SoulForm({ onClose }: { onClose: () => void }) {
 
   if (submitted) {
     return (
-      <div className="fixed inset-0 z-[10000] bg-black flex items-center justify-center p-4">
+      <div className="fixed inset-0 z-[10000] bg-black flex items-start sm:items-center justify-center p-4 py-6 overflow-y-auto">
         <div className="absolute inset-0 opacity-20" style={{ background: "radial-gradient(ellipse at center, #660000 0%, transparent 70%)" }} />
         <div className="text-center font-mono max-w-md relative z-10">
           <p className="text-6xl mb-4 animate-pulse">👹</p>
@@ -730,7 +811,7 @@ function SoulForm({ onClose }: { onClose: () => void }) {
   }
 
   return (
-    <div className="fixed inset-0 z-[10000] flex items-center justify-center p-4 overflow-hidden">
+    <div className="fixed inset-0 z-[10000] flex items-start sm:items-center justify-center p-4 py-6 overflow-y-auto">
       {/* Dark hellish background */}
       <div className="absolute inset-0 bg-black" />
       <div className="absolute inset-0 opacity-30" style={{ background: "radial-gradient(ellipse at bottom, #4a0000 0%, transparent 60%)" }} />
