@@ -183,26 +183,28 @@ function formatSyncIST(iso: string): string {
 function computeWindowLayout() {
   if (typeof window === "undefined") {
     return {
-      main: { x: 100, y: 30 },
-      perks: { x: 550, y: 30 },
-      photos: { x: 550, y: 350 },
-      error: { x: 100, y: 400 },
-      soul: { x: 350, y: 180 },
-      team: { x: 250, y: 100 },
-      residents: { x: 350, y: 120 },
-      specs: { x: 300, y: 200 },
-      network: { x: 120, y: 260 },
-      cities: { x: 560, y: 180 },
-      news: { x: 300, y: 380 },
-      sponsors: { x: 100, y: 120 },
-      offgrid: { x: 440, y: 60 },
-      contact: { x: 620, y: 440 },
+      main: { x: 200, y: 30 },
+      perks: { x: 880, y: 30 },
+      photos: { x: 880, y: 350 },
+      error: { x: 200, y: 400 },
+      soul: { x: 580, y: 180 },
+      team: { x: 400, y: 100 },
+      residents: { x: 500, y: 120 },
+      specs: { x: 450, y: 200 },
+      network: { x: 700, y: 260 },
+      cities: { x: 900, y: 180 },
+      news: { x: 600, y: 380 },
+      sponsors: { x: 400, y: 120 },
+      offgrid: { x: 700, y: 60 },
+      contact: { x: 900, y: 440 },
     };
   }
 
   const vw = window.innerWidth;
   const vh = window.innerHeight;
-  const iconCol = 85;
+  // Icon tray is a 2-col grid: 12px left offset + 176px wide = 188px.
+  // Windows must start AFTER the full tray or they cover the second column.
+  const iconCol = 188;
   const taskbarH = 36;
   const gutter = 12;
 
