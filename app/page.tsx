@@ -17,6 +17,7 @@ import {
   Phone,
   Flame,
   ArrowUp,
+  Skull,
 } from "lucide-react";
 import { WinWindow } from "@/components/win-window";
 import { DesktopIcon } from "@/components/desktop-icon";
@@ -166,6 +167,15 @@ function useFeedData(): FeedData {
   return data ?? FEED_DEFAULT;
 }
 
+/** Deterministic IST timestamp — avoids server/client hydration mismatch. */
+function formatSyncIST(iso: string): string {
+  const d = new Date(iso);
+  if (isNaN(d.getTime())) return iso;
+  const ist = new Date(d.getTime() + 5.5 * 3600e3);
+  const p = (n: number) => String(n).padStart(2, "0");
+  return `${p(ist.getUTCDate())}-${p(ist.getUTCMonth() + 1)}-${ist.getUTCFullYear()} ${p(ist.getUTCHours())}:${p(ist.getUTCMinutes())} IST`;
+}
+
 // ═══════════════════════════════════════════════════════════════════════════
 // Window layout
 // ═══════════════════════════════════════════════════════════════════════════
@@ -213,6 +223,11 @@ function computeWindowLayout() {
   const soulX = iconCol + Math.floor(availW / 2) - 130;
   const soulY = Math.floor(availH / 2) - 80;
 
+  // New windows — right strip (past the perks/photos column) + bottom-center
+  // strip (below the main window). Clamped so a ~300px window always fits.
+  const rightX = Math.min(col2X + Math.min(colW, 380) + 16, vw - 300);
+  const bottomX = col1X + Math.min(colW, 380) + 16;
+
   return {
     main: { x: col1X, y: row1Y },
     perks: { x: col2X, y: row1Y },
@@ -222,13 +237,13 @@ function computeWindowLayout() {
     team: { x: centerX - 20, y: centerY },
     residents: { x: centerX + 30, y: centerY + 40 },
     specs: { x: centerX + 60, y: centerY + 80 },
-    // New windows — cascade around the edges of the free space
-    network: { x: centerX - 280, y: centerY + 70 },
-    cities: { x: centerX + 210, y: centerY + 10 },
-    news: { x: centerX + 30, y: centerY + 270 },
-    sponsors: { x: centerX - 300, y: centerY - 60 },
-    offgrid: { x: centerX - 60, y: centerY - 230 },
-    contact: { x: centerX + 250, y: centerY + 330 },
+    // Default-open apps — staggered so every title bar is visible
+    news: { x: rightX, y: row1Y },
+    offgrid: { x: rightX + 20, y: row1Y + 90 },
+    network: { x: rightX + 40, y: row1Y + 180 },
+    cities: { x: bottomX, y: row2Y },
+    sponsors: { x: bottomX + 20, y: row2Y + 80 },
+    contact: { x: bottomX + 40, y: row2Y + 160 },
   };
 }
 
@@ -346,9 +361,9 @@ function MobileView() {
               Ticket
             </p>
             <p className="text-[10px] text-yellow-200/70 mt-2 leading-relaxed">
-              48 hours. No internet. Pure chaos. Win Offgrid and get a{" "}
-              <span className="text-yellow-300 font-bold">guaranteed seat</span> in the next Hack47
-              cohort.
+              30 days. Fully remote. Pure chaos. Win Offgrid and get a{" "}
+                        <span className="text-yellow-300 font-bold">guaranteed seat</span> in the next Hack47
+                        cohort.
             </p>
             <a
               href="https://hack47-offgrid.devpost.com/"
@@ -784,14 +799,20 @@ function DesktopView() {
     team: false,
     residents: false,
     specs: false,
-    network: false,
-    cities: false,
-    news: false,
-    sponsors: false,
-    offgrid: false,
-    contact: false,
+    network: true,
+    cities: true,
+    news: true,
+    sponsors: true,
+    offgrid: true,
+    contact: true,
   });
   const [windowOrder, setWindowOrder] = useState<string[]>([
+    "news",
+    "offgrid",
+    "network",
+    "cities",
+    "sponsors",
+    "contact",
     "soul",
     "main",
     "perks",
@@ -800,12 +821,6 @@ function DesktopView() {
     "team",
     "residents",
     "specs",
-    "network",
-    "cities",
-    "news",
-    "sponsors",
-    "offgrid",
-    "contact",
   ]);
   const [clippyVisible, setClippyVisible] = useState(false);
   const [showForm, setShowForm] = useState(false);
@@ -879,19 +894,19 @@ function DesktopView() {
         alt="Heraldic Sun"
       />
 
-      {/* Desktop Icons — two columns */}
+      {/* Desktop Icons — two columns, each app with its own colored tile */}
       <div className="desktop-icons absolute top-4 left-3 grid grid-cols-2 gap-x-1 gap-y-3 w-[176px] z-20">
-        <DesktopIcon icon={Monitor} label="My Computer" onClick={() => toggleWindow("specs", true)} />
-        <DesktopIcon icon={Trash2} label="Recycle Bin" onClick={() => alert("Emptying bin...")} />
-        <DesktopIcon icon={Users} label="The Devils" onClick={() => toggleWindow("team", true)} />
-        <DesktopIcon icon={Folder} label="House_Photos" onClick={() => toggleWindow("photos", true)} />
-        <DesktopIcon icon={MapPin} label="Residents" onClick={() => toggleWindow("residents", true)} />
-        <DesktopIcon icon={Globe} label="The Web" onClick={() => toggleWindow("network", true)} />
-        <DesktopIcon icon={MapPin} label="Next Nodes" onClick={() => toggleWindow("cities", true)} />
-        <DesktopIcon icon={Newspaper} label="News Signal" onClick={() => toggleWindow("news", true)} />
-        <DesktopIcon icon={Zap} label="Power Supply" onClick={() => toggleWindow("sponsors", true)} />
-        <DesktopIcon icon={Ticket} label="Offgrid" onClick={() => toggleWindow("offgrid", true)} />
-        <DesktopIcon icon={Mail} label="Helpdesk" onClick={() => toggleWindow("contact", true)} />
+        <DesktopIcon icon={Monitor} tile="bg-[#000080]" label="My Computer" onClick={() => toggleWindow("specs", true)} />
+        <DesktopIcon icon={Trash2} tile="bg-[#008000]" label="Recycle Bin" onClick={() => alert("Emptying bin...")} />
+        <DesktopIcon icon={Skull} tile="bg-[#8b0000]" label="The Devils" onClick={() => toggleWindow("team", true)} />
+        <DesktopIcon icon={Folder} tile="bg-[#0058ee]" label="House_Photos" onClick={() => toggleWindow("photos", true)} />
+        <DesktopIcon icon={Users} tile="bg-[#006400]" label="Residents" onClick={() => toggleWindow("residents", true)} />
+        <DesktopIcon icon={Globe} tile="bg-[#0000cc]" label="The Web" onClick={() => toggleWindow("network", true)} />
+        <DesktopIcon icon={MapPin} tile="bg-[#008080]" label="Next Nodes" onClick={() => toggleWindow("cities", true)} />
+        <DesktopIcon icon={Newspaper} tile="bg-[#cc0000]" label="News Signal" onClick={() => toggleWindow("news", true)} />
+        <DesktopIcon icon={Zap} tile="bg-[#4a0080]" label="Power Supply" onClick={() => toggleWindow("sponsors", true)} />
+        <DesktopIcon icon={Ticket} tile="bg-[#8b6914]" label="Offgrid" onClick={() => toggleWindow("offgrid", true)} />
+        <DesktopIcon icon={Mail} tile="bg-[#006666]" label="Helpdesk" onClick={() => toggleWindow("contact", true)} />
       </div>
 
       {/* ═══════ WINDOWS (2×2 grid, never overlapping) ═══════ */}
@@ -1106,7 +1121,7 @@ function DesktopView() {
           zIndex={getZIndex("network")}
           onActivate={() => bringToFront("network")}
           onClose={() => toggleWindow("network", false)}
-          floating={true}
+          floating={false}
         >
           <NetworkNeighborhood />
         </WinWindow>
@@ -1124,7 +1139,7 @@ function DesktopView() {
           zIndex={getZIndex("cities")}
           onActivate={() => bringToFront("cities")}
           onClose={() => toggleWindow("cities", false)}
-          floating={true}
+          floating={false}
         >
           <CitiesPanel />
         </WinWindow>
@@ -1142,7 +1157,7 @@ function DesktopView() {
           zIndex={getZIndex("news")}
           onActivate={() => bringToFront("news")}
           onClose={() => toggleWindow("news", false)}
-          floating={true}
+          floating={false}
         >
           <NewsPanel />
         </WinWindow>
@@ -1160,7 +1175,7 @@ function DesktopView() {
           zIndex={getZIndex("sponsors")}
           onActivate={() => bringToFront("sponsors")}
           onClose={() => toggleWindow("sponsors", false)}
-          floating={true}
+          floating={false}
         >
           <SponsorsPanel />
         </WinWindow>
@@ -1178,7 +1193,7 @@ function DesktopView() {
           zIndex={getZIndex("offgrid")}
           onActivate={() => bringToFront("offgrid")}
           onClose={() => toggleWindow("offgrid", false)}
-          floating={true}
+          floating={false}
         >
           <OffgridPanel />
         </WinWindow>
@@ -1196,7 +1211,7 @@ function DesktopView() {
           zIndex={getZIndex("contact")}
           onActivate={() => bringToFront("contact")}
           onClose={() => toggleWindow("contact", false)}
-          floating={true}
+          floating={false}
         >
           <ContactPanel />
         </WinWindow>
@@ -1347,7 +1362,7 @@ function NewsPanel() {
         {tab === "linkedin" && <LinkedInFeedTab posts={feed.linkedin} />}
       </div>
       <p className="text-[7px] text-gray-400 mt-1.5 px-1">
-        LAST SYNC: {new Date(feed.updated).toLocaleString()} · FEED: @hack47org + /company/hack47
+        LAST SYNC: {formatSyncIST(feed.updated)} · FEED: @hack47org + /company/hack47
       </p>
     </div>
   );
@@ -1506,9 +1521,9 @@ function OffgridPanel() {
           Ticket
         </p>
         <p className="text-[9px] text-yellow-100/70 leading-relaxed mb-3">
-          48 hours. No internet. Pure chaos. Win Offgrid and get a{" "}
-          <span className="text-yellow-300 font-bold">guaranteed seat</span> in the next Hack47
-          cohort.
+          30 days. Fully remote. Pure chaos. Win Offgrid and get a{" "}
+                    <span className="text-yellow-300 font-bold">guaranteed seat</span> in the next Hack47
+                    cohort.
         </p>
         <a
           href={OFFGRID_URL}
