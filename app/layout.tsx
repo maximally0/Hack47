@@ -23,7 +23,8 @@ export const metadata: Metadata = {
     default: "Hack47",
     template: "%s | Hack47",
   },
-  description: "Delhi's first hacker house. A 30-day residency for 16 builders who ship fast, sleep less, and build what matters. Delhi. Sept 15 – Oct 15.",
+  description:
+    "Delhi's first hacker house. A 30-day residency for 16 builders who ship fast, sleep less, and build what matters. Delhi. Sept 15 – Oct 15. Expanding to Mumbai, Bangalore & Chandigarh.",
   keywords: ["hacker house", "Delhi", "residency", "builders", "startup", "coliving", "hackathon", "Hack47", "India"],
   authors: [{ name: "Hack47" }],
   creator: "Hack47",
@@ -60,13 +61,13 @@ export const metadata: Metadata = {
     title: "Hack47 — Delhi's First Hacker House",
     description: "30 days. 16 builders. One villa. Pure chaos. Apply now.",
     images: ["/og-image.png"],
-    creator: "@hack47_",
+    creator: "@hack47org",
   },
   icons: {
     icon: [
       { url: "/favicon.ico", sizes: "48x48" },
-      { url: "/favicon-16x16.png", sizes: "16x16", type: "image/png" },
-      { url: "/favicon-32x32.png", sizes: "32x32", type: "image/png" },
+      { url: "/favicon.svg", type: "image/svg+xml" },
+      { url: "/favicon-96x96.png", sizes: "96x96", type: "image/png" },
     ],
     apple: "/apple-touch-icon.png",
   },

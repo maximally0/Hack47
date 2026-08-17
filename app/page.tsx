@@ -2,7 +2,22 @@
 
 import React, { useState, useEffect, useRef } from "react";
 import { gsap } from "gsap";
-import { Monitor, Trash2, Globe, Folder, AlertTriangle, Users } from "lucide-react";
+import {
+  Monitor,
+  Trash2,
+  Globe,
+  Folder,
+  AlertTriangle,
+  Users,
+  MapPin,
+  Newspaper,
+  Zap,
+  Ticket,
+  Mail,
+  Phone,
+  Flame,
+  ArrowUp,
+} from "lucide-react";
 import { WinWindow } from "@/components/win-window";
 import { DesktopIcon } from "@/components/desktop-icon";
 import { Taskbar } from "@/components/taskbar";
@@ -18,14 +33,161 @@ const BIRD_SVG = "https://cdn.jsdelivr.net/npm/game-icons-transparent@latest/svg
 const FLOWER_SVG = "https://cdn.jsdelivr.net/npm/game-icons-transparent@latest/svgs/lorc/twirly-flower.svg";
 const SHIELD_SVG = "https://cdn.jsdelivr.net/npm/game-icons-transparent@latest/svgs/lorc/checked-shield.svg";
 
-/**
- * Compute window positions as a 2x2 grid with gutters.
- * Takes the available viewport minus the icon column (80px) and taskbar (36px).
- * Returns pixel positions for each of the 4 windows.
- */
+// ═══════════════════════════════════════════════════════════════════════════
+// DATA — socials, cities, contact, feed
+// ═══════════════════════════════════════════════════════════════════════════
+
+const SOCIALS = [
+  {
+    id: "x",
+    label: "X / TWITTER",
+    handle: "@hack47org",
+    url: "https://x.com/hack47org",
+    icon: "𝕏",
+  },
+  {
+    id: "instagram",
+    label: "INSTAGRAM",
+    handle: "@hack47.0rg",
+    url: "https://www.instagram.com/hack47.0rg/",
+    icon: "📸",
+  },
+  {
+    id: "linkedin",
+    label: "LINKEDIN",
+    handle: "/company/hack47",
+    url: "https://www.linkedin.com/company/hack47",
+    icon: "💼",
+  },
+];
+
+const CONTACT = {
+  email: "hello@hack47.org",
+  phone: "+91 90412 60790",
+  phoneRaw: "+919041260790",
+};
+
+const CITIES = [
+  {
+    name: "DELHI",
+    status: "LIVE",
+    statusText: "BATCH #001 · SEPT 15 – OCT 15",
+    detail: "The origin node. 16 builders. One villa.",
+    icon: "🔥",
+  },
+  {
+    name: "MUMBAI",
+    status: "QUEUED",
+    statusText: "NEXT WAVE",
+    detail: "Maximum city. Maximum chaos.",
+    icon: "🌊",
+  },
+  {
+    name: "BANGALORE",
+    status: "QUEUED",
+    statusText: "NEXT WAVE",
+    detail: "The silicon node.",
+    icon: "💻",
+  },
+  {
+    name: "CHANDIGARH",
+    status: "QUEUED",
+    statusText: "NEXT WAVE",
+    detail: "The home node.",
+    icon: "🏠",
+  },
+  {
+    name: "AND MORE…",
+    status: "TBD",
+    statusText: "ACROSS INDIA",
+    detail: "The network keeps growing. City by city.",
+    icon: "🇮🇳",
+  },
+];
+
+type FeedPost = { author: string; role: string; date: string; url: string; text: string };
+type FeedData = {
+  updated: string;
+  mint: { title: string; url: string; date: string; snippet: string };
+  x: FeedPost[];
+  linkedin: FeedPost[];
+};
+
+const FEED_DEFAULT: FeedData = {
+  updated: "2026-08-17T11:30:00+05:30",
+  mint: {
+    title:
+      "How Gen Z entrepreneurs are using startup builder residencies and hacker houses to start their businesses",
+    url: "https://www.livemint.com/mint-lounge/business-of-life/gen-z-business-entrepreneurs-residency-hacker-house-11785839736145.html",
+    date: "2026-08-05",
+    snippet:
+      '"Others, like Hack47 (which describes itself as Delhi\'s first hacker house), will pack builders into a villa for a month."',
+  },
+  x: [],
+  linkedin: [
+    {
+      author: "Pratyush Pandey",
+      role: "co-founder @ Hack47",
+      date: "2026-08-17",
+      url: "https://www.linkedin.com/feed/update/urn:li:activity:7494952801635328000/",
+      text: "At 17 I hosted the biggest hackathon of my city. At 18 I will be hosting Delhi's first hacker house. upgraded? maybe. but this time I wanna create more impact with my work. Hack47 doesn't want to be just another hacker house — we want to be the most exclusive community of builders where we can build, break and rebuild together.",
+    },
+    {
+      author: "Rishul Chanana",
+      role: "founder @ hack47.org",
+      date: "2026-08-16",
+      url: "https://www.linkedin.com/feed/update/urn:li:activity:7494805195122716672/",
+      text: "OpenAI credits are coming to hack47. Every builder at hack47 is going to get OpenAI credits to build with. A lot of them. We want hack47 to be less about sitting through talks and more about actually building shit.",
+    },
+    {
+      author: "Rishul Chanana",
+      role: "founder @ hack47.org",
+      date: "2026-08-16",
+      url: "https://www.linkedin.com/feed/update/urn:li:activity:7494453770676887552/",
+      text: "The fastest person in the room is often the least productive. I've started noticing this after being around a lot of young builders. I've been to two hacker houses, I'm hosting another one right now, and I've run around 20 hackathons.",
+    },
+  ],
+};
+
+function useFeedData(): FeedData {
+  const [data, setData] = useState<FeedData | null>(null);
+  useEffect(() => {
+    let alive = true;
+    fetch("/feed/latest.json")
+      .then((r) => (r.ok ? r.json() : null))
+      .then((d) => {
+        if (alive && d && typeof d === "object") setData(d);
+      })
+      .catch(() => {});
+    return () => {
+      alive = false;
+    };
+  }, []);
+  return data ?? FEED_DEFAULT;
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+// Window layout
+// ═══════════════════════════════════════════════════════════════════════════
+
 function computeWindowLayout() {
   if (typeof window === "undefined") {
-    return { main: { x: 100, y: 30 }, perks: { x: 550, y: 30 }, photos: { x: 550, y: 350 }, error: { x: 100, y: 400 }, soul: { x: 350, y: 180 }, team: { x: 250, y: 100 }, residents: { x: 350, y: 120 }, specs: { x: 300, y: 200 } };
+    return {
+      main: { x: 100, y: 30 },
+      perks: { x: 550, y: 30 },
+      photos: { x: 550, y: 350 },
+      error: { x: 100, y: 400 },
+      soul: { x: 350, y: 180 },
+      team: { x: 250, y: 100 },
+      residents: { x: 350, y: 120 },
+      specs: { x: 300, y: 200 },
+      network: { x: 120, y: 260 },
+      cities: { x: 560, y: 180 },
+      news: { x: 300, y: 380 },
+      sponsors: { x: 100, y: 120 },
+      offgrid: { x: 440, y: 60 },
+      contact: { x: 620, y: 440 },
+    };
   }
 
   const vw = window.innerWidth;
@@ -45,11 +207,9 @@ function computeWindowLayout() {
   const row1Y = gutter;
   const row2Y = gutter + rowH + gutter;
 
-  // Extra windows cascade from center
   const centerX = iconCol + Math.floor(availW / 3);
   const centerY = Math.floor(availH / 4);
 
-  // Soul window: dead center of the screen
   const soulX = iconCol + Math.floor(availW / 2) - 130;
   const soulY = Math.floor(availH / 2) - 80;
 
@@ -62,6 +222,13 @@ function computeWindowLayout() {
     team: { x: centerX - 20, y: centerY },
     residents: { x: centerX + 30, y: centerY + 40 },
     specs: { x: centerX + 60, y: centerY + 80 },
+    // New windows — cascade around the edges of the free space
+    network: { x: centerX - 280, y: centerY + 70 },
+    cities: { x: centerX + 210, y: centerY + 10 },
+    news: { x: centerX + 30, y: centerY + 270 },
+    sponsors: { x: centerX - 300, y: centerY - 60 },
+    offgrid: { x: centerX - 60, y: centerY - 230 },
+    contact: { x: centerX + 250, y: centerY + 330 },
   };
 }
 
@@ -82,112 +249,530 @@ export default function DesktopPage() {
   return <DesktopView />;
 }
 
+// ═══════════════════════════════════════════════════════════════════════════
+// MOBILE VIEW — the full experience, rebuilt
+// ═══════════════════════════════════════════════════════════════════════════
+
+function MobileCard({
+  title,
+  children,
+  titleClassName,
+}: {
+  title: string;
+  children: React.ReactNode;
+  titleClassName?: string;
+}) {
+  return (
+    <div className="mb-3 bg-[#c0c0c0] win-border-outset overflow-hidden shadow-[3px_3px_0px_rgba(0,0,0,0.35)]">
+      <div
+        className={cn(
+          "bg-gradient-to-r from-[#800000] to-[#cc0000] px-2.5 py-1.5 text-[11px] font-bold text-white flex items-center justify-between",
+          titleClassName
+        )}
+      >
+        <span className="truncate pr-2">{title}</span>
+        <span className="text-[8px] text-white/50 tracking-tight shrink-0 select-none">─ □ ✕</span>
+      </div>
+      <div className="p-0.5 m-[3px] win-border-inset bg-white text-black">{children}</div>
+    </div>
+  );
+}
+
 function MobileView() {
   const [showForm, setShowForm] = useState(false);
+  const feed = useFeedData();
+
+  const scrollTo = (id: string) =>
+    document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" });
 
   return (
     <div
-      className="min-h-screen font-mono p-3 pb-24"
-      style={{ background: "linear-gradient(180deg, #3a0505 0%, #120000 55%, #000000 100%)" }}
+      className="relative min-h-screen font-mono pb-28"
+      style={{
+        background:
+          "radial-gradient(120% 80% at 50% 0%, #4a0505 0%, #1a0000 45%, #000000 100%)",
+      }}
     >
-      {/* Header */}
-      <div className="mb-4 p-4 bg-black/40 backdrop-blur-sm border border-red-900/50 rounded">
-        <h1 className="font-anton text-6xl leading-none tracking-tight text-white uppercase mb-2 select-none">
-          HACK<a href="https://en.wikipedia.org/wiki/Indian_independence_movement" target="_blank" rel="noopener noreferrer" className="text-electric-yellow">47</a>
-        </h1>
-        <p className="text-[11px] text-red-200/80 leading-snug">
-          Delhi&apos;s first hacker house. A 30-day residency for 16 builders who care more about their Git history than their sleep schedule.
-        </p>
-        <div className="mt-3 bg-black text-electric-yellow p-2 font-mono text-[10px] border-l-4 border-electric-yellow">
-          <p>&gt; LOCATION: DELHI VILLA</p>
-          <p>&gt; SEPT 15 - OCT 15</p>
-          <p>&gt; STATUS: PURE CHAOS DETECTED</p>
-        </div>
-      </div>
+      {/* CRT scanline overlay */}
+      <div className="fixed inset-0 pointer-events-none z-[9997] scanlines opacity-15" />
 
-      {/* Apply CTA — the whole point of the mobile page */}
-      <MobileCard title="⚠ SELL_YOUR_SOUL.EXE">
-        <div className="p-3 text-center font-mono">
-          <p className="text-xl font-bold mb-1">👹</p>
-          <p className="font-bold text-sm uppercase tracking-wide mb-2">SELL US YOUR SOUL</p>
-          <p className="text-[10px] text-gray-600 mb-3 leading-relaxed">
-            30 days. No distractions. Pure building.<br />
-            In exchange, we take your soul (and your sleep schedule).
-          </p>
+      {/* ── Sticky top bar ── */}
+      <div className="sticky top-0 z-[9000] bg-black/80 backdrop-blur-md border-b-2 border-red-900/60 px-3 py-2 flex items-center justify-between">
+        <p className="font-anton text-2xl leading-none text-white uppercase tracking-tight select-none">
+          HACK<span className="text-electric-yellow">47</span>
+        </p>
+        <div className="flex items-center gap-2">
+          <span className="flex items-center gap-1.5 text-[9px] text-green-400 font-bold">
+            <span className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse" />
+            BATCH #001 LIVE
+          </span>
           <button
             onClick={() => setShowForm(true)}
-            className="w-full bg-red-600 text-white py-2.5 font-bold text-xs uppercase tracking-wider hover:bg-red-700 active:translate-y-px transition-all shadow-[3px_3px_0px_rgba(0,0,0,0.3)]"
+            className="bg-red-600 text-white text-[10px] font-bold px-3 py-1.5 win-border-outset active:translate-x-px active:translate-y-px"
           >
-            ✦ I ACCEPT — APPLY NOW ✦
+            APPLY
           </button>
-          <p className="text-[8px] text-gray-400 mt-2 italic">Terms: No refunds on sleep lost.</p>
         </div>
-      </MobileCard>
+      </div>
 
-      {/* House protocols */}
-      <MobileCard title="README_FIRST.TXT">
-        <div className="p-3 font-mono text-[11px] text-black">
-          <p className="font-bold underline mb-3 uppercase">HOUSE PROTOCOLS:</p>
-          <ul className="space-y-3 mb-4">
-            <li>- <span className="font-bold">LAUNDRY.SYS</span>: We wash the socks. You build the robots.</li>
-            <li>- <span className="font-bold">FOOD.EXE</span>: High-protein fuel. Optimized for latency.</li>
-            <li>- <span className="font-bold">SLEEP.DLL</span>: Optional. Not recommended during demo day.</li>
-          </ul>
-          <div className="p-3 border-2 border-dashed border-red-500 bg-red-50/70">
-            <p className="text-[11px] leading-relaxed">Highly addictive environment. May cause sudden career pivots.</p>
+      {/* ── Hero ── */}
+      <section className="px-4 pt-6">
+        <h1 className="font-anton text-[64px] leading-[0.9] text-white uppercase select-none">
+          HACK<span className="text-electric-yellow">47</span>
+        </h1>
+        <p className="text-[11px] text-red-200/80 leading-snug mt-2 max-w-[320px]">
+          Delhi&apos;s first hacker house. A 30-day residency for 16 builders who care more about
+          their Git history than their sleep schedule.
+        </p>
+        <div className="mt-3 bg-black text-electric-yellow p-2.5 font-mono text-[10px] border-l-4 border-electric-yellow shadow-[3px_3px_0px_rgba(0,0,0,0.4)]">
+          <p>&gt; INITIALIZING DELHI&apos;S FIRST HACKER HOUSE...</p>
+          <p>&gt; STATUS: PURE CHAOS DETECTED</p>
+          <p>&gt; LOCATION: DELHI VILLA · SEPT 15 – OCT 15</p>
+          <p className="animate-pulse">&gt; NEXT NODE: TBD — INDIA IS THE NETWORK ▊</p>
+        </div>
+      </section>
+
+      {/* ── OFFGRID — golden ticket ── */}
+      <section id="offgrid" className="px-4 mt-6">
+        <div className="relative overflow-hidden bg-gradient-to-b from-[#3a2b00] via-[#1a1200] to-black border-2 border-yellow-700/60 shadow-[0_0_30px_rgba(255,200,0,0.15)]">
+          <div className="px-4 py-4">
+            <div className="flex justify-between items-center text-[9px] font-bold tracking-widest text-yellow-600">
+              <span>OFFGRID.EXE</span>
+              <span>VIRTUAL HACKATHON</span>
+            </div>
+            <p className="font-anton text-3xl text-yellow-400 uppercase mt-2 leading-none">
+              Golden
+              <br />
+              Ticket
+            </p>
+            <p className="text-[10px] text-yellow-200/70 mt-2 leading-relaxed">
+              48 hours. No internet. Pure chaos. Win Offgrid and get a{" "}
+              <span className="text-yellow-300 font-bold">guaranteed seat</span> in the next Hack47
+              cohort.
+            </p>
+            <a
+              href="https://hack47-offgrid.devpost.com/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="mt-3 inline-block w-full text-center bg-yellow-500 text-black font-bold text-xs uppercase py-2.5 tracking-wider win-border-outset active:translate-y-px"
+            >
+              ✦ ENTER THE ARENA ↗
+            </a>
+            <p className="text-[8px] text-yellow-700/60 mt-1.5 text-center italic">
+              One winner. One seat. The next cohort is waiting.
+            </p>
           </div>
         </div>
-      </MobileCard>
+      </section>
 
-      {/* Residents */}
-      <MobileCard title="RESIDENTS.DAT">
-        <ResidentsPanel />
-      </MobileCard>
+      {/* ── APPLY CTA ── */}
+      <section id="apply" className="px-4 mt-6">
+        <MobileCard title="⚠ SELL_YOUR_SOUL.EXE">
+          <div className="p-4 text-center font-mono">
+            <p className="text-2xl font-bold mb-1">👹</p>
+            <p className="font-bold text-sm uppercase tracking-wide mb-2">SELL US YOUR SOUL</p>
+            <p className="text-[10px] text-gray-600 mb-3 leading-relaxed">
+              30 days. No distractions. Pure building.
+              <br />
+              In exchange, we take your soul (and your sleep schedule).
+            </p>
+            <button
+              onClick={() => setShowForm(true)}
+              className="w-full bg-red-600 text-white py-3 font-bold text-xs uppercase tracking-wider hover:bg-red-700 active:translate-y-px transition-all shadow-[3px_3px_0px_rgba(0,0,0,0.3)]"
+            >
+              ✦ I ACCEPT — APPLY NOW ✦
+            </button>
+            <p className="text-[8px] text-gray-400 mt-2 italic">Terms: No refunds on sleep lost.</p>
+          </div>
+        </MobileCard>
+      </section>
 
-      {/* Specs */}
-      <MobileCard title="SYSTEM_SPECS.INF">
-        <SystemSpecs />
-      </MobileCard>
+      {/* ── CITIES — next nodes ── */}
+      <section id="nodes" className="px-4 mt-6">
+        <MobileCard title="📡 NEXT_NODES.EXE" titleClassName="bg-gradient-to-r from-[#006400] to-[#00a000]">
+          <div className="p-3 font-mono text-[11px]">
+            <div className="flex justify-between items-center mb-2">
+              <p className="font-bold text-[10px] text-gray-700 uppercase">INDIA NODE MAP</p>
+              <span className="text-[8px] font-bold text-green-600 animate-pulse">● DELHI LIVE</span>
+            </div>
+            <div>
+              {CITIES.map((c) => (
+                <div
+                  key={c.name}
+                  className="flex items-center justify-between py-2 border-b border-gray-200 last:border-0"
+                >
+                  <div className="pr-2">
+                    <p className="font-bold text-[11px]">
+                      {c.icon} {c.name}
+                    </p>
+                    <p className="text-[9px] text-gray-500">{c.detail}</p>
+                  </div>
+                  <div className="text-right shrink-0">
+                    <span
+                      className={cn(
+                        "inline-block text-[8px] font-bold px-1.5 py-0.5 border",
+                        c.status === "LIVE"
+                          ? "text-green-700 border-green-600 bg-green-50"
+                          : c.status === "QUEUED"
+                            ? "text-yellow-700 border-yellow-600 bg-yellow-50"
+                            : "text-gray-500 border-gray-400 bg-gray-100"
+                      )}
+                    >
+                      {c.status}
+                    </span>
+                    <p className="text-[7px] text-gray-400 mt-0.5">{c.statusText}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+            <p className="text-[9px] text-gray-500 italic mt-2">
+              Node announcements drop on X + LinkedIn first. Follow to know when your city goes
+              live.
+            </p>
+          </div>
+        </MobileCard>
+      </section>
 
-      {/* House photos — horizontal strip */}
-      <div className="mt-4 mb-4 overflow-x-auto flex gap-2 pb-2">
-        {HOUSE_PHOTOS.map((p, i) => (
-          <img
-            key={i}
-            src={p.src}
-            alt={p.caption}
-            className="h-28 w-auto object-cover rounded border-2 border-white/30 shrink-0 shadow-lg"
-            style={{ transform: `rotate(${(i % 2 === 0 ? -1 : 1) * (2 + i)}deg)` }}
-          />
-        ))}
-      </div>
+      {/* ── SPONSORS — power supply ── */}
+      <section id="sponsors" className="px-4 mt-6">
+        <MobileCard title="⚡ POWER_SUPPLY.INI" titleClassName="bg-gradient-to-r from-[#4a0080] to-[#7a00cc]">
+          <div className="p-3">
+            <p className="font-bold text-[10px] text-gray-700 uppercase mb-2">
+              INSTALLED DRIVERS — POWERING THE MACHINE
+            </p>
+            <div className="flex gap-2">
+              <div className="flex-1 bg-white border border-gray-300 p-2 flex flex-col items-center justify-center min-h-[92px]">
+                <img src="/sponsors/redbull.png" alt="Red Bull" className="h-10 w-auto" />
+                <p className="text-[7px] text-gray-500 mt-1 text-center">FUEL.SYS — OFFICIAL CHAOS FUEL</p>
+              </div>
+              <div className="flex-1 bg-white border border-gray-300 p-2 flex flex-col items-center justify-center min-h-[92px]">
+                <img src="/sponsors/openai.png" alt="OpenAI" className="h-7 w-auto" />
+                <p className="text-[7px] text-gray-500 mt-1 text-center">GPT.DLL — COMPUTE FOR BUILDERS</p>
+              </div>
+            </div>
+            <p className="text-[8px] text-gray-500 italic mt-2">
+              Want to power the machine? → hello@hack47.org
+            </p>
+          </div>
+        </MobileCard>
+      </section>
 
-      {/* Footer */}
-      <div className="mt-4 text-center text-[9px] text-red-200/40 border-t border-red-900/30 pt-4">
-        <p>HACK47 © 2026 — Delhi&apos;s first hacker house</p>
-        <a
-          href="https://www.linkedin.com/company/hack47"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="inline-block mt-2 text-red-300/70 hover:text-red-200 underline"
-        >
-          LinkedIn ↗
-        </a>
-      </div>
+      {/* ── NEWS — press + live feed ── */}
+      <section id="news" className="px-4 mt-6">
+        <MobileCard title="📰 NEWS_SIGNAL.EXE" titleClassName="bg-gradient-to-r from-[#000080] to-[#0000cc]">
+          <div className="p-3">
+            <a
+              href={feed.mint.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="block bg-black text-white p-3 border-2 border-yellow-500/60 hover:border-yellow-400 transition-colors"
+            >
+              <p className="text-[8px] font-bold text-yellow-400 tracking-widest mb-1 uppercase">
+                ★ Featured in The Mint — {feed.mint.date}
+              </p>
+              <p className="text-[11px] font-bold leading-snug mb-2">{feed.mint.title}</p>
+              <p className="text-[9px] text-gray-400 italic">{feed.mint.snippet}</p>
+              <p className="text-[9px] text-yellow-400 mt-2 font-bold">READ ARTICLE ↗</p>
+            </a>
+
+            <div className="mt-3">
+              <p className="text-[9px] font-bold text-gray-600 uppercase mb-1.5">
+                LATEST SIGNALS
+              </p>
+              {feed.x.length === 0 ? (
+                <div className="text-[9px] text-gray-500 bg-gray-100 border border-dashed border-gray-300 p-2 leading-relaxed">
+                  @hack47org — 0 signals detected. The birds haven&apos;t landed yet.{" "}
+                  <a
+                    href="https://x.com/hack47org"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-blue-700 font-bold underline"
+                  >
+                    Follow ↗
+                  </a>
+                </div>
+              ) : (
+                feed.x.slice(0, 1).map((p, i) => (
+                  <a
+                    key={i}
+                    href={p.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="block border border-gray-300 bg-[#f8f8f8] p-2 mb-2"
+                  >
+                    <p className="text-[9px] font-bold text-gray-800">
+                      {p.author} <span className="text-gray-400 font-normal">· {p.date}</span>
+                    </p>
+                    <p className="text-[9px] text-gray-600 leading-snug mt-1 line-clamp-3">{p.text}</p>
+                    <p className="text-[8px] font-bold mt-1 text-blue-700">OPEN ON X ↗</p>
+                  </a>
+                ))
+              )}
+              {feed.linkedin.slice(0, 2).map((p, i) => (
+                <a
+                  key={i}
+                  href={p.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="block border border-gray-300 bg-[#f8f8f8] p-2 mb-2 last:mb-0"
+                >
+                  <div className="flex justify-between items-center">
+                    <p className="text-[9px] font-bold text-gray-800">{p.author}</p>
+                    <span className="text-[8px] text-gray-400">{p.date}</span>
+                  </div>
+                  <p className="text-[8px] text-gray-500">{p.role}</p>
+                  <p className="text-[9px] text-gray-600 leading-snug mt-1 line-clamp-3">{p.text}</p>
+                  <p className="text-[8px] font-bold mt-1 text-blue-700">OPEN ON LINKEDIN ↗</p>
+                </a>
+              ))}
+            </div>
+          </div>
+        </MobileCard>
+      </section>
+
+      {/* ── HOUSE PROTOCOLS ── */}
+      <section className="px-4 mt-6">
+        <MobileCard title="README_FIRST.TXT">
+          <div className="p-3 font-mono text-[11px] text-black">
+            <p className="font-bold underline mb-3 uppercase">HOUSE PROTOCOLS:</p>
+            <ul className="space-y-3 mb-4">
+              <li>
+                - <span className="font-bold">LAUNDRY.SYS</span>: We wash the socks. You build the robots.
+              </li>
+              <li>
+                - <span className="font-bold">FOOD.EXE</span>: High-protein fuel. Optimized for latency.
+              </li>
+              <li>
+                - <span className="font-bold">SLEEP.DLL</span>: Optional. Not recommended during demo day.
+              </li>
+            </ul>
+            <div className="p-3 border-2 border-dashed border-red-500 bg-red-50/70">
+              <p className="text-[11px] leading-relaxed">
+                Highly addictive environment. May cause sudden career pivots.
+              </p>
+            </div>
+          </div>
+        </MobileCard>
+      </section>
+
+      {/* ── ARCHDEMONS ── */}
+      <section id="devils" className="px-4 mt-6">
+        <MobileCard title="👹 ARCHDEMONS.SYS" titleClassName="bg-gradient-to-r from-[#4a0000] to-[#cc0000]">
+          <div className="p-3">
+            <p className="text-center text-[9px] text-gray-500 italic mb-3">
+              The ones who summoned this chaos into existence
+            </p>
+            <DevilRow
+              name="Rishul Chanana"
+              role="Archdemon I"
+              img="/rishul.jpeg"
+              links={[
+                { label: "LinkedIn ↗", url: "https://www.linkedin.com/in/rishul-chanana/" },
+                { label: "𝕏 ↗", url: "https://x.com/rishhul" },
+              ]}
+            />
+            <DevilRow
+              name="Pratyush Pandey"
+              role="Archdemon II"
+              img="/pratyush.jpeg"
+              links={[
+                { label: "LinkedIn ↗", url: "https://www.linkedin.com/in/pratyush-pandey-09b35b219" },
+                { label: "𝕏 ↗", url: "https://x.com/P_Pratyush7" },
+              ]}
+            />
+            <DevilRow
+              name="Raghwender Vasisth"
+              role="Archdemon III"
+              initials="RV"
+              links={[
+                { label: "LinkedIn ↗", url: "https://www.linkedin.com/in/raghwender-vasist" },
+                { label: "𝕏 ↗", url: "https://x.com/Hawthorn_thinks" },
+                { label: "IG ↗", url: "https://www.instagram.com/hawthorn_laments" },
+              ]}
+            />
+            <p className="text-center text-[8px] text-gray-400 italic mt-3">
+              These three traded their souls first. Now they collect yours.
+            </p>
+          </div>
+        </MobileCard>
+      </section>
+
+      {/* ── RESIDENTS ── */}
+      <section className="px-4 mt-6">
+        <MobileCard title="RESIDENTS.DAT" titleClassName="bg-gradient-to-r from-[#005000] to-[#008000]">
+          <ResidentsPanel />
+        </MobileCard>
+      </section>
+
+      {/* ── SYSTEM SPECS ── */}
+      <section className="px-4 mt-6">
+        <MobileCard title="SYSTEM_SPECS.INF" titleClassName="bg-gradient-to-r from-[#404040] to-[#808080]">
+          <SystemSpecs />
+        </MobileCard>
+      </section>
+
+      {/* ── HOUSE PHOTOS ── */}
+      <section className="px-4 mt-6">
+        <MobileCard title="HOUSE_PHOTOS.EXE" titleClassName="bg-gradient-to-r from-[#0058ee] to-[#3789f8]">
+          <div className="overflow-x-auto flex gap-2 p-2 pb-2">
+            {HOUSE_PHOTOS.map((p, i) => (
+              <img
+                key={i}
+                src={p.src}
+                alt={p.caption}
+                className="h-28 w-auto object-cover rounded border-2 border-white/30 shrink-0 shadow-lg"
+                style={{ transform: `rotate(${(i % 2 === 0 ? -1 : 1) * (2 + i)}deg)` }}
+              />
+            ))}
+          </div>
+          <p className="px-2 pb-2 text-[8px] text-gray-500 italic">
+            The house. The arena. The 4AM brainwave zone.
+          </p>
+        </MobileCard>
+      </section>
+
+      {/* ── CONTACT — helpdesk ── */}
+      <section id="contact" className="px-4 mt-6">
+        <MobileCard title="☎ HELPDESK.EXE" titleClassName="bg-gradient-to-r from-[#008080] to-[#00b0b0]">
+          <div className="p-3">
+            <p className="text-[10px] text-gray-600 mb-3">
+              Summon an organizer. We reply fast (or when the WiFi drops).
+            </p>
+            <a
+              href={`mailto:${CONTACT.email}`}
+              className="block w-full text-left bg-[#c0c0c0] win-border-outset px-3 py-2.5 mb-2 active:translate-x-px active:translate-y-px"
+            >
+              <p className="text-[8px] font-bold text-gray-500 uppercase">Email</p>
+              <p className="text-[13px] font-bold text-blue-800">{CONTACT.email}</p>
+            </a>
+            <a
+              href={`tel:${CONTACT.phoneRaw}`}
+              className="block w-full text-left bg-[#c0c0c0] win-border-outset px-3 py-2.5 active:translate-x-px active:translate-y-px"
+            >
+              <p className="text-[8px] font-bold text-gray-500 uppercase">Phone / WhatsApp</p>
+              <p className="text-[13px] font-bold text-blue-800">{CONTACT.phone}</p>
+            </a>
+            <p className="text-[8px] text-gray-500 italic mt-2">
+              Response time: 24-48h. Faster if you bribe us with chai.
+            </p>
+          </div>
+        </MobileCard>
+      </section>
+
+      {/* ── FOOTER ── */}
+      <footer className="px-4 mt-6 pb-4">
+        <div className="flex gap-2">
+          {SOCIALS.map((s) => (
+            <a
+              key={s.id}
+              href={s.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex-1 bg-black/60 border border-red-900/50 text-white py-2.5 text-center text-[10px] font-bold hover:bg-red-950/60 transition-colors"
+            >
+              {s.icon} {s.label.split(" ")[0]} ↗
+            </a>
+          ))}
+        </div>
+        <p className="text-center text-[9px] text-red-200/40 mt-4 leading-relaxed">
+          HACK47 © 2026 — Delhi&apos;s first hacker house.
+          <br />
+          Batch #001: Sept 15 – Oct 15 · More cities loading…
+        </p>
+      </footer>
+
+      {/* ── BOTTOM DOCK ── */}
+      <MobileDock
+        onApply={() => setShowForm(true)}
+        scrollTo={scrollTo}
+      />
 
       {showForm && <SoulForm onClose={() => setShowForm(false)} />}
     </div>
   );
 }
 
-function MobileCard({ title, children }: { title: string; children: React.ReactNode }) {
+function DevilRow({
+  name,
+  role,
+  img,
+  initials,
+  links,
+}: {
+  name: string;
+  role: string;
+  img?: string;
+  initials?: string;
+  links: { label: string; url: string }[];
+}) {
   return (
-    <div className="mb-3 bg-[#c0c0c0] win-border-outset overflow-hidden">
-      <div className="bg-gradient-to-r from-[#800000] to-[#cc0000] px-2 py-1 text-[11px] font-bold text-white">{title}</div>
-      <div className="p-0.5 m-[3px] win-border-inset bg-white text-black">{children}</div>
+    <div className="flex gap-3 items-start p-2 border border-gray-300 bg-[#f8f8f8] mb-2 last:mb-0">
+      {img ? (
+        <img src={img} alt={name} className="w-16 h-16 object-cover border-2 border-red-800 shrink-0" />
+      ) : (
+        <div className="w-16 h-16 border-2 border-red-800 bg-black text-red-500 flex items-center justify-center font-bold text-xl shrink-0">
+          {initials}
+        </div>
+      )}
+      <div className="flex-1 min-w-0">
+        <p className="font-bold text-[11px]">{name}</p>
+        <p className="text-[9px] text-red-700 uppercase tracking-wider mb-1.5">{role}</p>
+        <div className="flex gap-2 flex-wrap">
+          {links.map((l) => (
+            <a
+              key={l.label}
+              href={l.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-[9px] text-blue-600 hover:underline"
+            >
+              {l.label}
+            </a>
+          ))}
+        </div>
+      </div>
     </div>
   );
 }
+
+function MobileDock({
+  onApply,
+  scrollTo,
+}: {
+  onApply: () => void;
+  scrollTo: (id: string) => void;
+}) {
+  const items = [
+    {
+      id: "top",
+      label: "TOP",
+      icon: ArrowUp,
+      action: () => window.scrollTo({ top: 0, behavior: "smooth" }),
+    },
+    { id: "apply", label: "APPLY", icon: Flame, action: onApply },
+    { id: "nodes", label: "NODES", icon: MapPin, action: () => scrollTo("nodes") },
+    { id: "news", label: "NEWS", icon: Newspaper, action: () => scrollTo("news") },
+    { id: "call", label: "CALL", icon: Phone, action: () => (window.location.href = `tel:${CONTACT.phoneRaw}`) },
+  ];
+  return (
+    <div className="fixed bottom-0 left-0 right-0 z-[9999] bg-linear-to-b from-[#245edb] via-[#3f8cf3] to-[#245edb] border-t-2 border-black/50 shadow-[0_-2px_10px_rgba(0,0,0,0.6)] flex">
+      {items.map((i) => (
+        <button
+          key={i.id}
+          onClick={i.action}
+          className="flex-1 flex flex-col items-center justify-center py-1.5 gap-0.5 text-white active:bg-[#2c6ecb] transition-colors"
+        >
+          <i.icon className="w-4 h-4" />
+          <span className="text-[8px] font-bold tracking-wider">{i.label}</span>
+        </button>
+      ))}
+    </div>
+  );
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+// DESKTOP VIEW
+// ═══════════════════════════════════════════════════════════════════════════
 
 function DesktopView() {
   const [openWindows, setOpenWindows] = useState<Record<string, boolean>>({
@@ -199,15 +784,35 @@ function DesktopView() {
     team: false,
     residents: false,
     specs: false,
+    network: false,
+    cities: false,
+    news: false,
+    sponsors: false,
+    offgrid: false,
+    contact: false,
   });
-  const [windowOrder, setWindowOrder] = useState<string[]>(["soul", "main", "perks", "photos", "error", "team", "residents", "specs"]);
+  const [windowOrder, setWindowOrder] = useState<string[]>([
+    "soul",
+    "main",
+    "perks",
+    "photos",
+    "error",
+    "team",
+    "residents",
+    "specs",
+    "network",
+    "cities",
+    "news",
+    "sponsors",
+    "offgrid",
+    "contact",
+  ]);
   const [clippyVisible, setClippyVisible] = useState(false);
   const [showForm, setShowForm] = useState(false);
   const [layout, setLayout] = useState(computeWindowLayout);
 
   const desktopRef = useRef<HTMLDivElement>(null);
 
-  // Recompute layout on mount (SSR → client)
   useEffect(() => {
     setLayout(computeWindowLayout());
   }, []);
@@ -245,6 +850,12 @@ function DesktopView() {
       case "team": return "ARCHDEMONS.SYS";
       case "residents": return "RESIDENTS.DAT";
       case "specs": return "SYSTEM_SPECS.INF";
+      case "network": return "NETWORK_NEIGHBORHOOD.EXE";
+      case "cities": return "NEXT_NODES.EXE";
+      case "news": return "NEWS_SIGNAL.EXE";
+      case "sponsors": return "POWER_SUPPLY.INI";
+      case "offgrid": return "OFFGRID.EXE";
+      case "contact": return "HELPDESK.EXE";
       default: return id;
     }
   }
@@ -268,14 +879,19 @@ function DesktopView() {
         alt="Heraldic Sun"
       />
 
-      {/* Desktop Icons */}
-      <div className="desktop-icons absolute top-4 left-3 flex flex-col gap-3 z-20">
+      {/* Desktop Icons — two columns */}
+      <div className="desktop-icons absolute top-4 left-3 grid grid-cols-2 gap-x-1 gap-y-3 w-[176px] z-20">
         <DesktopIcon icon={Monitor} label="My Computer" onClick={() => toggleWindow("specs", true)} />
         <DesktopIcon icon={Trash2} label="Recycle Bin" onClick={() => alert("Emptying bin...")} />
-        <DesktopIcon icon={Globe} label="The Devils" onClick={() => toggleWindow("team", true)} />
+        <DesktopIcon icon={Users} label="The Devils" onClick={() => toggleWindow("team", true)} />
         <DesktopIcon icon={Folder} label="House_Photos" onClick={() => toggleWindow("photos", true)} />
-        <DesktopIcon icon={Users} label="Residents" onClick={() => toggleWindow("residents", true)} />
-        <DesktopIcon icon={Globe} label="LinkedIn" onClick={() => window.open("https://www.linkedin.com/company/hack47", "_blank")} />
+        <DesktopIcon icon={MapPin} label="Residents" onClick={() => toggleWindow("residents", true)} />
+        <DesktopIcon icon={Globe} label="The Web" onClick={() => toggleWindow("network", true)} />
+        <DesktopIcon icon={MapPin} label="Next Nodes" onClick={() => toggleWindow("cities", true)} />
+        <DesktopIcon icon={Newspaper} label="News Signal" onClick={() => toggleWindow("news", true)} />
+        <DesktopIcon icon={Zap} label="Power Supply" onClick={() => toggleWindow("sponsors", true)} />
+        <DesktopIcon icon={Ticket} label="Offgrid" onClick={() => toggleWindow("offgrid", true)} />
+        <DesktopIcon icon={Mail} label="Helpdesk" onClick={() => toggleWindow("contact", true)} />
       </div>
 
       {/* ═══════ WINDOWS (2×2 grid, never overlapping) ═══════ */}
@@ -302,6 +918,7 @@ function DesktopView() {
               <p>&gt; STATUS: PURE CHAOS DETECTED</p>
               <p>&gt; LOCATION: DELHI VILLA</p>
               <p>&gt; SEPT 15 - OCT 15</p>
+              <p>&gt; NEXT NODE: TBD — INDIA IS THE NETWORK</p>
             </div>
             <p className="font-serif italic text-[clamp(11px,1.3vw,18px)] text-gray-700 leading-snug border-l-4 border-gray-300 pl-2">
               &quot;A 30-day residency for 16 builders who care more about their Git history than their sleep schedule.&quot;
@@ -429,7 +1046,7 @@ function DesktopView() {
           title="ARCHDEMONS.SYS"
           startX={layout.team.x}
           startY={layout.team.y}
-          className="w-[40vw] min-w-[280px] max-w-[360px]"
+          className="w-[40vw] min-w-[280px] max-w-[380px]"
           titleBarClassName="bg-[#4a0000]"
           isActive={windowOrder[0] === "team"}
           zIndex={getZIndex("team")}
@@ -476,6 +1093,115 @@ function DesktopView() {
         </WinWindow>
       )}
 
+      {/* ═══════ NEW WINDOWS — network, cities, news, sponsors, offgrid, contact ═══════ */}
+
+      {openWindows.network && (
+        <WinWindow
+          id="network"
+          title="NETWORK_NEIGHBORHOOD.EXE"
+          startX={layout.network.x}
+          startY={layout.network.y}
+          className="w-[36vw] min-w-[240px] max-w-[300px]"
+          isActive={windowOrder[0] === "network"}
+          zIndex={getZIndex("network")}
+          onActivate={() => bringToFront("network")}
+          onClose={() => toggleWindow("network", false)}
+          floating={true}
+        >
+          <NetworkNeighborhood />
+        </WinWindow>
+      )}
+
+      {openWindows.cities && (
+        <WinWindow
+          id="cities"
+          title="NEXT_NODES.EXE"
+          startX={layout.cities.x}
+          startY={layout.cities.y}
+          className="w-[40vw] min-w-[260px] max-w-[330px]"
+          titleBarClassName="bg-[#006400]"
+          isActive={windowOrder[0] === "cities"}
+          zIndex={getZIndex("cities")}
+          onActivate={() => bringToFront("cities")}
+          onClose={() => toggleWindow("cities", false)}
+          floating={true}
+        >
+          <CitiesPanel />
+        </WinWindow>
+      )}
+
+      {openWindows.news && (
+        <WinWindow
+          id="news"
+          title="NEWS_SIGNAL.EXE"
+          startX={layout.news.x}
+          startY={layout.news.y}
+          className="w-[44vw] min-w-[300px] max-w-[400px]"
+          titleBarClassName="bg-[#000080]"
+          isActive={windowOrder[0] === "news"}
+          zIndex={getZIndex("news")}
+          onActivate={() => bringToFront("news")}
+          onClose={() => toggleWindow("news", false)}
+          floating={true}
+        >
+          <NewsPanel />
+        </WinWindow>
+      )}
+
+      {openWindows.sponsors && (
+        <WinWindow
+          id="sponsors"
+          title="POWER_SUPPLY.INI"
+          startX={layout.sponsors.x}
+          startY={layout.sponsors.y}
+          className="w-[36vw] min-w-[240px] max-w-[310px]"
+          titleBarClassName="bg-[#4a0080]"
+          isActive={windowOrder[0] === "sponsors"}
+          zIndex={getZIndex("sponsors")}
+          onActivate={() => bringToFront("sponsors")}
+          onClose={() => toggleWindow("sponsors", false)}
+          floating={true}
+        >
+          <SponsorsPanel />
+        </WinWindow>
+      )}
+
+      {openWindows.offgrid && (
+        <WinWindow
+          id="offgrid"
+          title="OFFGRID.EXE"
+          startX={layout.offgrid.x}
+          startY={layout.offgrid.y}
+          className="w-[36vw] min-w-[250px] max-w-[320px]"
+          titleBarClassName="bg-[#8b6914]"
+          isActive={windowOrder[0] === "offgrid"}
+          zIndex={getZIndex("offgrid")}
+          onActivate={() => bringToFront("offgrid")}
+          onClose={() => toggleWindow("offgrid", false)}
+          floating={true}
+        >
+          <OffgridPanel />
+        </WinWindow>
+      )}
+
+      {openWindows.contact && (
+        <WinWindow
+          id="contact"
+          title="HELPDESK.EXE"
+          startX={layout.contact.x}
+          startY={layout.contact.y}
+          className="w-[36vw] min-w-[240px] max-w-[300px]"
+          titleBarClassName="bg-[#008080]"
+          isActive={windowOrder[0] === "contact"}
+          zIndex={getZIndex("contact")}
+          onActivate={() => bringToFront("contact")}
+          onClose={() => toggleWindow("contact", false)}
+          floating={true}
+        >
+          <ContactPanel />
+        </WinWindow>
+      )}
+
       {/* Clippy Buddy */}
       <div className="absolute bottom-11 right-4 z-[9000]">
         <div className={cn(
@@ -502,6 +1228,339 @@ function DesktopView() {
         onTaskClick={(id) => { toggleWindow(id, true); bringToFront(id); }}
         onStartClick={() => toggleWindow("error", true)}
       />
+    </div>
+  );
+}
+
+// ─── Network Neighborhood (social links app) ────────────────────────────────
+
+function NetworkNeighborhood() {
+  return (
+    <div className="p-3 font-mono">
+      <div className="flex items-center justify-between mb-2">
+        <p className="text-[10px] font-bold text-gray-700">&gt; SELECT A CHANNEL</p>
+        <span className="text-[8px] text-green-600 font-bold animate-pulse">● 3 CHANNELS ONLINE</span>
+      </div>
+      <div className="space-y-2">
+        {SOCIALS.map((s) => (
+          <a
+            key={s.id}
+            href={s.url}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center gap-2.5 bg-win-grey win-border-outset px-2.5 py-2 hover:brightness-105 active:translate-x-px active:translate-y-px transition-all"
+          >
+            <span className="w-7 h-7 bg-white win-border-inset flex items-center justify-center text-sm shrink-0">
+              {s.icon}
+            </span>
+            <span className="flex-1 min-w-0">
+              <span className="block text-[10px] font-bold text-black uppercase">{s.label}</span>
+              <span className="block text-[8px] text-gray-600 truncate">{s.handle}</span>
+            </span>
+            <span className="text-[10px] text-black font-bold">↗</span>
+          </a>
+        ))}
+      </div>
+      <p className="text-[8px] text-gray-500 italic mt-2">
+        Establish connection. No viruses detected (probably).
+      </p>
+    </div>
+  );
+}
+
+// ─── Next Nodes (cities) ────────────────────────────────────────────────────
+
+function CitiesPanel() {
+  return (
+    <div className="p-3 font-mono text-[10px]">
+      <div className="flex justify-between items-center mb-2">
+        <p className="font-bold text-gray-800">INDIA NODE MAP</p>
+        <span className="text-[8px] font-bold text-green-600 animate-pulse">● DELHI NODE LIVE</span>
+      </div>
+      <div className="space-y-1">
+        {CITIES.map((c) => (
+          <div key={c.name} className="flex items-center justify-between border border-gray-200 bg-[#f8f8f8] px-2 py-1.5">
+            <div className="pr-2 min-w-0">
+              <p className="font-bold text-[10px]">
+                {c.icon} {c.name}
+              </p>
+              <p className="text-[8px] text-gray-500">{c.detail}</p>
+            </div>
+            <div className="text-right shrink-0">
+              <span
+                className={cn(
+                  "inline-block text-[8px] font-bold px-1.5 py-0.5 border",
+                  c.status === "LIVE"
+                    ? "text-green-700 border-green-600 bg-green-50"
+                    : c.status === "QUEUED"
+                      ? "text-yellow-700 border-yellow-600 bg-yellow-50"
+                      : "text-gray-500 border-gray-400 bg-gray-100"
+                )}
+              >
+                {c.status}
+              </span>
+              <p className="text-[7px] text-gray-400 mt-0.5">{c.statusText}</p>
+            </div>
+          </div>
+        ))}
+      </div>
+      <p className="text-[8px] text-gray-500 italic mt-2">
+        Node announcements drop on X + LinkedIn first. Follow to know when your city goes live.
+      </p>
+    </div>
+  );
+}
+
+// ─── News Signal (press + feeds) ────────────────────────────────────────────
+
+const NEWS_TABS = [
+  { id: "press", label: "PRESS" },
+  { id: "x", label: "X FEED" },
+  { id: "linkedin", label: "LINKEDIN" },
+] as const;
+
+function NewsPanel() {
+  const [tab, setTab] = useState<(typeof NEWS_TABS)[number]["id"]>("press");
+  const feed = useFeedData();
+
+  return (
+    <div className="p-2 font-mono">
+      <div className="flex items-end gap-0 px-1">
+        {NEWS_TABS.map((t) => (
+          <button
+            key={t.id}
+            onClick={() => setTab(t.id)}
+            className={cn(
+              "px-3 py-1 text-[9px] font-bold border border-gray-400 -mb-px transition-colors",
+              tab === t.id
+                ? "bg-white border-b-white relative z-10 text-black"
+                : "bg-[#d4d0c8] text-gray-500 hover:bg-[#e0ddd5]"
+            )}
+          >
+            {t.label}
+          </button>
+        ))}
+      </div>
+      <div className="bg-white border border-gray-400 p-2 min-h-[190px] max-h-[320px] overflow-y-auto">
+        {tab === "press" && <PressTab />}
+        {tab === "x" && <XFeedTab posts={feed.x} />}
+        {tab === "linkedin" && <LinkedInFeedTab posts={feed.linkedin} />}
+      </div>
+      <p className="text-[7px] text-gray-400 mt-1.5 px-1">
+        LAST SYNC: {new Date(feed.updated).toLocaleString()} · FEED: @hack47org + /company/hack47
+      </p>
+    </div>
+  );
+}
+
+function PressTab() {
+  const feed = useFeedData();
+  const m = feed.mint;
+  return (
+    <a
+      href={m.url}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="block bg-black text-white p-3 border-2 border-yellow-500/60 hover:border-yellow-400 transition-colors"
+    >
+      <p className="text-[8px] font-bold text-yellow-400 tracking-widest mb-1 uppercase">
+        ★ Featured in The Mint — {m.date}
+      </p>
+      <p className="text-[11px] font-bold leading-snug mb-2">{m.title}</p>
+      <p className="text-[9px] text-gray-400 italic leading-relaxed">{m.snippet}</p>
+      <p className="text-[9px] text-yellow-400 mt-2 font-bold">READ ARTICLE ↗</p>
+    </a>
+  );
+}
+
+function PostCard({ post, platform }: { post: FeedPost; platform: "x" | "linkedin" }) {
+  return (
+    <a
+      href={post.url}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="block border border-gray-300 bg-[#f8f8f8] p-2 mb-2 hover:bg-[#fffbe6] transition-colors last:mb-0"
+    >
+      <div className="flex justify-between items-center mb-1">
+        <p className="text-[9px] font-bold text-gray-800">
+          {post.author} <span className="text-gray-400 font-normal">· {post.role}</span>
+        </p>
+        <span className="text-[8px] text-gray-400 shrink-0 ml-2">{post.date}</span>
+      </div>
+      <p className="text-[9px] text-gray-600 leading-snug line-clamp-4">{post.text}</p>
+      <p className="text-[8px] font-bold mt-1 text-blue-700">
+        OPEN ON {platform === "x" ? "X" : "LINKEDIN"} ↗
+      </p>
+    </a>
+  );
+}
+
+function XFeedTab({ posts }: { posts: FeedPost[] }) {
+  if (posts.length === 0) {
+    return (
+      <div className="flex flex-col items-center justify-center h-full min-h-[150px] text-center p-4">
+        <p className="text-2xl mb-2">🕊️</p>
+        <p className="text-[10px] font-bold text-gray-700 uppercase tracking-widest mb-1">
+          NO_SIGNAL
+        </p>
+        <p className="text-[9px] text-gray-500 leading-relaxed max-w-[220px] mb-3">
+          0 posts detected on @hack47org. The birds haven&apos;t landed yet.
+        </p>
+        <a
+          href="https://x.com/hack47org"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="bg-win-grey win-border-outset px-4 py-1.5 text-[10px] font-bold text-black hover:brightness-105 active:translate-x-px active:translate-y-px"
+        >
+          FOLLOW ON X ↗
+        </a>
+      </div>
+    );
+  }
+  return (
+    <div>
+      {posts.map((p, i) => (
+        <PostCard key={i} post={p} platform="x" />
+      ))}
+    </div>
+  );
+}
+
+function LinkedInFeedTab({ posts }: { posts: FeedPost[] }) {
+  if (posts.length === 0) {
+    return (
+      <div className="flex flex-col items-center justify-center h-full min-h-[150px] text-center p-4">
+        <p className="text-2xl mb-2">💼</p>
+        <p className="text-[10px] font-bold text-gray-700 uppercase tracking-widest mb-1">
+          NO_SIGNAL
+        </p>
+        <p className="text-[9px] text-gray-500 leading-relaxed max-w-[220px] mb-3">
+          No posts detected on /company/hack47.
+        </p>
+        <a
+          href="https://www.linkedin.com/company/hack47"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="bg-win-grey win-border-outset px-4 py-1.5 text-[10px] font-bold text-black hover:brightness-105 active:translate-x-px active:translate-y-px"
+        >
+          FOLLOW ON LINKEDIN ↗
+        </a>
+      </div>
+    );
+  }
+  return (
+    <div>
+      {posts.map((p, i) => (
+        <PostCard key={i} post={p} platform="linkedin" />
+      ))}
+    </div>
+  );
+}
+
+// ─── Power Supply (sponsors) ────────────────────────────────────────────────
+
+function SponsorsPanel() {
+  return (
+    <div className="p-3 font-mono text-[10px]">
+      <p className="font-bold text-gray-800 mb-2 underline">POWER SUPPLY — INSTALLED DRIVERS</p>
+      <div className="space-y-2">
+        <div className="border border-gray-300 bg-[#f8f8f8] p-2">
+          <div className="flex justify-between items-center mb-1.5">
+            <p className="font-bold text-[10px] text-red-700">DRIVER 01 — RED BULL</p>
+            <span className="text-[8px] text-green-600 font-bold">OVERCLOCKED</span>
+          </div>
+          <img src="/sponsors/redbull.png" alt="Red Bull" className="h-9 w-auto mb-1" />
+          <p className="text-[8px] text-gray-500">FUEL.SYS — Liquid horsepower for the chaos engine.</p>
+        </div>
+        <div className="border border-gray-300 bg-[#f8f8f8] p-2">
+          <div className="flex justify-between items-center mb-1.5">
+            <p className="font-bold text-[10px] text-gray-800">DRIVER 02 — OPENAI</p>
+            <span className="text-[8px] text-green-600 font-bold">LOADED</span>
+          </div>
+          <img src="/sponsors/openai.png" alt="OpenAI" className="h-6 w-auto mb-1" />
+          <p className="text-[8px] text-gray-500">GPT.DLL — Compute credits for every builder in the house.</p>
+        </div>
+      </div>
+      <p className="text-[8px] text-gray-500 italic mt-2">
+        Want to power the machine? → hello@hack47.org
+      </p>
+    </div>
+  );
+}
+
+// ─── Offgrid (golden ticket) ────────────────────────────────────────────────
+
+const OFFGRID_URL = "https://hack47-offgrid.devpost.com/";
+
+function OffgridPanel() {
+  return (
+    <div className="p-3 font-mono">
+      <div className="border-2 border-yellow-600/70 bg-gradient-to-b from-[#2a2000] to-[#0d0a00] p-3 relative overflow-hidden">
+        <div className="flex justify-between text-[8px] font-bold text-yellow-600 tracking-widest mb-2">
+          <span>OFFGRID.EXE</span>
+          <span>VIRTUAL HACKATHON</span>
+        </div>
+        <p className="font-anton text-2xl text-yellow-400 uppercase leading-none mb-1">
+          Golden
+          <br />
+          Ticket
+        </p>
+        <p className="text-[9px] text-yellow-100/70 leading-relaxed mb-3">
+          48 hours. No internet. Pure chaos. Win Offgrid and get a{" "}
+          <span className="text-yellow-300 font-bold">guaranteed seat</span> in the next Hack47
+          cohort.
+        </p>
+        <a
+          href={OFFGRID_URL}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="block text-center bg-yellow-500 text-black font-bold text-[10px] uppercase py-2 win-border-outset hover:brightness-110 active:translate-y-px"
+        >
+          ✦ ENTER THE ARENA ↗
+        </a>
+        <p className="text-[8px] text-yellow-700/60 mt-1.5 text-center italic">
+          One winner. One seat. The next cohort is waiting.
+        </p>
+      </div>
+    </div>
+  );
+}
+
+// ─── Helpdesk (contact) ─────────────────────────────────────────────────────
+
+function ContactPanel() {
+  return (
+    <div className="p-3 font-mono">
+      <p className="text-[10px] font-bold text-gray-700 mb-2">&gt; SUMMON AN ORGANIZER</p>
+      <a
+        href={`mailto:${CONTACT.email}`}
+        className="flex items-center gap-2 bg-win-grey win-border-outset px-2.5 py-2 mb-2 hover:brightness-105 active:translate-x-px active:translate-y-px transition-all"
+      >
+        <span className="w-7 h-7 bg-white win-border-inset flex items-center justify-center shrink-0">
+          <Mail className="w-4 h-4 text-black" />
+        </span>
+        <span className="flex-1 min-w-0">
+          <span className="block text-[8px] text-gray-600 uppercase font-bold">Email</span>
+          <span className="block text-[11px] font-bold text-black truncate">{CONTACT.email}</span>
+        </span>
+        <span className="text-[10px] text-black font-bold">↗</span>
+      </a>
+      <a
+        href={`tel:${CONTACT.phoneRaw}`}
+        className="flex items-center gap-2 bg-win-grey win-border-outset px-2.5 py-2 hover:brightness-105 active:translate-x-px active:translate-y-px transition-all"
+      >
+        <span className="w-7 h-7 bg-white win-border-inset flex items-center justify-center shrink-0">
+          <Phone className="w-4 h-4 text-black" />
+        </span>
+        <span className="flex-1 min-w-0">
+          <span className="block text-[8px] text-gray-600 uppercase font-bold">Phone / WhatsApp</span>
+          <span className="block text-[11px] font-bold text-black truncate">{CONTACT.phone}</span>
+        </span>
+        <span className="text-[10px] text-black font-bold">↗</span>
+      </a>
+      <p className="text-[8px] text-gray-500 italic mt-2">
+        Response time: 24-48h. Faster if you bribe us with chai.
+      </p>
     </div>
   );
 }
@@ -545,43 +1604,38 @@ function TheDevils() {
       </div>
 
       <div className="space-y-4">
-        {/* Rishul */}
-        <div className="flex gap-3 items-start p-2 border border-gray-300 bg-[#f8f8f8]">
-          <img
-            src="/rishul.jpeg"
-            alt="Rishul Chanana"
-            className="w-16 h-16 object-cover border-2 border-red-800"
-          />
-          <div className="flex-1 min-w-0">
-            <p className="font-bold text-[11px]">Rishul Chanana</p>
-            <p className="text-[9px] text-red-700 uppercase tracking-wider mb-1.5">Archdemon I</p>
-            <div className="flex gap-2">
-              <a href="https://www.linkedin.com/in/rishul-chanana/" target="_blank" rel="noopener noreferrer" className="text-[9px] text-blue-600 hover:underline">LinkedIn ↗</a>
-              <a href="https://x.com/rishhul" target="_blank" rel="noopener noreferrer" className="text-[9px] text-gray-700 hover:underline">𝕏 ↗</a>
-            </div>
-          </div>
-        </div>
-
-        {/* Pratyush */}
-        <div className="flex gap-3 items-start p-2 border border-gray-300 bg-[#f8f8f8]">
-          <img
-            src="/pratyush.jpeg"
-            alt="Pratyush Pandey"
-            className="w-16 h-16 object-cover border-2 border-red-800"
-          />
-          <div className="flex-1 min-w-0">
-            <p className="font-bold text-[11px]">Pratyush Pandey</p>
-            <p className="text-[9px] text-red-700 uppercase tracking-wider mb-1.5">Archdemon II</p>
-            <div className="flex gap-2">
-              <a href="https://www.linkedin.com/in/pratyush-pandey-09b35b219" target="_blank" rel="noopener noreferrer" className="text-[9px] text-blue-600 hover:underline">LinkedIn ↗</a>
-              <a href="https://x.com/P_Pratyush7" target="_blank" rel="noopener noreferrer" className="text-[9px] text-gray-700 hover:underline">𝕏 ↗</a>
-            </div>
-          </div>
-        </div>
+        <DevilRow
+          name="Rishul Chanana"
+          role="Archdemon I"
+          img="/rishul.jpeg"
+          links={[
+            { label: "LinkedIn ↗", url: "https://www.linkedin.com/in/rishul-chanana/" },
+            { label: "𝕏 ↗", url: "https://x.com/rishhul" },
+          ]}
+        />
+        <DevilRow
+          name="Pratyush Pandey"
+          role="Archdemon II"
+          img="/pratyush.jpeg"
+          links={[
+            { label: "LinkedIn ↗", url: "https://www.linkedin.com/in/pratyush-pandey-09b35b219" },
+            { label: "𝕏 ↗", url: "https://x.com/P_Pratyush7" },
+          ]}
+        />
+        <DevilRow
+          name="Raghwender Vasisth"
+          role="Archdemon III"
+          initials="RV"
+          links={[
+            { label: "LinkedIn ↗", url: "https://www.linkedin.com/in/raghwender-vasist" },
+            { label: "𝕏 ↗", url: "https://x.com/Hawthorn_thinks" },
+            { label: "IG ↗", url: "https://www.instagram.com/hawthorn_laments" },
+          ]}
+        />
       </div>
 
       <div className="mt-4 pt-3 border-t border-gray-300 text-center">
-        <p className="text-[8px] text-gray-400 italic">These two traded their souls first. Now they collect yours.</p>
+        <p className="text-[8px] text-gray-400 italic">These three traded their souls first. Now they collect yours.</p>
       </div>
     </div>
   );
@@ -675,13 +1729,11 @@ function SoulForm({ onClose }: { onClose: () => void }) {
         return null;
 
       case "phone":
-        // Strip spaces, dashes, parens for validation
         const digits = v.replace(/[\s\-().+]/g, "");
         if (!/^\d{7,15}$/.test(digits)) return "Enter a valid phone number (7-15 digits).";
         return null;
 
       case "instagram":
-        // Accept @handle or full URL
         if (!/^@?[\w.]+$/.test(v) && !/instagram\.com\/[\w.]+/i.test(v)) {
           return "Enter a valid Instagram handle (@username) or profile URL.";
         }
@@ -694,7 +1746,6 @@ function SoulForm({ onClose }: { onClose: () => void }) {
         return null;
 
       case "twitter":
-        // Accept @handle or x.com/... or twitter.com/...
         if (!/^@[\w]+$/.test(v) && !/(x\.com|twitter\.com)\/[\w]+/i.test(v) && !/^[\w]+$/.test(v)) {
           return "Enter a valid X/Twitter handle (@username) or profile URL.";
         }
@@ -1029,7 +2080,6 @@ function NatureLayer() {
 
     clouds.forEach((cloud, i) => {
       const dir = i % 2 === 0 ? 1 : -1;
-      // Continuous horizontal drift
       gsap.to(cloud, {
         x: dir * (window.innerWidth * 0.5 + Math.random() * 200),
         duration: 25 + Math.random() * 30,
@@ -1037,7 +2087,6 @@ function NatureLayer() {
         yoyo: true,
         ease: "none",
       });
-      // Vertical float
       gsap.to(cloud, {
         y: `random(-50, 50)`,
         duration: 6 + Math.random() * 8,
