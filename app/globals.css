@@ -11,6 +11,11 @@
     --font-mono: "IBM Plex Mono", monospace;
     --font-win: "Tahoma", "Segoe UI", sans-serif;
 
+    /* Mobile-first display/body/code fonts — different from the desktop XP theme */
+    --font-display: var(--font-space-grotesk);
+    --font-body: var(--font-inter);
+    --font-code: var(--font-jetbrains);
+
     --color-toxic-green: #32CD32;
     --color-win-blue: #000080;
     --color-win-grey: #c0c0c0;
@@ -146,6 +151,22 @@
 @utility brutalist-thick {
     border: 3px solid #000;
     box-shadow: 4px 4px 0px #000;
+}
+
+/* ── Mobile readability floor ──
+   The desktop is a dense XP terminal where tiny mono text is thematic.
+   On mobile we enforce a legible minimum so nothing is 7-11px. Scoped to
+   .mobile-page so the desktop experience is untouched. */
+@media (max-width: 767px) {
+  .mobile-page p,
+  .mobile-page span,
+  .mobile-page li,
+  .mobile-page a,
+  .mobile-page button,
+  .mobile-page figcaption {
+    font-size: max(13px, 1em) !important;
+    line-height: 1.45 !important;
+  }
 }
 
 @layer base {

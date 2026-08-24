@@ -307,21 +307,19 @@ function MobileCard({
   titleClassName?: string
 }) {
   return (
-    <div className="mb-3 overflow-hidden win-border-outset bg-[#c0c0c0] shadow-[3px_3px_0px_rgba(0,0,0,0.35)]">
+    <div className="mb-3 overflow-hidden rounded-xl border border-zinc-200 bg-white shadow-[0_1px_4px_rgba(0,0,0,0.08)]">
       <div
         className={cn(
-          "flex items-center justify-between bg-gradient-to-r from-[#800000] to-[#cc0000] px-2.5 py-1.5 text-[11px] font-bold text-white",
-          titleClassName
+          "h-[3px] w-full",
+          titleClassName || "bg-gradient-to-r from-[#dc2626] to-[#ef4444]"
         )}
-      >
-        <span className="truncate pr-2">{title}</span>
-        <span className="shrink-0 text-[8px] tracking-tight text-white/50 select-none">
-          ─ □ ✕
+      />
+      <div className="px-3.5 pt-2.5 pb-1">
+        <span className="font-code text-[11px] font-bold uppercase tracking-wider text-zinc-500">
+          {title}
         </span>
       </div>
-      <div className="m-[3px] bg-white p-0.5 text-black win-border-inset">
-        {children}
-      </div>
+      <div className="text-zinc-900">{children}</div>
     </div>
   )
 }
@@ -337,44 +335,44 @@ function MobileView() {
 
   return (
     <div
-      className="relative min-h-screen pb-28 font-mono"
+      className="mobile-page relative min-h-screen pb-28 font-body"
       style={{
         background:
-          "radial-gradient(120% 80% at 50% 0%, #4a0505 0%, #1a0000 45%, #000000 100%)",
+          "radial-gradient(120% 80% at 50% 0%, #241a00 0%, #0c0c0c 45%, #000000 100%)",
       }}
     >
       {/* CRT scanline overlay */}
       <div className="pointer-events-none fixed inset-0 z-[9997] scanlines opacity-15" />
 
       {/* ── Sticky top bar ── */}
-      <div className="sticky top-0 z-[9000] flex items-center justify-between border-b-2 border-red-900/60 bg-black/80 px-3 py-2 backdrop-blur-md">
-        <p className="font-anton text-2xl leading-none tracking-tight text-white uppercase select-none">
+      <div className="sticky top-0 z-[9000] flex items-center justify-between border-b border-white/10 bg-black/80 px-4 py-3 backdrop-blur-md">
+        <p className="font-display text-xl font-bold leading-none tracking-tight text-white uppercase select-none">
           HACK<span className="text-electric-yellow">47</span>
         </p>
         <div className="flex items-center gap-2">
-          <span className="flex items-center gap-1.5 text-[9px] font-bold text-green-400">
+          <span className="flex items-center gap-1.5 text-[11px] font-bold text-green-400">
             <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-green-400" />
             BATCH #001 LIVE
           </span>
           <button
             onClick={() => setShowForm(true)}
-            className="win-border-outset bg-red-600 px-3 py-1.5 text-[10px] font-bold text-white active:translate-x-px active:translate-y-px"
+            className="rounded-lg bg-red-600 px-4 py-2 text-[13px] font-bold text-white uppercase transition-colors active:scale-95"
           >
-            APPLY
+            Apply
           </button>
         </div>
       </div>
 
       {/* ── Hero ── */}
-      <section className="px-4 pt-6">
-        <h1 className="font-anton text-[64px] leading-[0.9] text-white uppercase select-none">
+      <section className="px-4 pt-8 pb-4">
+        <h1 className="font-display text-[56px] font-bold leading-[0.95] tracking-tight text-white uppercase select-none">
           HACK<span className="text-electric-yellow">47</span>
         </h1>
-        <p className="mt-2 max-w-[320px] text-[11px] leading-snug text-red-200/80">
+        <p className="mt-3 max-w-[340px] text-[15px] leading-relaxed text-zinc-300">
           Delhi&apos;s first hacker house. A 30-day residency for 16 builders
           who care more about their Git history than their sleep schedule.
         </p>
-        <div className="mt-3 border-l-4 border-electric-yellow bg-black p-2.5 font-mono text-[10px] text-electric-yellow shadow-[3px_3px_0px_rgba(0,0,0,0.4)]">
+        <div className="mt-5 rounded-xl border border-white/10 bg-black/60 p-3.5 font-code text-[13px] leading-relaxed text-electric-yellow">
           <p>&gt; INITIALIZING DELHI&apos;S FIRST HACKER HOUSE...</p>
           <p>&gt; STATUS: PURE CHAOS DETECTED</p>
           <p>&gt; LOCATION: DELHI VILLA · SEPT 15 – OCT 15</p>
@@ -963,14 +961,13 @@ function MobileDock({
   onApply: () => void
   scrollTo: (id: string) => void
 }) {
-  const items = [
+  const tabs = [
     {
       id: "top",
       label: "TOP",
       icon: ArrowUp,
       action: () => window.scrollTo({ top: 0, behavior: "smooth" }),
     },
-    { id: "apply", label: "APPLY", icon: Flame, action: onApply },
     {
       id: "nodes",
       label: "NODES",
@@ -991,17 +988,28 @@ function MobileDock({
     },
   ]
   return (
-    <div className="fixed right-0 bottom-0 left-0 z-[9999] flex border-t-2 border-black/50 bg-linear-to-b from-[#245edb] via-[#3f8cf3] to-[#245edb] shadow-[0_-2px_10px_rgba(0,0,0,0.6)]">
-      {items.map((i) => (
+    <div className="fixed inset-x-0 bottom-0 z-[9999] border-t border-white/10 bg-black/85 px-3 pt-2 pb-[max(10px,calc(env(safe-area-inset-bottom)))] backdrop-blur">
+      <div className="flex items-center gap-2">
+        {tabs.map((t) => (
+          <button
+            key={t.id}
+            onClick={t.action}
+            className="flex flex-1 flex-col items-center gap-1 py-1 text-zinc-400 transition-colors hover:text-white"
+          >
+            <t.icon className="h-5 w-5" />
+            <span className="text-[10px] font-bold tracking-wider">
+              {t.label}
+            </span>
+          </button>
+        ))}
         <button
-          key={i.id}
-          onClick={i.action}
-          className="flex flex-1 flex-col items-center justify-center gap-0.5 py-1.5 text-white transition-colors active:bg-[#2c6ecb]"
+          onClick={onApply}
+          className="flex items-center gap-1.5 rounded-xl bg-red-600 px-5 py-3 text-[13px] font-bold uppercase text-white shadow-[0_4px_16px_rgba(220,38,38,0.4)] transition-colors active:scale-95"
         >
-          <i.icon className="h-4 w-4" />
-          <span className="text-[8px] font-bold tracking-wider">{i.label}</span>
+          <Flame className="h-4 w-4" />
+          Apply
         </button>
-      ))}
+      </div>
     </div>
   )
 }

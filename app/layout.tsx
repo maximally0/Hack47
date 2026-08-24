@@ -1,4 +1,4 @@
-import { Anton, IBM_Plex_Mono } from "next/font/google"
+import { Anton, IBM_Plex_Mono, Space_Grotesk, Inter, JetBrains_Mono } from "next/font/google"
 import { Metadata } from "next"
 
 import "./globals.css"
@@ -15,6 +15,25 @@ const fontMono = IBM_Plex_Mono({
   subsets: ["latin"],
   weight: ["400", "700"],
   variable: "--font-mono",
+});
+
+// Mobile-first fonts — deliberately different from the desktop XP theme.
+const spaceGrotesk = Space_Grotesk({
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+  variable: "--font-space-grotesk",
+});
+
+const inter = Inter({
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+  variable: "--font-inter",
+});
+
+const jetBrains = JetBrains_Mono({
+  subsets: ["latin"],
+  weight: ["400", "700"],
+  variable: "--font-jetbrains",
 })
 
 export const metadata: Metadata = {
@@ -83,7 +102,7 @@ export default function RootLayout({
     <html
       lang="en"
       suppressHydrationWarning
-      className={cn("antialiased", fontMono.variable, anton.variable)}
+      className={cn("antialiased", fontMono.variable, anton.variable, spaceGrotesk.variable, inter.variable, jetBrains.variable)}
     >
       <body className="bg-black">
         <ThemeProvider>{children}</ThemeProvider>
