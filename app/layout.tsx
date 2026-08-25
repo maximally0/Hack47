@@ -1,4 +1,4 @@
-import { Anton, IBM_Plex_Mono, Space_Grotesk, Inter, JetBrains_Mono } from "next/font/google"
+import { Anton, IBM_Plex_Mono, Sora, DM_Sans, Space_Mono } from "next/font/google"
 import { Metadata } from "next"
 
 import "./globals.css"
@@ -18,22 +18,22 @@ const fontMono = IBM_Plex_Mono({
 });
 
 // Mobile-first fonts — deliberately different from the desktop XP theme.
-const spaceGrotesk = Space_Grotesk({
+const sora = Sora({
   subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
-  variable: "--font-space-grotesk",
+  weight: ["400", "500", "600", "700", "800"],
+  variable: "--font-sora",
 });
 
-const inter = Inter({
+const dmSans = DM_Sans({
   subsets: ["latin"],
   weight: ["400", "500", "600", "700"],
-  variable: "--font-inter",
+  variable: "--font-dm-sans",
 });
 
-const jetBrains = JetBrains_Mono({
+const spaceMono = Space_Mono({
   subsets: ["latin"],
   weight: ["400", "700"],
-  variable: "--font-jetbrains",
+  variable: "--font-space-mono",
 })
 
 export const metadata: Metadata = {
@@ -102,7 +102,7 @@ export default function RootLayout({
     <html
       lang="en"
       suppressHydrationWarning
-      className={cn("antialiased", fontMono.variable, anton.variable, spaceGrotesk.variable, inter.variable, jetBrains.variable)}
+      className={cn("antialiased", fontMono.variable, anton.variable, sora.variable, dmSans.variable, spaceMono.variable)}
     >
       <body className="bg-black">
         <ThemeProvider>{children}</ThemeProvider>

@@ -12,9 +12,9 @@
     --font-win: "Tahoma", "Segoe UI", sans-serif;
 
     /* Mobile-first display/body/code fonts — different from the desktop XP theme */
-    --font-display: var(--font-space-grotesk);
-    --font-body: var(--font-inter);
-    --font-code: var(--font-jetbrains);
+    --font-display: var(--font-sora);
+    --font-body: var(--font-dm-sans);
+    --font-code: var(--font-space-mono);
 
     --color-toxic-green: #32CD32;
     --color-win-blue: #000080;

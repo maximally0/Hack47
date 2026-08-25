@@ -287,7 +287,7 @@ export default function DesktopPage() {
   }, [])
 
   if (isMobile) {
-    return <MobileView />
+    return <MobileExperience />
   }
 
   return <DesktopView />
@@ -1010,6 +1010,438 @@ function MobileDock({
           Apply
         </button>
       </div>
+    </div>
+  )
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+// MOBILE EXPERIENCE — cinematic, real-asset, warm (rebuilt from the ground up)
+// ═══════════════════════════════════════════════════════════════════════════
+
+function MobileLabel({ children }: { children: React.ReactNode }) {
+  return (
+    <div className="font-code text-[11px] uppercase tracking-[0.18em] text-[#ffb627] mb-2">
+      {children}
+    </div>
+  )
+}
+
+/** Warm content card that pops on the dark cinematic base. */
+function ContentCard({ children, className }: { children: React.ReactNode; className?: string }) {
+  return (
+    <div className={cn("rounded-3xl bg-[#fbf7f1] text-[#1c1813] p-5 shadow-[0_20px_50px_rgba(0,0,0,0.35)]", className)}>
+      {children}
+    </div>
+  )
+}
+
+function PerkRow({ n, title, desc }: { n: string; title: string; desc: string }) {
+  return (
+    <div className="flex items-start gap-3 py-2.5 border-b border-black/5 last:border-0">
+      <span className="font-code text-[12px] font-bold text-[#ff7a45] mt-0.5">{n}</span>
+      <div>
+        <h3 className="font-display font-semibold text-[16px] text-[#1c1813]">{title}</h3>
+        <p className="text-[13.5px] text-[#6f675e] mt-0.5">{desc}</p>
+      </div>
+    </div>
+  )
+}
+
+function MobileExperience() {
+  const [showForm, setShowForm] = useState(false)
+  const feed = useFeedData()
+  const open = () => setShowForm(true)
+  const scrollTo = (id: string) =>
+    document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" })
+
+  return (
+    <div className="mobile-page relative min-h-screen bg-[#0e0d0b] text-[#f5f1ea] font-body overflow-x-hidden pb-28">
+      {/* ── Cinematic hero (real b-roll video / photo) ── */}
+      <section className="relative isolate flex min-h-[96svh] flex-col justify-between overflow-hidden">
+        <div className="absolute inset-0 -z-10 bg-[#0e0d0b]">
+          <video
+            className="h-full w-full object-cover"
+            autoPlay
+            muted
+            loop
+            playsInline
+            poster="/assets/hero-2.jpg"
+            preload="metadata"
+            aria-hidden="true"
+          >
+            <source src="/assets/hero.mp4" type="video/mp4" />
+          </video>
+          <div className="absolute inset-0 bg-gradient-to-b from-black/80 via-black/45 to-[#0e0d0b]" />
+        </div>
+
+        <header className="flex items-center justify-between px-5 pt-5">
+          <div className="font-display text-2xl font-extrabold tracking-tight text-white">
+            HACK<span className="text-[#ff7a45]">47</span>
+          </div>
+          <button
+            onClick={open}
+            className="rounded-full bg-[#ff7a45] px-4 py-2 text-sm font-semibold text-black shadow-[0_8px_20px_rgba(255,122,69,0.4)] active:scale-95"
+          >
+            Apply
+          </button>
+        </header>
+
+        <div className="px-5 pb-8">
+          <MobileLabel>Delhi&apos;s first hacker house</MobileLabel>
+          <h1 className="font-display text-[clamp(42px,12vw,56px)] font-extrabold leading-[0.95] tracking-tight text-white">
+            The coolest <span className="text-[#ff7a45]">hacker house.</span>
+          </h1>
+          <p className="mt-4 max-w-[320px] text-[15px] leading-relaxed text-white/80">
+            30 days. 16 builders. One villa. Build something real — then actually enjoy the good life.
+          </p>
+          <div className="mt-6 flex flex-wrap items-center gap-2 font-code text-[11px]">
+            <span className="rounded-full border border-white/15 bg-white/10 px-3 py-1.5">SEPT 15 – OCT 15</span>
+            <span className="rounded-full border border-white/15 bg-white/10 px-3 py-1.5">16 SLOTS</span>
+            <span className="rounded-full bg-[#ffb627] px-3 py-1.5 font-bold text-black">APPLY NOW</span>
+          </div>
+          <button
+            onClick={open}
+            className="mt-7 w-full rounded-2xl bg-[#ff7a45] py-4 font-display text-[17px] font-bold text-black shadow-[0_12px_30px_rgba(255,122,69,0.35)] active:scale-[0.99]"
+          >
+            Apply to Hack47 →
+          </button>
+        </div>
+      </section>
+
+      {/* ── Stats ── */}
+      <section className="grid grid-cols-3 gap-3 px-5 pt-6">
+        {[
+          ["30", "days"],
+          ["16", "builders"],
+          ["1", "villa"],
+        ].map(([v, l]) => (
+          <div key={l} className="rounded-2xl border border-white/10 bg-white/5 py-5 text-center">
+            <div className="font-display text-3xl font-extrabold text-[#ffb627]">{v}</div>
+            <div className="mt-1 text-[11px] uppercase tracking-wider text-white/50">{l}</div>
+          </div>
+        ))}
+      </section>
+
+      {/* ── What you get ── */}
+      <section className="px-5 pt-9">
+        <MobileLabel>What you get</MobileLabel>
+        <h2 className="mb-5 font-display text-2xl font-bold text-white">Built to ship. Built to live.</h2>
+        <ContentCard>
+          <PerkRow n="01" title="16 desks, real monitors" desc="Work when it flows." />
+          <PerkRow n="02" title="1Gbps fiber + failsafe" desc="Lag is a build error." />
+          <PerkRow n="03" title="3 meals a day" desc="Fuel, not feasts. Snack bar 24/7." />
+          <PerkRow n="04" title="Unlimited chai & coffee" desc="Pick your poison, we stock it." />
+          <PerkRow n="05" title="Terrace + sunsets" desc="Build by day, unwind by dusk." />
+          <PerkRow n="06" title="Your work stays yours" desc="We host, you keep the IP." />
+        </ContentCard>
+      </section>
+
+      {/* ── The house (photos) ── */}
+      <section className="px-5 pt-9">
+        <MobileLabel>The house</MobileLabel>
+        <h2 className="mb-5 font-display text-2xl font-bold text-white">A villa, not an office.</h2>
+        <div className="-mx-5 flex snap-x gap-3 overflow-x-auto px-5 pb-2">
+          {HOUSE_PHOTOS.map((p, i) => (
+            <figure key={i} className="w-[80%] max-w-[320px] shrink-0 snap-center">
+              <img
+                src={p.src}
+                alt={p.caption}
+                loading="lazy"
+                className="aspect-[4/3] w-full rounded-2xl border border-white/10 object-cover"
+              />
+              <figcaption className="mt-2 text-[12px] text-white/60">{p.caption}</figcaption>
+            </figure>
+          ))}
+        </div>
+      </section>
+
+      {/* ── Offgrid golden ticket ── */}
+      <section id="offgrid" className="px-5 pt-9">
+        <MobileLabel>Offgrid — the golden ticket</MobileLabel>
+        <div className="rounded-3xl bg-gradient-to-br from-[#ffb627] to-[#ff7a45] p-5 text-[#2a1c00] shadow-[0_16px_40px_rgba(255,183,39,0.25)]">
+          <div className="flex items-center justify-between font-code text-[11px] font-bold uppercase tracking-widest text-[#33250a]">
+            <span>Virtual hackathon</span><span>30 days</span>
+          </div>
+          <h2 className="mt-3 font-display text-3xl font-extrabold uppercase leading-none">Win a seat</h2>
+          <p className="mt-2 max-w-[300px] text-[14px] leading-relaxed text-[#3a2a08]">
+            Fully remote. Pure chaos. Win Offgrid and get a guaranteed spot in the next Hack47 cohort.
+          </p>
+          <a
+            href={OFFGRID_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="mt-4 block w-full rounded-xl bg-black py-3 text-center font-display text-[15px] font-bold text-[#ffb627] active:scale-[0.99]"
+          >
+            Enter the arena ↗
+          </a>
+        </div>
+      </section>
+
+      {/* ── Cities / nodes ── */}
+      <section id="nodes" className="px-5 pt-9">
+        <MobileLabel>Next nodes</MobileLabel>
+        <ContentCard>
+          <div className="mb-1 flex items-center justify-between">
+            <h2 className="font-display text-xl font-bold text-[#1c1813]">India node map</h2>
+            <span className="font-code text-[11px] font-bold text-green-700">● DELHI LIVE</span>
+          </div>
+          <div className="mt-2">
+            {CITIES.map((c) => (
+              <div key={c.name} className="flex items-center justify-between border-b border-black/5 py-2.5 last:border-0">
+                <div>
+                  <p className="font-display text-[14px] font-semibold text-[#1c1813]">
+                    {c.icon} {c.name}
+                  </p>
+                  <p className="text-[12px] text-[#6f675e]">{c.detail}</p>
+                </div>
+                <span
+                  className={cn(
+                    "shrink-0 rounded-full border px-2 py-0.5 font-code text-[10px] font-bold uppercase",
+                    c.status === "LIVE"
+                      ? "border-green-600 bg-green-50 text-green-700"
+                      : c.status === "CO-RUN"
+                        ? "border-purple-600 bg-purple-50 text-purple-700"
+                        : c.status === "QUEUED"
+                          ? "border-amber-600 bg-amber-50 text-amber-700"
+                          : "border-zinc-400 bg-zinc-100 text-zinc-500"
+                  )}
+                >
+                  {c.status}
+                </span>
+              </div>
+            ))}
+          </div>
+          <p className="mt-3 text-[12px] italic text-[#6f675e]">
+            Node announcements drop on X + LinkedIn first. Follow to know when your city goes live.
+          </p>
+        </ContentCard>
+      </section>
+
+      {/* ── Variance partner ── */}
+      <section id="partner" className="px-5 pt-9">
+        <MobileLabel>Partner node</MobileLabel>
+        <div className="rounded-3xl bg-gradient-to-br from-[#7a2ff2] to-[#b06bff] p-5 text-white shadow-[0_16px_40px_rgba(122,47,242,0.3)]">
+          <div className="flex items-center justify-between font-code text-[11px] font-bold uppercase tracking-widest">
+            <span>Variance.house</span><span className="text-green-300">● CONNECTED</span>
+          </div>
+          <h2 className="mt-3 font-display text-3xl font-extrabold uppercase leading-none">Variance</h2>
+          <p className="mt-2 max-w-[320px] text-[14px] leading-relaxed text-white/85">
+            30-day deep-tech residency in Bengaluru. Same month as Delhi — shared mentors, shared sponsors, stacked credits. No fee. No equity.
+          </p>
+          <a
+            href="https://www.variance.house"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="mt-4 block w-full rounded-xl bg-white py-3 text-center font-display text-[15px] font-bold text-[#7a2ff2] active:scale-[0.99]"
+          >
+            Learn more ↗
+          </a>
+        </div>
+      </section>
+
+      {/* ── Sponsors ── */}
+      <section id="sponsors" className="px-5 pt-9">
+        <MobileLabel>Power supply</MobileLabel>
+        <ContentCard>
+          <p className="mb-3 font-code text-[11px] font-bold uppercase tracking-widest text-[#1c1813]">
+            Powering the machine
+          </p>
+          <div className="flex gap-3">
+            <div className="flex flex-1 flex-col items-center justify-center rounded-xl border border-zinc-200 bg-white p-4">
+              <img src="/sponsors/redbull.png" alt="Red Bull" className="h-9 w-auto" />
+              <p className="mt-2 text-center font-code text-[10px] text-[#6f675e]">Fuel</p>
+            </div>
+            <div className="flex flex-1 flex-col items-center justify-center rounded-xl border border-zinc-200 bg-white p-4">
+              <img src="/sponsors/openai.png" alt="OpenAI" className="h-9 w-auto" />
+              <p className="mt-2 text-center font-code text-[10px] text-[#6f675e]">Compute</p>
+            </div>
+          </div>
+          <p className="mt-3 text-[12px] text-[#6f675e]">
+            Plus the shared Variance credit stack. Want to power the machine?{" "}
+            <a href={`mailto:${CONTACT.email}`} className="font-bold text-blue-700 underline">
+              hello@hack47.org
+            </a>
+          </p>
+        </ContentCard>
+      </section>
+
+      {/* ── News ── */}
+      <section id="news" className="px-5 pt-9">
+        <MobileLabel>Press + signals</MobileLabel>
+        <a
+          href={feed.mint.url}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="block rounded-3xl border border-white/10 bg-white/5 p-5 transition-colors hover:border-[#ffb627]/50"
+        >
+          <p className="font-code text-[11px] font-bold uppercase tracking-widest text-[#ffb627]">
+            ★ Featured in The Mint — {feed.mint.date}
+          </p>
+          <p className="mt-2 font-display text-[16px] font-semibold text-white">{feed.mint.title}</p>
+          <p className="mt-2 text-[13px] leading-relaxed text-white/60">{feed.mint.snippet}</p>
+          <p className="mt-3 font-code text-[11px] font-bold text-[#ffb627]">Read article ↗</p>
+        </a>
+        <div className="mt-3 space-y-3">
+          {feed.x.slice(0, 1).map((p, i) => (
+            <a key={i} href={p.url} target="_blank" rel="noopener noreferrer" className="block rounded-2xl border border-white/10 bg-white/[0.03] p-4">
+              <p className="font-code text-[12px] font-bold text-white">
+                {p.author} <span className="font-normal text-white/50">· {p.date}</span>
+              </p>
+              <p className="mt-1 line-clamp-3 text-[13px] leading-relaxed text-white/65">{p.text}</p>
+              <p className="mt-2 font-code text-[11px] font-bold text-[#ff7a45]">Open on X ↗</p>
+            </a>
+          ))}
+          {feed.linkedin.slice(0, 1).map((p, i) => (
+            <a key={i} href={p.url} target="_blank" rel="noopener noreferrer" className="block rounded-2xl border border-white/10 bg-white/[0.03] p-4">
+              <p className="font-code text-[12px] font-bold text-white">{p.author}</p>
+              <p className="mt-1 line-clamp-3 text-[13px] leading-relaxed text-white/65">{p.text}</p>
+              <p className="mt-2 font-code text-[11px] font-bold text-[#ff7a45]">Open on LinkedIn ↗</p>
+            </a>
+          ))}
+        </div>
+      </section>
+
+      {/* ── House protocols ── */}
+      <section className="px-5 pt-9">
+        <MobileLabel>House protocols</MobileLabel>
+        <ContentCard>
+          <p className="mb-3 font-code text-[11px] font-bold uppercase tracking-widest text-[#1c1813]">Read me first</p>
+          <div className="space-y-3">
+            {[
+              ["LAUNDRY.SYS", "We wash the socks. You build the robots."],
+              ["FOOD.EXE", "High-protein fuel. Optimized for latency."],
+              ["SLEEP.DLL", "Optional. Not recommended during demo day."],
+            ].map(([f, l]) => (
+              <div key={f} className="flex items-start gap-2">
+                <span className="font-code text-[13px] font-bold text-[#ff7a45]">{f}</span>
+                <span className="text-[13.5px] text-[#3a352d]">{l}</span>
+              </div>
+            ))}
+          </div>
+          <p className="mt-4 text-[12px] italic text-[#6f675e]">
+            Highly addictive environment. May cause sudden career pivots.
+          </p>
+        </ContentCard>
+      </section>
+
+      {/* ── Archdemons ── */}
+      <section id="devils" className="px-5 pt-9">
+        <MobileLabel>The archdemons</MobileLabel>
+        <ContentCard>
+          <p className="mb-3 text-center text-[12px] italic text-[#6f675e]">The ones who summoned this chaos into existence</p>
+          <DevilRow name="Rishul Chanana" role="Archdemon I" img="/rishul.jpeg" links={[{ label: "LinkedIn ↗", url: "https://www.linkedin.com/in/rishul-chanana/" }, { label: "𝕏 ↗", url: "https://x.com/rishhul" }]} />
+          <DevilRow name="Pratyush Pandey" role="Archdemon II" img="/pratyush.jpeg" links={[{ label: "LinkedIn ↗", url: "https://www.linkedin.com/in/pratyush-pandey-09b35b219" }, { label: "𝕏 ↗", url: "https://x.com/P_Pratyush7" }]} />
+          <DevilRow name="Raghwender Vasisth" role="Archdemon III" initials="RV" links={[{ label: "LinkedIn ↗", url: "https://www.linkedin.com/in/raghwender-vasist" }, { label: "𝕏 ↗", url: "https://x.com/Hawthorn_thinks" }, { label: "IG ↗", url: "https://www.instagram.com/hawthorn_laments" }]} />
+        </ContentCard>
+      </section>
+
+      {/* ── Residents ── */}
+      <section className="px-5 pt-9">
+        <MobileLabel>Residents</MobileLabel>
+        <ContentCard>
+          <ResidentsPanel />
+        </ContentCard>
+      </section>
+
+      {/* ── System specs ── */}
+      <section className="px-5 pt-9">
+        <MobileLabel>System specs</MobileLabel>
+        <ContentCard>
+          <SystemSpecs />
+        </ContentCard>
+      </section>
+
+      {/* ── FAQ ── */}
+      <section className="px-5 pt-9">
+        <MobileLabel>FAQ</MobileLabel>
+        <h2 className="mb-4 font-display text-2xl font-bold text-white">A few practical questions.</h2>
+        <div className="divide-y divide-white/10">
+          {[
+            ["Who is this for?", "Builders. Students, founders, indie hackers — anyone who ships. The bar is momentum, not pedigree."],
+            ["What does it cost?", "We ask if you can contribute, but it never affects your application. Be honest — need-based support exists and nobody is turned away over money."],
+            ["Where is it?", "A premium villa in Delhi. 4BHK, terrace, garden. Sept 15 – Oct 15."],
+            ["Do I need to know how to code already?", "Being a builder is the real requirement. Code helps; momentum wins."],
+            ["Is it really about the good life?", "Yes. Ship like you mean it, then actually enjoy the best 30 days of your year. That is the whole point."],
+          ].map(([q, a]) => (
+            <div key={q} className="py-4">
+              <h3 className="font-display text-[15px] font-semibold text-white">{q}</h3>
+              <p className="mt-1.5 text-[13.5px] leading-relaxed text-white/65">{a}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* ── Contact ── */}
+      <section id="contact" className="px-5 pt-9">
+        <MobileLabel>Contact</MobileLabel>
+        <ContentCard>
+          <p className="mb-3 text-[13.5px] text-[#6f675e]">Summon an organizer. We reply fast (or when the WiFi drops).</p>
+          <a href={`mailto:${CONTACT.email}`} className="block rounded-xl border border-zinc-200 bg-white p-3">
+            <p className="font-code text-[10px] font-bold uppercase text-[#6f675e]">Email</p>
+            <p className="font-display text-[16px] font-semibold text-blue-800">{CONTACT.email}</p>
+          </a>
+          <a href={`tel:${CONTACT.phoneRaw}`} className="mt-2 block rounded-xl border border-zinc-200 bg-white p-3">
+            <p className="font-code text-[10px] font-bold uppercase text-[#6f675e]">Phone / WhatsApp</p>
+            <p className="font-display text-[16px] font-semibold text-blue-800">{CONTACT.phone}</p>
+          </a>
+          <p className="mt-3 text-[12px] italic text-[#6f675e]">Response time: 24-48h. Faster if you bribe us with chai.</p>
+        </ContentCard>
+      </section>
+
+      {/* ── Footer ── */}
+      <footer className="mt-10 px-5 pb-8 text-center">
+        <div className="flex gap-2">
+          {SOCIALS.map((s) => (
+            <a
+              key={s.id}
+              href={s.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex-1 rounded-xl border border-white/10 bg-white/5 py-3 text-center text-[12px] font-semibold text-white/80 transition-colors hover:border-[#ff7a45]/50"
+            >
+              {s.icon} {s.label.split(" ")[0]} ↗
+            </a>
+          ))}
+        </div>
+        <p className="mt-5 text-[11px] leading-relaxed text-white/40">
+          HACK47 © 2026 — Delhi&apos;s first hacker house.
+          <br />
+          Batch #001: Sept 15 – Oct 15 · More cities loading…
+          <br />
+          Co-conducted with{" "}
+          <a href="https://www.variance.house" target="_blank" rel="noopener noreferrer" className="underline hover:text-white">
+            variance.house
+          </a>
+        </p>
+      </footer>
+
+      {/* ── Bottom dock ── */}
+      <nav className="fixed inset-x-0 bottom-0 z-50 border-t border-white/10 bg-[#0c0b09]/90 px-4 pt-2 pb-[max(10px,calc(env(safe-area-inset-bottom)))] backdrop-blur">
+        <div className="flex items-center gap-2">
+          <button onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })} className="flex flex-1 flex-col items-center gap-1 py-1 text-white/50 hover:text-white">
+            <ArrowUp className="h-5 w-5" />
+            <span className="text-[10px] font-bold tracking-wider">Top</span>
+          </button>
+          <button onClick={() => scrollTo("nodes")} className="flex flex-1 flex-col items-center gap-1 py-1 text-white/50 hover:text-white">
+            <MapPin className="h-5 w-5" />
+            <span className="text-[10px] font-bold tracking-wider">Nodes</span>
+          </button>
+          <button onClick={() => scrollTo("news")} className="flex flex-1 flex-col items-center gap-1 py-1 text-white/50 hover:text-white">
+            <Newspaper className="h-5 w-5" />
+            <span className="text-[10px] font-bold tracking-wider">News</span>
+          </button>
+          <button onClick={() => (window.location.href = `tel:${CONTACT.phoneRaw}`)} className="flex flex-1 flex-col items-center gap-1 py-1 text-white/50 hover:text-white">
+            <Phone className="h-5 w-5" />
+            <span className="text-[10px] font-bold tracking-wider">Call</span>
+          </button>
+          <button onClick={open} className="flex items-center gap-1.5 rounded-xl bg-[#ff7a45] px-5 py-3 text-[13px] font-bold text-black shadow-[0_6px_18px_rgba(255,122,69,0.4)] active:scale-95">
+            <Flame className="h-4 w-4" />
+            Apply
+          </button>
+        </div>
+      </nav>
+
+      {showForm && <SoulForm onClose={() => setShowForm(false)} />}
     </div>
   )
 }
