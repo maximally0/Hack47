@@ -376,7 +376,7 @@ function MobileView() {
           <p>&gt; INITIALIZING DELHI&apos;S FIRST HACKER HOUSE...</p>
           <p>&gt; STATUS: PURE CHAOS DETECTED</p>
           <p>&gt; LOCATION: DELHI VILLA · SEPT 15 – OCT 15</p>
-          <p>&gt; PARTNER NODE: VARIANCE.HOUSE — CONNECTED</p>
+          <p>&gt; CROSS-LINK: VARIANCE.HOUSE — SAME MONTH, TWO CITIES</p>
           <p className="animate-pulse">
             &gt; NEXT NODE: TBD — INDIA IS THE NETWORK ▊
           </p>
@@ -502,13 +502,13 @@ function MobileView() {
       {/* ── PARTNER — variance ── */}
       <section id="partner" className="mt-6 px-4">
         <MobileCard
-          title="🌐 PARTNER_NODE.SYS"
+          title="🌐 CROSS_LINK.EXE"
           titleClassName="bg-gradient-to-r from-[#7a007a] to-[#c300c3]"
         >
           <div className="p-3 font-mono text-[11px]">
             <div className="border-2 border-purple-700/60 bg-gradient-to-b from-[#1a001a] to-[#000000] p-3">
               <div className="mb-2 flex justify-between text-[8px] font-bold tracking-widest text-purple-400">
-                <span>NODE: VARIANCE.HOUSE</span>
+                <span>LINK: VARIANCE.HOUSE</span>
                 <span className="animate-pulse text-green-400">
                   ● CONNECTED
                 </span>
@@ -518,8 +518,8 @@ function MobileView() {
               </p>
               <p className="mb-2 text-[9px] leading-relaxed text-purple-100/70">
                 30-day deep-tech residency. Bengaluru. Same month as Delhi —
-                Sept 15 to Oct 15. Shared mentors, shared sponsors, stacked
-                credits. No fee. No equity.
+                Sept 15 to Oct 15. Cross-promoted, not merged. No fee. No
+                equity.
               </p>
               <a
                 href="https://www.variance.house"
@@ -530,8 +530,7 @@ function MobileView() {
                 ✦ LEARN MORE ↗
               </a>
               <p className="mt-1.5 text-center text-[8px] text-purple-400/60 italic">
-                Mentors, supporters &amp; full credit stack — listed on
-                variance.house.
+                Full details on variance.house.
               </p>
             </div>
           </div>
@@ -573,14 +572,14 @@ function MobileView() {
             <div className="mt-2 border border-purple-300 bg-white p-2">
               <div className="mb-1 flex items-center justify-between">
                 <p className="text-[9px] font-bold text-purple-800 uppercase">
-                  DRIVER 03 — VARIANCE NETWORK
+                  DRIVER 03 — VARIANCE HOUSE
                 </p>
                 <span className="text-[7px] font-bold text-green-600">
                   LINKED
                 </span>
               </div>
               <p className="mb-1 text-[8px] text-gray-600">
-                Shared sponsor stack &amp; credits via variance.house.
+                Sister residency, bengaluru — same month, cross-promoted.
               </p>
               <a
                 href="https://www.variance.house"
@@ -1549,7 +1548,7 @@ function DesktopView() {
       case "contact":
         return "HELPDESK.EXE"
       case "partner":
-        return "PARTNER_NODE.SYS"
+        return "CROSS_LINK.EXE"
       default:
         return id
     }
@@ -1622,7 +1621,7 @@ function DesktopView() {
         <DesktopIcon
           icon={Link2}
           tile="bg-[#7a007a]"
-          label="Partner Node"
+          label="Variance House"
           onClick={() => toggleWindow("partner", true)}
         />
         <DesktopIcon
@@ -1683,7 +1682,7 @@ function DesktopView() {
               <p>&gt; STATUS: PURE CHAOS DETECTED</p>
               <p>&gt; LOCATION: DELHI VILLA</p>
               <p>&gt; SEPT 15 - OCT 15</p>
-              <p>&gt; PARTNER NODE: VARIANCE.HOUSE — CONNECTED</p>
+              <p>&gt; CROSS-LINK: VARIANCE.HOUSE — SAME MONTH, TWO CITIES</p>
               <p>&gt; NEXT NODE: TBD — INDIA IS THE NETWORK</p>
             </div>
             <p className="border-l-4 border-gray-300 pl-2 font-serif text-[clamp(11px,1.3vw,18px)] leading-snug text-gray-700 italic">
@@ -1993,7 +1992,7 @@ function DesktopView() {
       {openWindows.partner && (
         <WinWindow
           id="partner"
-          title="PARTNER_NODE.SYS"
+          title="CROSS_LINK.EXE"
           startX={layout.partner.x}
           startY={layout.partner.y}
           className="w-[38vw] max-w-[320px] min-w-[250px]"
@@ -2007,16 +2006,16 @@ function DesktopView() {
           <div className="p-3 font-mono">
             <div className="relative overflow-hidden border-2 border-purple-700/60 bg-gradient-to-b from-[#1a001a] to-[#000000] p-3">
               <div className="mb-2 flex justify-between text-[8px] font-bold tracking-widest text-purple-400">
-                <span>PARTNER_NODE.SYS</span>
-                <span>NODE: VARIANCE.HOUSE</span>
+                <span>CROSS_LINK.EXE</span>
+                <span>LINK: VARIANCE.HOUSE</span>
               </div>
               <p className="mb-1 font-anton text-2xl leading-none text-purple-300 uppercase">
                 Variance
               </p>
               <p className="mb-2 text-[9px] leading-relaxed text-purple-100/70">
                 30-day deep-tech residency. Bengaluru. Same month as Delhi —
-                Sept 15 to Oct 15. Shared mentors, shared sponsors, stacked
-                credits. No fee. No equity. Your work stays yours.
+                Sept 15 to Oct 15. Cross-promoted, not merged. No fee. No
+                equity. Your work stays yours.
               </p>
               <a
                 href="https://www.variance.house"
@@ -2027,8 +2026,7 @@ function DesktopView() {
                 ✦ LEARN MORE ↗
               </a>
               <p className="mt-1.5 text-center text-[8px] text-purple-400/60 italic">
-                Mentors, supporters &amp; full credit stack — listed on
-                variance.house.
+                Full details on variance.house.
               </p>
             </div>
           </div>
@@ -2376,12 +2374,12 @@ function SponsorsPanel() {
         <div className="border border-gray-300 bg-[#f8f8f8] p-2">
           <div className="mb-1.5 flex items-center justify-between">
             <p className="text-[10px] font-bold text-purple-800">
-              DRIVER 03 — VARIANCE NETWORK
+              DRIVER 03 — VARIANCE HOUSE
             </p>
             <span className="text-[8px] font-bold text-green-600">LINKED</span>
           </div>
           <p className="mb-1 text-[8px] text-gray-600">
-            Shared sponsor stack &amp; credits via variance.house.
+            Sister residency, bengaluru — same month, cross-promoted.
           </p>
           <a
             href="https://www.variance.house"
