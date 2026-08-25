@@ -1020,7 +1020,7 @@ function MobileDock({
 
 function MobileLabel({ children }: { children: React.ReactNode }) {
   return (
-    <div className="font-code text-[11px] uppercase tracking-[0.18em] text-[#ffb627] mb-2">
+    <div className="font-code text-[11px] uppercase tracking-[0.18em] text-[#38bdf8] mb-2">
       {children}
     </div>
   )
@@ -1029,7 +1029,7 @@ function MobileLabel({ children }: { children: React.ReactNode }) {
 /** Warm content card that pops on the dark cinematic base. */
 function ContentCard({ children, className }: { children: React.ReactNode; className?: string }) {
   return (
-    <div className={cn("rounded-3xl bg-[#fbf7f1] text-[#1c1813] p-5 shadow-[0_20px_50px_rgba(0,0,0,0.35)]", className)}>
+    <div className={cn("rounded-3xl bg-[#eef4ff] text-[#0c1524] p-5 shadow-[0_20px_50px_rgba(0,0,0,0.35)]", className)}>
       {children}
     </div>
   )
@@ -1038,10 +1038,10 @@ function ContentCard({ children, className }: { children: React.ReactNode; class
 function PerkRow({ n, title, desc }: { n: string; title: string; desc: string }) {
   return (
     <div className="flex items-start gap-3 py-2.5 border-b border-black/5 last:border-0">
-      <span className="font-code text-[12px] font-bold text-[#ff7a45] mt-0.5">{n}</span>
+      <span className="font-code text-[12px] font-bold text-[#3b82f6] mt-0.5">{n}</span>
       <div>
-        <h3 className="font-display font-semibold text-[16px] text-[#1c1813]">{title}</h3>
-        <p className="text-[13.5px] text-[#6f675e] mt-0.5">{desc}</p>
+        <h3 className="font-semibold text-[16px] text-[#0c1524]">{title}</h3>
+        <p className="text-[13.5px] text-[#62708c] mt-0.5">{desc}</p>
       </div>
     </div>
   )
@@ -1055,10 +1055,10 @@ function MobileExperience() {
     document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" })
 
   return (
-    <div className="mobile-page relative min-h-screen bg-[#0e0d0b] text-[#f5f1ea] font-body overflow-x-hidden pb-28">
+    <div className="mobile-page relative min-h-screen bg-[#070d1a] text-[#f5f1ea] font-body overflow-x-hidden pb-28">
       {/* ── Cinematic hero (real b-roll video / photo) ── */}
       <section className="relative isolate flex min-h-[96svh] flex-col justify-between overflow-hidden">
-        <div className="absolute inset-0 -z-10 bg-[#0e0d0b]">
+        <div className="absolute inset-0 -z-10 bg-[#070d1a]">
           <video
             className="h-full w-full object-cover"
             autoPlay
@@ -1071,16 +1071,16 @@ function MobileExperience() {
           >
             <source src="/assets/hero.mp4" type="video/mp4" />
           </video>
-          <div className="absolute inset-0 bg-gradient-to-b from-black/80 via-black/45 to-[#0e0d0b]" />
+          <div className="absolute inset-0 bg-gradient-to-b from-black/80 via-black/45 to-[#070d1a]" />
         </div>
 
         <header className="flex items-center justify-between px-5 pt-5">
           <div className="font-display text-2xl font-extrabold tracking-tight text-white">
-            HACK<span className="text-[#ff7a45]">47</span>
+            HACK<span className="text-[#3b82f6]">47</span>
           </div>
           <button
             onClick={open}
-            className="rounded-full bg-[#ff7a45] px-4 py-2 text-sm font-semibold text-black shadow-[0_8px_20px_rgba(255,122,69,0.4)] active:scale-95"
+            className="rounded-full bg-[#3b82f6] px-4 py-2 text-sm font-semibold text-white shadow-[0_8px_20px_rgba(59,130,246,0.4)] active:scale-95"
           >
             Apply
           </button>
@@ -1088,8 +1088,8 @@ function MobileExperience() {
 
         <div className="px-5 pb-8">
           <MobileLabel>Delhi&apos;s first hacker house</MobileLabel>
-          <h1 className="font-display text-[clamp(42px,12vw,56px)] font-extrabold leading-[0.95] tracking-tight text-white">
-            The coolest <span className="text-[#ff7a45]">hacker house.</span>
+          <h1 className="font-display text-[clamp(30px,9vw,40px)] font-extrabold leading-[1.02] tracking-tight text-white">
+            The coolest <span className="text-[#3b82f6]">hacker house.</span>
           </h1>
           <p className="mt-4 max-w-[320px] text-[15px] leading-relaxed text-white/80">
             30 days. 16 builders. One villa. Build something real — then actually enjoy the good life.
@@ -1097,11 +1097,11 @@ function MobileExperience() {
           <div className="mt-6 flex flex-wrap items-center gap-2 font-code text-[11px]">
             <span className="rounded-full border border-white/15 bg-white/10 px-3 py-1.5">SEPT 15 – OCT 15</span>
             <span className="rounded-full border border-white/15 bg-white/10 px-3 py-1.5">16 SLOTS</span>
-            <span className="rounded-full bg-[#ffb627] px-3 py-1.5 font-bold text-black">APPLY NOW</span>
+            <span className="rounded-full bg-[#38bdf8] px-3 py-1.5 font-bold text-black">APPLY NOW</span>
           </div>
           <button
             onClick={open}
-            className="mt-7 w-full rounded-2xl bg-[#ff7a45] py-4 font-display text-[17px] font-bold text-black shadow-[0_12px_30px_rgba(255,122,69,0.35)] active:scale-[0.99]"
+            className="mt-7 w-full rounded-2xl bg-[#3b82f6] py-4 font-display text-[17px] font-bold text-white shadow-[0_12px_30px_rgba(59,130,246,0.35)] active:scale-[0.99]"
           >
             Apply to Hack47 →
           </button>
@@ -1116,7 +1116,7 @@ function MobileExperience() {
           ["1", "villa"],
         ].map(([v, l]) => (
           <div key={l} className="rounded-2xl border border-white/10 bg-white/5 py-5 text-center">
-            <div className="font-display text-3xl font-extrabold text-[#ffb627]">{v}</div>
+            <div className="font-display text-3xl font-extrabold text-[#38bdf8]">{v}</div>
             <div className="mt-1 text-[11px] uppercase tracking-wider text-white/50">{l}</div>
           </div>
         ))}
@@ -1158,19 +1158,19 @@ function MobileExperience() {
       {/* ── Offgrid golden ticket ── */}
       <section id="offgrid" className="px-5 pt-9">
         <MobileLabel>Offgrid — the golden ticket</MobileLabel>
-        <div className="rounded-3xl bg-gradient-to-br from-[#ffb627] to-[#ff7a45] p-5 text-[#2a1c00] shadow-[0_16px_40px_rgba(255,183,39,0.25)]">
-          <div className="flex items-center justify-between font-code text-[11px] font-bold uppercase tracking-widest text-[#33250a]">
+        <div className="rounded-3xl bg-gradient-to-br from-[#38bdf8] to-[#3b82f6] p-5 text-white shadow-[0_16px_40px_rgba(56,189,248,0.25)]">
+          <div className="flex items-center justify-between font-code text-[11px] font-bold uppercase tracking-widest text-[#eaf3ff]">
             <span>Virtual hackathon</span><span>30 days</span>
           </div>
           <h2 className="mt-3 font-display text-3xl font-extrabold uppercase leading-none">Win a seat</h2>
-          <p className="mt-2 max-w-[300px] text-[14px] leading-relaxed text-[#3a2a08]">
+          <p className="mt-2 max-w-[300px] text-[14px] leading-relaxed text-[#eaf3ff]">
             Fully remote. Pure chaos. Win Offgrid and get a guaranteed spot in the next Hack47 cohort.
           </p>
           <a
             href={OFFGRID_URL}
             target="_blank"
             rel="noopener noreferrer"
-            className="mt-4 block w-full rounded-xl bg-black py-3 text-center font-display text-[15px] font-bold text-[#ffb627] active:scale-[0.99]"
+            className="mt-4 block w-full rounded-xl bg-black py-3 text-center font-display text-[15px] font-bold text-[#38bdf8] active:scale-[0.99]"
           >
             Enter the arena ↗
           </a>
@@ -1182,17 +1182,17 @@ function MobileExperience() {
         <MobileLabel>Next nodes</MobileLabel>
         <ContentCard>
           <div className="mb-1 flex items-center justify-between">
-            <h2 className="font-display text-xl font-bold text-[#1c1813]">India node map</h2>
+            <h2 className="text-xl font-bold text-[#0c1524]">India node map</h2>
             <span className="font-code text-[11px] font-bold text-green-700">● DELHI LIVE</span>
           </div>
           <div className="mt-2">
             {CITIES.map((c) => (
               <div key={c.name} className="flex items-center justify-between border-b border-black/5 py-2.5 last:border-0">
                 <div>
-                  <p className="font-display text-[14px] font-semibold text-[#1c1813]">
+                  <p className="text-[14px] font-semibold text-[#0c1524]">
                     {c.icon} {c.name}
                   </p>
-                  <p className="text-[12px] text-[#6f675e]">{c.detail}</p>
+                  <p className="text-[12px] text-[#62708c]">{c.detail}</p>
                 </div>
                 <span
                   className={cn(
@@ -1211,7 +1211,7 @@ function MobileExperience() {
               </div>
             ))}
           </div>
-          <p className="mt-3 text-[12px] italic text-[#6f675e]">
+          <p className="mt-3 text-[12px] italic text-[#62708c]">
             Node announcements drop on X + LinkedIn first. Follow to know when your city goes live.
           </p>
         </ContentCard>
@@ -1220,7 +1220,7 @@ function MobileExperience() {
       {/* ── Variance partner ── */}
       <section id="partner" className="px-5 pt-9">
         <MobileLabel>Partner node</MobileLabel>
-        <div className="rounded-3xl bg-gradient-to-br from-[#7a2ff2] to-[#b06bff] p-5 text-white shadow-[0_16px_40px_rgba(122,47,242,0.3)]">
+        <div className="rounded-3xl bg-gradient-to-br from-[#4f46e5] to-[#818cf8] p-5 text-white shadow-[0_16px_40px_rgba(79,70,229,0.3)]">
           <div className="flex items-center justify-between font-code text-[11px] font-bold uppercase tracking-widest">
             <span>Variance.house</span><span className="text-green-300">● CONNECTED</span>
           </div>
@@ -1232,7 +1232,7 @@ function MobileExperience() {
             href="https://www.variance.house"
             target="_blank"
             rel="noopener noreferrer"
-            className="mt-4 block w-full rounded-xl bg-white py-3 text-center font-display text-[15px] font-bold text-[#7a2ff2] active:scale-[0.99]"
+            className="mt-4 block w-full rounded-xl bg-white py-3 text-center font-display text-[15px] font-bold text-[#4f46e5] active:scale-[0.99]"
           >
             Learn more ↗
           </a>
@@ -1243,20 +1243,20 @@ function MobileExperience() {
       <section id="sponsors" className="px-5 pt-9">
         <MobileLabel>Power supply</MobileLabel>
         <ContentCard>
-          <p className="mb-3 font-code text-[11px] font-bold uppercase tracking-widest text-[#1c1813]">
+          <p className="mb-3 font-code text-[11px] font-bold uppercase tracking-widest text-[#0c1524]">
             Powering the machine
           </p>
           <div className="flex gap-3">
             <div className="flex flex-1 flex-col items-center justify-center rounded-xl border border-zinc-200 bg-white p-4">
               <img src="/sponsors/redbull.png" alt="Red Bull" className="h-9 w-auto" />
-              <p className="mt-2 text-center font-code text-[10px] text-[#6f675e]">Fuel</p>
+              <p className="mt-2 text-center font-code text-[10px] text-[#62708c]">Fuel</p>
             </div>
             <div className="flex flex-1 flex-col items-center justify-center rounded-xl border border-zinc-200 bg-white p-4">
               <img src="/sponsors/openai.png" alt="OpenAI" className="h-9 w-auto" />
-              <p className="mt-2 text-center font-code text-[10px] text-[#6f675e]">Compute</p>
+              <p className="mt-2 text-center font-code text-[10px] text-[#62708c]">Compute</p>
             </div>
           </div>
-          <p className="mt-3 text-[12px] text-[#6f675e]">
+          <p className="mt-3 text-[12px] text-[#62708c]">
             Plus the shared Variance credit stack. Want to power the machine?{" "}
             <a href={`mailto:${CONTACT.email}`} className="font-bold text-blue-700 underline">
               hello@hack47.org
@@ -1272,14 +1272,14 @@ function MobileExperience() {
           href={feed.mint.url}
           target="_blank"
           rel="noopener noreferrer"
-          className="block rounded-3xl border border-white/10 bg-white/5 p-5 transition-colors hover:border-[#ffb627]/50"
+          className="block rounded-3xl border border-white/10 bg-white/5 p-5 transition-colors hover:border-[#38bdf8]/50"
         >
-          <p className="font-code text-[11px] font-bold uppercase tracking-widest text-[#ffb627]">
+          <p className="font-code text-[11px] font-bold uppercase tracking-widest text-[#38bdf8]">
             ★ Featured in The Mint — {feed.mint.date}
           </p>
-          <p className="mt-2 font-display text-[16px] font-semibold text-white">{feed.mint.title}</p>
+          <p className="mt-2 text-[16px] font-semibold text-white">{feed.mint.title}</p>
           <p className="mt-2 text-[13px] leading-relaxed text-white/60">{feed.mint.snippet}</p>
-          <p className="mt-3 font-code text-[11px] font-bold text-[#ffb627]">Read article ↗</p>
+          <p className="mt-3 font-code text-[11px] font-bold text-[#38bdf8]">Read article ↗</p>
         </a>
         <div className="mt-3 space-y-3">
           {feed.x.slice(0, 1).map((p, i) => (
@@ -1288,14 +1288,14 @@ function MobileExperience() {
                 {p.author} <span className="font-normal text-white/50">· {p.date}</span>
               </p>
               <p className="mt-1 line-clamp-3 text-[13px] leading-relaxed text-white/65">{p.text}</p>
-              <p className="mt-2 font-code text-[11px] font-bold text-[#ff7a45]">Open on X ↗</p>
+              <p className="mt-2 font-code text-[11px] font-bold text-[#3b82f6]">Open on X ↗</p>
             </a>
           ))}
           {feed.linkedin.slice(0, 1).map((p, i) => (
             <a key={i} href={p.url} target="_blank" rel="noopener noreferrer" className="block rounded-2xl border border-white/10 bg-white/[0.03] p-4">
               <p className="font-code text-[12px] font-bold text-white">{p.author}</p>
               <p className="mt-1 line-clamp-3 text-[13px] leading-relaxed text-white/65">{p.text}</p>
-              <p className="mt-2 font-code text-[11px] font-bold text-[#ff7a45]">Open on LinkedIn ↗</p>
+              <p className="mt-2 font-code text-[11px] font-bold text-[#3b82f6]">Open on LinkedIn ↗</p>
             </a>
           ))}
         </div>
@@ -1305,7 +1305,7 @@ function MobileExperience() {
       <section className="px-5 pt-9">
         <MobileLabel>House protocols</MobileLabel>
         <ContentCard>
-          <p className="mb-3 font-code text-[11px] font-bold uppercase tracking-widest text-[#1c1813]">Read me first</p>
+          <p className="mb-3 font-code text-[11px] font-bold uppercase tracking-widest text-[#0c1524]">Read me first</p>
           <div className="space-y-3">
             {[
               ["LAUNDRY.SYS", "We wash the socks. You build the robots."],
@@ -1313,12 +1313,12 @@ function MobileExperience() {
               ["SLEEP.DLL", "Optional. Not recommended during demo day."],
             ].map(([f, l]) => (
               <div key={f} className="flex items-start gap-2">
-                <span className="font-code text-[13px] font-bold text-[#ff7a45]">{f}</span>
-                <span className="text-[13.5px] text-[#3a352d]">{l}</span>
+                <span className="font-code text-[13px] font-bold text-[#3b82f6]">{f}</span>
+                <span className="text-[13.5px] text-[#2a3450]">{l}</span>
               </div>
             ))}
           </div>
-          <p className="mt-4 text-[12px] italic text-[#6f675e]">
+          <p className="mt-4 text-[12px] italic text-[#62708c]">
             Highly addictive environment. May cause sudden career pivots.
           </p>
         </ContentCard>
@@ -1328,7 +1328,7 @@ function MobileExperience() {
       <section id="devils" className="px-5 pt-9">
         <MobileLabel>The archdemons</MobileLabel>
         <ContentCard>
-          <p className="mb-3 text-center text-[12px] italic text-[#6f675e]">The ones who summoned this chaos into existence</p>
+          <p className="mb-3 text-center text-[12px] italic text-[#62708c]">The ones who summoned this chaos into existence</p>
           <DevilRow name="Rishul Chanana" role="Archdemon I" img="/rishul.jpeg" links={[{ label: "LinkedIn ↗", url: "https://www.linkedin.com/in/rishul-chanana/" }, { label: "𝕏 ↗", url: "https://x.com/rishhul" }]} />
           <DevilRow name="Pratyush Pandey" role="Archdemon II" img="/pratyush.jpeg" links={[{ label: "LinkedIn ↗", url: "https://www.linkedin.com/in/pratyush-pandey-09b35b219" }, { label: "𝕏 ↗", url: "https://x.com/P_Pratyush7" }]} />
           <DevilRow name="Raghwender Vasisth" role="Archdemon III" initials="RV" links={[{ label: "LinkedIn ↗", url: "https://www.linkedin.com/in/raghwender-vasist" }, { label: "𝕏 ↗", url: "https://x.com/Hawthorn_thinks" }, { label: "IG ↗", url: "https://www.instagram.com/hawthorn_laments" }]} />
@@ -1364,7 +1364,7 @@ function MobileExperience() {
             ["Is it really about the good life?", "Yes. Ship like you mean it, then actually enjoy the best 30 days of your year. That is the whole point."],
           ].map(([q, a]) => (
             <div key={q} className="py-4">
-              <h3 className="font-display text-[15px] font-semibold text-white">{q}</h3>
+              <h3 className="text-[15px] font-semibold text-white">{q}</h3>
               <p className="mt-1.5 text-[13.5px] leading-relaxed text-white/65">{a}</p>
             </div>
           ))}
@@ -1375,16 +1375,16 @@ function MobileExperience() {
       <section id="contact" className="px-5 pt-9">
         <MobileLabel>Contact</MobileLabel>
         <ContentCard>
-          <p className="mb-3 text-[13.5px] text-[#6f675e]">Summon an organizer. We reply fast (or when the WiFi drops).</p>
+          <p className="mb-3 text-[13.5px] text-[#62708c]">Summon an organizer. We reply fast (or when the WiFi drops).</p>
           <a href={`mailto:${CONTACT.email}`} className="block rounded-xl border border-zinc-200 bg-white p-3">
-            <p className="font-code text-[10px] font-bold uppercase text-[#6f675e]">Email</p>
-            <p className="font-display text-[16px] font-semibold text-blue-800">{CONTACT.email}</p>
+            <p className="font-code text-[10px] font-bold uppercase text-[#62708c]">Email</p>
+            <p className="text-[16px] font-semibold text-blue-800">{CONTACT.email}</p>
           </a>
           <a href={`tel:${CONTACT.phoneRaw}`} className="mt-2 block rounded-xl border border-zinc-200 bg-white p-3">
-            <p className="font-code text-[10px] font-bold uppercase text-[#6f675e]">Phone / WhatsApp</p>
-            <p className="font-display text-[16px] font-semibold text-blue-800">{CONTACT.phone}</p>
+            <p className="font-code text-[10px] font-bold uppercase text-[#62708c]">Phone / WhatsApp</p>
+            <p className="text-[16px] font-semibold text-blue-800">{CONTACT.phone}</p>
           </a>
-          <p className="mt-3 text-[12px] italic text-[#6f675e]">Response time: 24-48h. Faster if you bribe us with chai.</p>
+          <p className="mt-3 text-[12px] italic text-[#62708c]">Response time: 24-48h. Faster if you bribe us with chai.</p>
         </ContentCard>
       </section>
 
@@ -1397,7 +1397,7 @@ function MobileExperience() {
               href={s.url}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex-1 rounded-xl border border-white/10 bg-white/5 py-3 text-center text-[12px] font-semibold text-white/80 transition-colors hover:border-[#ff7a45]/50"
+              className="flex-1 rounded-xl border border-white/10 bg-white/5 py-3 text-center text-[12px] font-semibold text-white/80 transition-colors hover:border-[#3b82f6]/50"
             >
               {s.icon} {s.label.split(" ")[0]} ↗
             </a>
@@ -1434,7 +1434,7 @@ function MobileExperience() {
             <Phone className="h-5 w-5" />
             <span className="text-[10px] font-bold tracking-wider">Call</span>
           </button>
-          <button onClick={open} className="flex items-center gap-1.5 rounded-xl bg-[#ff7a45] px-5 py-3 text-[13px] font-bold text-black shadow-[0_6px_18px_rgba(255,122,69,0.4)] active:scale-95">
+          <button onClick={open} className="flex items-center gap-1.5 rounded-xl bg-[#3b82f6] px-5 py-3 text-[13px] font-bold text-white shadow-[0_6px_18px_rgba(59,130,246,0.4)] active:scale-95">
             <Flame className="h-4 w-4" />
             Apply
           </button>
