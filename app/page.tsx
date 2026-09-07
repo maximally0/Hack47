@@ -17,8 +17,11 @@ import {
   Mail,
   Phone,
   Flame,
-  ArrowUp,
   Skull,
+  Minus,
+  ShieldCheck,
+  Square,
+  X,
 } from "lucide-react"
 import { WinWindow } from "@/components/win-window"
 import { DesktopIcon } from "@/components/desktop-icon"
@@ -294,615 +297,45 @@ export default function DesktopPage() {
 }
 
 // ═══════════════════════════════════════════════════════════════════════════
-// MOBILE VIEW — the full experience, rebuilt
+// MOBILE VIEW — HACK47 OS, phone edition.
+// Mirrors the desktop XP experience 1:1: wallpaper desktop, app icons that
+// open windows, window chrome (titlebar, bevels, control buttons), XP taskbar.
+// Every section below = the exact same window as on desktop.
 // ═══════════════════════════════════════════════════════════════════════════
 
-function MobileCard({
-  title,
-  children,
-  titleClassName,
-}: {
-  title: string
-  children: React.ReactNode
-  titleClassName?: string
-}) {
-  return (
-    <div className="mb-3 overflow-hidden rounded-xl border border-zinc-200 bg-white shadow-[0_1px_4px_rgba(0,0,0,0.08)]">
-      <div
-        className={cn(
-          "h-[3px] w-full",
-          titleClassName || "bg-gradient-to-r from-[#dc2626] to-[#ef4444]"
-        )}
-      />
-      <div className="px-3.5 pt-2.5 pb-1">
-        <span className="font-code text-[11px] font-bold uppercase tracking-wider text-zinc-500">
-          {title}
-        </span>
-      </div>
-      <div className="text-zinc-900">{children}</div>
-    </div>
-  )
+const MOBILE_WIN_DEFAULTS: Record<string, boolean> = {
+  main: true,
+  error: true,
+  perks: true,
+  photos: true,
+  offgrid: true,
+  soul: true,
+  sponsors: true,
+  news: true,
+  cities: true,
+  network: true,
+  partner: true,
+  devils: true,
+  residents: true,
+  specs: true,
+  faq: true,
+  helpdesk: true,
 }
 
-function MobileView() {
-  const [showForm, setShowForm] = useState(false)
-  const feed = useFeedData()
-
-  const scrollTo = (id: string) =>
-    document
-      .getElementById(id)
-      ?.scrollIntoView({ behavior: "smooth", block: "start" })
-
-  return (
-    <div
-      className="mobile-page relative min-h-screen pb-28 font-body"
-      style={{
-        background:
-          "radial-gradient(120% 80% at 50% 0%, #241a00 0%, #0c0c0c 45%, #000000 100%)",
-      }}
-    >
-      {/* CRT scanline overlay */}
-      <div className="pointer-events-none fixed inset-0 z-[9997] scanlines opacity-15" />
-
-      {/* ── Sticky top bar ── */}
-      <div className="sticky top-0 z-[9000] flex items-center justify-between border-b border-white/10 bg-black/80 px-4 py-3 backdrop-blur-md">
-        <p className="font-display text-xl font-bold leading-none tracking-tight text-white uppercase select-none">
-          HACK<span className="text-electric-yellow">47</span>
-        </p>
-        <div className="flex items-center gap-2">
-          <span className="flex items-center gap-1.5 text-[11px] font-bold text-green-400">
-            <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-green-400" />
-            BATCH #001 LIVE
-          </span>
-          <button
-            onClick={() => setShowForm(true)}
-            className="rounded-lg bg-red-600 px-4 py-2 text-[13px] font-bold text-white uppercase transition-colors active:scale-95"
-          >
-            Apply
-          </button>
-        </div>
-      </div>
-
-      {/* ── Hero ── */}
-      <section className="px-4 pt-8 pb-4">
-        <h1 className="font-display text-[56px] font-bold leading-[0.95] tracking-tight text-white uppercase select-none">
-          HACK<span className="text-electric-yellow">47</span>
-        </h1>
-        <p className="mt-3 max-w-[340px] text-[15px] leading-relaxed text-zinc-300">
-          Delhi&apos;s first hacker house. A 30-day residency for 16 builders
-          who care more about their Git history than their sleep schedule.
-        </p>
-        <div className="mt-5 rounded-xl border border-white/10 bg-black/60 p-3.5 font-code text-[13px] leading-relaxed text-electric-yellow">
-          <p>&gt; INITIALIZING DELHI&apos;S FIRST HACKER HOUSE...</p>
-          <p>&gt; STATUS: PURE CHAOS DETECTED</p>
-          <p>&gt; LOCATION: DELHI VILLA · SEPT 15 – OCT 15</p>
-          <p>&gt; CROSS-LINK: VARIANCE.HOUSE — SAME MONTH, TWO CITIES</p>
-          <p className="animate-pulse">
-            &gt; NEXT NODE: TBD — INDIA IS THE NETWORK ▊
-          </p>
-        </div>
-      </section>
-
-      {/* ── OFFGRID — golden ticket ── */}
-      <section id="offgrid" className="mt-6 px-4">
-        <div className="relative overflow-hidden border-2 border-yellow-700/60 bg-gradient-to-b from-[#3a2b00] via-[#1a1200] to-black shadow-[0_0_30px_rgba(255,200,0,0.15)]">
-          <div className="px-4 py-4">
-            <div className="flex items-center justify-between text-[9px] font-bold tracking-widest text-yellow-600">
-              <span>OFFGRID.EXE</span>
-              <span>VIRTUAL HACKATHON</span>
-            </div>
-            <p className="mt-2 font-anton text-3xl leading-none text-yellow-400 uppercase">
-              Golden
-              <br />
-              Ticket
-            </p>
-            <p className="mt-2 text-[10px] leading-relaxed text-yellow-200/70">
-              30 days. Fully remote. Pure chaos. Win Offgrid and get a{" "}
-              <span className="font-bold text-yellow-300">guaranteed seat</span>{" "}
-              in the next Hack47 cohort.
-            </p>
-            <a
-              href="https://hack47-offgrid.devpost.com/"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="mt-3 inline-block w-full win-border-outset bg-yellow-500 py-2.5 text-center text-xs font-bold tracking-wider text-black uppercase active:translate-y-px"
-            >
-              ✦ ENTER THE ARENA ↗
-            </a>
-            <p className="mt-1.5 text-center text-[8px] text-yellow-700/60 italic">
-              One winner. One seat. The next cohort is waiting.
-            </p>
-          </div>
-        </div>
-      </section>
-
-      {/* ── APPLY CTA ── */}
-      <section id="apply" className="mt-6 px-4">
-        <MobileCard title="⚠ SELL_YOUR_SOUL.EXE">
-          <div className="p-4 text-center font-mono">
-            <p className="mb-1 text-2xl font-bold">👹</p>
-            <p className="mb-2 text-sm font-bold tracking-wide uppercase">
-              SELL US YOUR SOUL
-            </p>
-            <p className="mb-3 text-[10px] leading-relaxed text-gray-600">
-              30 days. No distractions. Pure building.
-              <br />
-              In exchange, we take your soul (and your sleep schedule).
-            </p>
-            <button
-              onClick={() => setShowForm(true)}
-              className="w-full bg-red-600 py-3 text-xs font-bold tracking-wider text-white uppercase shadow-[3px_3px_0px_rgba(0,0,0,0.3)] transition-all hover:bg-red-700 active:translate-y-px"
-            >
-              ✦ I ACCEPT — APPLY NOW ✦
-            </button>
-            <p className="mt-2 text-[8px] text-gray-400 italic">
-              Terms: No refunds on sleep lost.
-            </p>
-          </div>
-        </MobileCard>
-      </section>
-
-      {/* ── CITIES — next nodes ── */}
-      <section id="nodes" className="mt-6 px-4">
-        <MobileCard
-          title="📡 NEXT_NODES.EXE"
-          titleClassName="bg-gradient-to-r from-[#006400] to-[#00a000]"
-        >
-          <div className="p-3 font-mono text-[11px]">
-            <div className="mb-2 flex items-center justify-between">
-              <p className="text-[10px] font-bold text-gray-700 uppercase">
-                INDIA NODE MAP
-              </p>
-              <span className="animate-pulse text-[8px] font-bold text-green-600">
-                ● DELHI LIVE
-              </span>
-            </div>
-            <div>
-              {CITIES.map((c) => (
-                <div
-                  key={c.name}
-                  className="flex items-center justify-between border-b border-gray-200 py-2 last:border-0"
-                >
-                  <div className="pr-2">
-                    <p className="text-[11px] font-bold">
-                      {c.icon} {c.name}
-                    </p>
-                    <p className="text-[9px] text-gray-500">{c.detail}</p>
-                  </div>
-                  <div className="shrink-0 text-right">
-                    <span
-                      className={cn(
-                        "inline-block border px-1.5 py-0.5 text-[8px] font-bold",
-                        c.status === "LIVE"
-                          ? "border-green-600 bg-green-50 text-green-700"
-                          : c.status === "CO-RUN"
-                            ? "border-purple-600 bg-purple-50 text-purple-700"
-                            : c.status === "QUEUED"
-                              ? "border-yellow-600 bg-yellow-50 text-yellow-700"
-                              : "border-gray-400 bg-gray-100 text-gray-500"
-                      )}
-                    >
-                      {c.status}
-                    </span>
-                    <p className="mt-0.5 text-[7px] text-gray-400">
-                      {c.statusText}
-                    </p>
-                  </div>
-                </div>
-              ))}
-            </div>
-            <p className="mt-2 text-[9px] text-gray-500 italic">
-              Node announcements drop on X + LinkedIn first. Follow to know when
-              your city goes live.
-            </p>
-          </div>
-        </MobileCard>
-      </section>
-
-      {/* ── PARTNER — variance ── */}
-      <section id="partner" className="mt-6 px-4">
-        <MobileCard
-          title="🌐 CROSS_LINK.EXE"
-          titleClassName="bg-gradient-to-r from-[#7a007a] to-[#c300c3]"
-        >
-          <div className="p-3 font-mono text-[11px]">
-            <div className="border-2 border-purple-700/60 bg-gradient-to-b from-[#1a001a] to-[#000000] p-3">
-              <div className="mb-2 flex justify-between text-[8px] font-bold tracking-widest text-purple-400">
-                <span>LINK: VARIANCE.HOUSE</span>
-                <span className="animate-pulse text-green-400">
-                  ● CONNECTED
-                </span>
-              </div>
-              <p className="mb-1 font-anton text-2xl leading-none text-purple-300 uppercase">
-                Variance
-              </p>
-              <p className="mb-2 text-[9px] leading-relaxed text-purple-100/70">
-                30-day deep-tech residency. Bengaluru. Same month as Delhi —
-                Sept 15 to Oct 15. Cross-promoted, not merged. No fee. No
-                equity.
-              </p>
-              <a
-                href="https://www.variance.house"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="block win-border-outset bg-purple-600 py-2 text-center text-[10px] font-bold text-white uppercase hover:brightness-110 active:translate-y-px"
-              >
-                ✦ LEARN MORE ↗
-              </a>
-              <p className="mt-1.5 text-center text-[8px] text-purple-400/60 italic">
-                Full details on variance.house.
-              </p>
-            </div>
-          </div>
-        </MobileCard>
-      </section>
-
-      {/* ── SPONSORS — power supply ── */}
-      <section id="sponsors" className="mt-6 px-4">
-        <MobileCard
-          title="⚡ POWER_SUPPLY.INI"
-          titleClassName="bg-gradient-to-r from-[#4a0080] to-[#7a00cc]"
-        >
-          <div className="p-3">
-            <p className="mb-2 text-[10px] font-bold text-gray-700 uppercase">
-              INSTALLED DRIVERS — POWERING THE MACHINE
-            </p>
-            <div className="flex gap-2">
-              <div className="flex min-h-[92px] flex-1 flex-col items-center justify-center border border-gray-300 bg-white p-2">
-                <img
-                  src="/sponsors/redbull.png"
-                  alt="Red Bull"
-                  className="h-10 w-auto"
-                />
-                <p className="mt-1 text-center text-[7px] text-gray-500">
-                  FUEL.SYS — OFFICIAL CHAOS FUEL
-                </p>
-              </div>
-              <div className="flex min-h-[92px] flex-1 flex-col items-center justify-center border border-gray-300 bg-white p-2">
-                <img
-                  src="/sponsors/openai.png"
-                  alt="OpenAI"
-                  className="h-7 w-auto"
-                />
-                <p className="mt-1 text-center text-[7px] text-gray-500">
-                  GPT.DLL — COMPUTE FOR BUILDERS
-                </p>
-              </div>
-            </div>
-            <div className="mt-2 border border-purple-300 bg-white p-2">
-              <div className="mb-1 flex items-center justify-between">
-                <p className="text-[9px] font-bold text-purple-800 uppercase">
-                  DRIVER 03 — VARIANCE HOUSE
-                </p>
-                <span className="text-[7px] font-bold text-green-600">
-                  LINKED
-                </span>
-              </div>
-              <p className="mb-1 text-[8px] text-gray-600">
-                Sister residency, bengaluru — same month, cross-promoted.
-              </p>
-              <a
-                href="https://www.variance.house"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-[8px] font-bold text-blue-700 underline"
-              >
-                LEARN MORE ↗
-              </a>
-            </div>
-            <p className="mt-2 text-[8px] text-gray-500 italic">
-              Want to power the machine? → hello@hack47.org
-            </p>
-          </div>
-        </MobileCard>
-      </section>
-
-      {/* ── NEWS — press + live feed ── */}
-      <section id="news" className="mt-6 px-4">
-        <MobileCard
-          title="📰 NEWS_SIGNAL.EXE"
-          titleClassName="bg-gradient-to-r from-[#000080] to-[#0000cc]"
-        >
-          <div className="p-3">
-            <a
-              href={feed.mint.url}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="block border-2 border-yellow-500/60 bg-black p-3 text-white transition-colors hover:border-yellow-400"
-            >
-              <p className="mb-1 text-[8px] font-bold tracking-widest text-yellow-400 uppercase">
-                ★ Featured in The Mint — {feed.mint.date}
-              </p>
-              <p className="mb-2 text-[11px] leading-snug font-bold">
-                {feed.mint.title}
-              </p>
-              <p className="text-[9px] text-gray-400 italic">
-                {feed.mint.snippet}
-              </p>
-              <p className="mt-2 text-[9px] font-bold text-yellow-400">
-                READ ARTICLE ↗
-              </p>
-            </a>
-
-            <div className="mt-3">
-              <p className="mb-1.5 text-[9px] font-bold text-gray-600 uppercase">
-                LATEST SIGNALS
-              </p>
-              {feed.x.length === 0 ? (
-                <div className="border border-dashed border-gray-300 bg-gray-100 p-2 text-[9px] leading-relaxed text-gray-500">
-                  @hack47org — 0 signals detected. The birds haven&apos;t landed
-                  yet.{" "}
-                  <a
-                    href="https://x.com/hack47org"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="font-bold text-blue-700 underline"
-                  >
-                    Follow ↗
-                  </a>
-                </div>
-              ) : (
-                feed.x.slice(0, 1).map((p, i) => (
-                  <a
-                    key={i}
-                    href={p.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="mb-2 block border border-gray-300 bg-[#f8f8f8] p-2"
-                  >
-                    <p className="text-[9px] font-bold text-gray-800">
-                      {p.author}{" "}
-                      <span className="font-normal text-gray-400">
-                        · {p.date}
-                      </span>
-                    </p>
-                    <p className="mt-1 line-clamp-3 text-[9px] leading-snug text-gray-600">
-                      {p.text}
-                    </p>
-                    <p className="mt-1 text-[8px] font-bold text-blue-700">
-                      OPEN ON X ↗
-                    </p>
-                  </a>
-                ))
-              )}
-              {feed.linkedin.slice(0, 2).map((p, i) => (
-                <a
-                  key={i}
-                  href={p.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="mb-2 block border border-gray-300 bg-[#f8f8f8] p-2 last:mb-0"
-                >
-                  <div className="flex items-center justify-between">
-                    <p className="text-[9px] font-bold text-gray-800">
-                      {p.author}
-                    </p>
-                    <span className="text-[8px] text-gray-400">{p.date}</span>
-                  </div>
-                  <p className="text-[8px] text-gray-500">{p.role}</p>
-                  <p className="mt-1 line-clamp-3 text-[9px] leading-snug text-gray-600">
-                    {p.text}
-                  </p>
-                  <p className="mt-1 text-[8px] font-bold text-blue-700">
-                    OPEN ON LINKEDIN ↗
-                  </p>
-                </a>
-              ))}
-            </div>
-          </div>
-        </MobileCard>
-      </section>
-
-      {/* ── HOUSE PROTOCOLS ── */}
-      <section className="mt-6 px-4">
-        <MobileCard title="README_FIRST.TXT">
-          <div className="p-3 font-mono text-[11px] text-black">
-            <p className="mb-3 font-bold uppercase underline">
-              HOUSE PROTOCOLS:
-            </p>
-            <ul className="mb-4 space-y-3">
-              <li>
-                - <span className="font-bold">LAUNDRY.SYS</span>: We wash the
-                socks. You build the robots.
-              </li>
-              <li>
-                - <span className="font-bold">FOOD.EXE</span>: High-protein
-                fuel. Optimized for latency.
-              </li>
-              <li>
-                - <span className="font-bold">SLEEP.DLL</span>: Optional. Not
-                recommended during demo day.
-              </li>
-            </ul>
-            <div className="border-2 border-dashed border-red-500 bg-red-50/70 p-3">
-              <p className="text-[11px] leading-relaxed">
-                Highly addictive environment. May cause sudden career pivots.
-              </p>
-            </div>
-          </div>
-        </MobileCard>
-      </section>
-
-      {/* ── ARCHDEMONS ── */}
-      <section id="devils" className="mt-6 px-4">
-        <MobileCard
-          title="👹 ARCHDEMONS.SYS"
-          titleClassName="bg-gradient-to-r from-[#4a0000] to-[#cc0000]"
-        >
-          <div className="p-3">
-            <p className="mb-3 text-center text-[9px] text-gray-500 italic">
-              The ones who summoned this chaos into existence
-            </p>
-            <DevilRow
-              name="Rishul Chanana"
-              role="Archdemon I"
-              img="/rishul.jpeg"
-              links={[
-                {
-                  label: "LinkedIn ↗",
-                  url: "https://www.linkedin.com/in/rishul-chanana/",
-                },
-                { label: "𝕏 ↗", url: "https://x.com/rishhul" },
-              ]}
-            />
-            <DevilRow
-              name="Pratyush Pandey"
-              role="Archdemon II"
-              img="/pratyush.jpeg"
-              links={[
-                {
-                  label: "LinkedIn ↗",
-                  url: "https://www.linkedin.com/in/pratyush-pandey-09b35b219",
-                },
-                { label: "𝕏 ↗", url: "https://x.com/P_Pratyush7" },
-              ]}
-            />
-            <DevilRow
-              name="Raghwender Vasisth"
-              role="Archdemon III"
-              initials="RV"
-              links={[
-                {
-                  label: "LinkedIn ↗",
-                  url: "https://www.linkedin.com/in/raghwender-vasist",
-                },
-                { label: "𝕏 ↗", url: "https://x.com/Hawthorn_thinks" },
-                {
-                  label: "IG ↗",
-                  url: "https://www.instagram.com/hawthorn_laments",
-                },
-              ]}
-            />
-            <p className="mt-3 text-center text-[8px] text-gray-400 italic">
-              These three traded their souls first. Now they collect yours.
-            </p>
-          </div>
-        </MobileCard>
-      </section>
-
-      {/* ── RESIDENTS ── */}
-      <section className="mt-6 px-4">
-        <MobileCard
-          title="RESIDENTS.DAT"
-          titleClassName="bg-gradient-to-r from-[#005000] to-[#008000]"
-        >
-          <ResidentsPanel />
-        </MobileCard>
-      </section>
-
-      {/* ── SYSTEM SPECS ── */}
-      <section className="mt-6 px-4">
-        <MobileCard
-          title="SYSTEM_SPECS.INF"
-          titleClassName="bg-gradient-to-r from-[#404040] to-[#808080]"
-        >
-          <SystemSpecs />
-        </MobileCard>
-      </section>
-
-      {/* ── HOUSE PHOTOS ── */}
-      <section className="mt-6 px-4">
-        <MobileCard
-          title="HOUSE_PHOTOS.EXE"
-          titleClassName="bg-gradient-to-r from-[#0058ee] to-[#3789f8]"
-        >
-          <div className="flex gap-2 overflow-x-auto p-2 pb-2">
-            {HOUSE_PHOTOS.map((p, i) => (
-              <img
-                key={i}
-                src={p.src}
-                alt={p.caption}
-                className="h-28 w-auto shrink-0 rounded border-2 border-white/30 object-cover shadow-lg"
-                style={{
-                  transform: `rotate(${(i % 2 === 0 ? -1 : 1) * (2 + i)}deg)`,
-                }}
-              />
-            ))}
-          </div>
-          <p className="px-2 pb-2 text-[8px] text-gray-500 italic">
-            The house. The arena. The 4AM brainwave zone.
-          </p>
-        </MobileCard>
-      </section>
-
-      {/* ── CONTACT — helpdesk ── */}
-      <section id="contact" className="mt-6 px-4">
-        <MobileCard
-          title="☎ HELPDESK.EXE"
-          titleClassName="bg-gradient-to-r from-[#008080] to-[#00b0b0]"
-        >
-          <div className="p-3">
-            <p className="mb-3 text-[10px] text-gray-600">
-              Summon an organizer. We reply fast (or when the WiFi drops).
-            </p>
-            <a
-              href={`mailto:${CONTACT.email}`}
-              className="mb-2 block w-full win-border-outset bg-[#c0c0c0] px-3 py-2.5 text-left active:translate-x-px active:translate-y-px"
-            >
-              <p className="text-[8px] font-bold text-gray-500 uppercase">
-                Email
-              </p>
-              <p className="text-[13px] font-bold text-blue-800">
-                {CONTACT.email}
-              </p>
-            </a>
-            <a
-              href={`tel:${CONTACT.phoneRaw}`}
-              className="block w-full win-border-outset bg-[#c0c0c0] px-3 py-2.5 text-left active:translate-x-px active:translate-y-px"
-            >
-              <p className="text-[8px] font-bold text-gray-500 uppercase">
-                Phone / WhatsApp
-              </p>
-              <p className="text-[13px] font-bold text-blue-800">
-                {CONTACT.phone}
-              </p>
-            </a>
-            <p className="mt-2 text-[8px] text-gray-500 italic">
-              Response time: 24-48h. Faster if you bribe us with chai.
-            </p>
-          </div>
-        </MobileCard>
-      </section>
-
-      {/* ── FOOTER ── */}
-      <footer className="mt-6 px-4 pb-4">
-        <div className="flex gap-2">
-          {SOCIALS.map((s) => (
-            <a
-              key={s.id}
-              href={s.url}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex-1 border border-red-900/50 bg-black/60 py-2.5 text-center text-[10px] font-bold text-white transition-colors hover:bg-red-950/60"
-            >
-              {s.icon} {s.label.split(" ")[0]} ↗
-            </a>
-          ))}
-        </div>
-        <p className="mt-4 text-center text-[9px] leading-relaxed text-red-200/40">
-          HACK47 © 2026 — Delhi&apos;s first hacker house.
-          <br />
-          Batch #001: Sept 15 – Oct 15 · More cities loading…
-          <br />
-          CO-CONDUCTED WITH VARIANCE HOUSE —{" "}
-          <a
-            href="https://www.variance.house"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="underline hover:text-red-200"
-          >
-            variance.house
-          </a>
-        </p>
-      </footer>
-
-      {/* ── BOTTOM DOCK ── */}
-      <MobileDock onApply={() => setShowForm(true)} scrollTo={scrollTo} />
-
-      {showForm && <SoulForm onClose={() => setShowForm(false)} />}
-    </div>
-  )
-}
+const MOBILE_APPS = [
+  { id: "specs", label: "My Computer", icon: Monitor, tile: "bg-[#000080]" },
+  { id: "bin", label: "Recycle Bin", icon: Trash2, tile: "bg-[#008000]" },
+  { id: "devils", label: "The Devils", icon: Skull, tile: "bg-[#8b0000]" },
+  { id: "photos", label: "House_Photos", icon: Folder, tile: "bg-[#0058ee]" },
+  { id: "residents", label: "Residents", icon: Users, tile: "bg-[#006400]" },
+  { id: "network", label: "The Web", icon: Globe, tile: "bg-[#0000cc]" },
+  { id: "cities", label: "Next Nodes", icon: MapPin, tile: "bg-[#008080]" },
+  { id: "partner", label: "Partner Node", icon: Link2, tile: "bg-[#7a007a]" },
+  { id: "news", label: "News Signal", icon: Newspaper, tile: "bg-[#cc0000]" },
+  { id: "sponsors", label: "Power Supply", icon: Zap, tile: "bg-[#4a0080]" },
+  { id: "offgrid", label: "Offgrid", icon: Ticket, tile: "bg-[#8b6914]" },
+  { id: "helpdesk", label: "Helpdesk", icon: Mail, tile: "bg-[#006666]" },
+]
 
 function DevilRow({
   name,
@@ -953,494 +386,498 @@ function DevilRow({
   )
 }
 
-function MobileDock({
-  onApply,
-  scrollTo,
+/** A full-width XP window — titlebar chrome + beveled content. Tap titlebar to minimize. */
+function MobileWin({
+  id,
+  title,
+  titleClass,
+  open,
+  onToggle,
+  children,
 }: {
-  onApply: () => void
-  scrollTo: (id: string) => void
+  id: string
+  title: string
+  titleClass?: string
+  open: boolean
+  onToggle: () => void
+  children: React.ReactNode
 }) {
-  const tabs = [
-    {
-      id: "top",
-      label: "TOP",
-      icon: ArrowUp,
-      action: () => window.scrollTo({ top: 0, behavior: "smooth" }),
-    },
-    {
-      id: "nodes",
-      label: "NODES",
-      icon: MapPin,
-      action: () => scrollTo("nodes"),
-    },
-    {
-      id: "news",
-      label: "NEWS",
-      icon: Newspaper,
-      action: () => scrollTo("news"),
-    },
-    {
-      id: "call",
-      label: "CALL",
-      icon: Phone,
-      action: () => (window.location.href = `tel:${CONTACT.phoneRaw}`),
-    },
-  ]
   return (
-    <div className="fixed inset-x-0 bottom-0 z-[9999] border-t border-white/10 bg-black/85 px-3 pt-2 pb-[max(10px,calc(env(safe-area-inset-bottom)))] backdrop-blur">
-      <div className="flex items-center gap-2">
-        {tabs.map((t) => (
+    <section
+      id={id}
+      className="mx-2 mb-3 select-none scroll-mt-2 bg-[#c0c0c0] win-border-outset shadow-[3px_3px_0px_rgba(0,0,0,0.35)]"
+    >
+      <div
+        onClick={onToggle}
+        className={cn(
+          "flex cursor-pointer items-center justify-between gap-2 bg-linear-to-r from-[#0058ee] to-[#3789f8] px-1.5 py-1.5 active:from-[#0048cc]",
+          titleClass
+        )}
+      >
+        <span className="truncate px-0.5 text-[12px] font-bold tracking-wide text-white uppercase drop-shadow-[1px_1px_1px_rgba(0,0,0,0.5)]">
+          {title}
+        </span>
+        <span className="flex shrink-0 gap-[2px]" onClick={(e) => e.stopPropagation()}>
           <button
-            key={t.id}
-            onClick={t.action}
-            className="flex flex-1 flex-col items-center gap-1 py-1 text-zinc-400 transition-colors hover:text-white"
+            aria-label="Minimize"
+            onClick={onToggle}
+            className="win-btn flex h-[22px] w-[24px] items-center justify-center bg-win-grey win-border-outset active:translate-x-px active:translate-y-px"
           >
-            <t.icon className="h-5 w-5" />
-            <span className="text-[10px] font-bold tracking-wider">
-              {t.label}
-            </span>
+            <Minus className="h-3.5 w-3.5 text-black" strokeWidth={3} />
           </button>
-        ))}
-        <button
-          onClick={onApply}
-          className="flex items-center gap-1.5 rounded-xl bg-red-600 px-5 py-3 text-[13px] font-bold uppercase text-white shadow-[0_4px_16px_rgba(220,38,38,0.4)] transition-colors active:scale-95"
-        >
-          <Flame className="h-4 w-4" />
-          Apply
-        </button>
+          <button
+            aria-label="Maximize"
+            className="win-btn flex h-[22px] w-[24px] items-center justify-center bg-win-grey win-border-outset"
+          >
+            <Square className="h-2.5 w-2.5 text-black" strokeWidth={4} />
+          </button>
+          <button
+            aria-label="Close"
+            onClick={onToggle}
+            className="win-btn flex h-[22px] w-[24px] items-center justify-center bg-[#e81123] text-white win-border-outset active:translate-x-px active:translate-y-px"
+          >
+            <X className="h-4 w-4" strokeWidth={3} />
+          </button>
+        </span>
       </div>
-    </div>
-  )
-}
-
-// ═══════════════════════════════════════════════════════════════════════════
-// MOBILE EXPERIENCE — cinematic, real-asset, warm (rebuilt from the ground up)
-// ═══════════════════════════════════════════════════════════════════════════
-
-function MobileLabel({ children }: { children: React.ReactNode }) {
-  return (
-    <div className="font-code text-[11px] uppercase tracking-[0.18em] text-[#38bdf8] mb-2">
-      {children}
-    </div>
-  )
-}
-
-/** Warm content card that pops on the dark cinematic base. */
-function ContentCard({ children, className }: { children: React.ReactNode; className?: string }) {
-  return (
-    <div className={cn("rounded-3xl bg-[#eef4ff] text-[#0c1524] p-5 shadow-[0_20px_50px_rgba(0,0,0,0.35)]", className)}>
-      {children}
-    </div>
-  )
-}
-
-function PerkRow({ n, title, desc }: { n: string; title: string; desc: string }) {
-  return (
-    <div className="flex items-start gap-3 py-2.5 border-b border-black/5 last:border-0">
-      <span className="font-code text-[12px] font-bold text-[#3b82f6] mt-0.5">{n}</span>
-      <div>
-        <h3 className="font-semibold text-[16px] text-[#0c1524]">{title}</h3>
-        <p className="text-[13.5px] text-[#62708c] mt-0.5">{desc}</p>
-      </div>
-    </div>
+      {open && (
+        <div className="win-content m-[3px] p-0.5 win-border-inset bg-[#ffffff] text-black">
+          {children}
+        </div>
+      )}
+    </section>
   )
 }
 
 function MobileExperience() {
   const [showForm, setShowForm] = useState(false)
-  const feed = useFeedData()
-  const open = () => setShowForm(true)
-  const scrollTo = (id: string) =>
-    document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" })
+  const [open, setOpen] = useState<Record<string, boolean>>(MOBILE_WIN_DEFAULTS)
+
+  const openApp = (id: string) => {
+    if (id === "bin") {
+      alert("Emptying bin...")
+      return
+    }
+    setOpen((prev) => (prev[id] ? prev : { ...prev, [id]: true }))
+    setTimeout(() => {
+      document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" })
+    }, 60)
+  }
+
+  const toggle = (id: string) => setOpen((prev) => ({ ...prev, [id]: !prev[id] }))
 
   return (
-    <div className="mobile-page relative min-h-screen bg-[#070d1a] text-[#f5f1ea] font-body overflow-x-hidden pb-28">
-      {/* ── Cinematic hero (real b-roll video / photo) ── */}
-      <section className="relative isolate flex min-h-[96svh] flex-col justify-between overflow-hidden">
-        <div className="absolute inset-0 -z-10 bg-[#070d1a]">
-          <video
-            className="h-full w-full object-cover"
-            autoPlay
-            muted
-            loop
-            playsInline
-            poster="/assets/hero-2.jpg"
-            preload="metadata"
-            aria-hidden="true"
-          >
-            <source src="/assets/hero.mp4" type="video/mp4" />
-          </video>
-          <div className="absolute inset-0 bg-gradient-to-b from-black/80 via-black/45 to-[#070d1a]" />
+    <div className="mobile-page relative min-h-screen overflow-x-hidden pb-24 font-win text-black">
+      {/* Wallpaper — same photo-layer feel as the desktop, dimmed for legibility */}
+      <div className="pointer-events-none fixed inset-0 -z-10 bg-[#05050f]">
+        <img
+          src="/assets/hero-2.jpg"
+          alt=""
+          aria-hidden="true"
+          className="h-full w-full object-cover opacity-80"
+        />
+        <div className="absolute inset-0 bg-[#02020a]/55" />
+        <div className="absolute inset-x-0 top-0 h-40 bg-linear-to-b from-black/70 to-transparent" />
+        <div className="absolute inset-x-0 bottom-0 h-48 bg-linear-to-t from-black/60 to-transparent" />
+      </div>
+
+      {/* ── Desktop screen: wordmark + status + app icons ── */}
+      <section className="px-3 pt-5">
+        <div className="flex items-start justify-between px-1">
+          <div>
+            <h1 className="font-anton text-[52px] leading-[0.9] tracking-tight text-white uppercase select-none">
+              HACK
+              <a
+                href="https://en.wikipedia.org/wiki/Indian_independence_movement"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-electric-yellow transition-colors hover:bg-electric-yellow hover:text-black"
+              >
+                47
+              </a>
+            </h1>
+            <p className="mt-1.5 font-mono text-[10px] font-bold tracking-widest text-white/70 uppercase">
+              Delhi&apos;s first hacker house
+            </p>
+          </div>
+          <div className="flex flex-col items-end gap-2 pt-1">
+            <img
+              src={SUN_SVG}
+              alt=""
+              aria-hidden="true"
+              className="h-9 w-9 animate-pulse drop-shadow-[0_0_24px_#FAFF00]"
+            />
+            <span className="flex items-center gap-1.5 rounded-[3px] border border-white/25 bg-black/40 px-2 py-1 font-mono text-[10px] font-bold text-toxic-green backdrop-blur-[2px]">
+              <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-toxic-green" />
+              BATCH #001 LIVE
+            </span>
+            <span className="font-mono text-[9px] font-bold text-white/50 uppercase">
+              SEPT 15 – OCT 15
+            </span>
+          </div>
         </div>
 
-        <header className="flex items-center justify-between px-5 pt-5">
-          <div className="font-display text-2xl font-extrabold tracking-tight text-white">
-            HACK<span className="text-[#3b82f6]">47</span>
-          </div>
-          <button
-            onClick={open}
-            className="rounded-full bg-[#3b82f6] px-4 py-2 text-sm font-semibold text-white shadow-[0_8px_20px_rgba(59,130,246,0.4)] active:scale-95"
-          >
-            Apply
-          </button>
-        </header>
-
-        <div className="px-5 pb-8">
-          <MobileLabel>Delhi&apos;s first hacker house</MobileLabel>
-          <h1 className="font-display text-[clamp(30px,9vw,40px)] font-extrabold leading-[1.02] tracking-tight text-white">
-            The coolest <span className="text-[#3b82f6]">hacker house.</span>
-          </h1>
-          <p className="mt-4 max-w-[320px] text-[15px] leading-relaxed text-white/80">
-            30 days. 16 builders. One villa. Build something real — then actually enjoy the good life.
-          </p>
-          <div className="mt-6 flex flex-wrap items-center gap-2 font-code text-[11px]">
-            <span className="rounded-full border border-white/15 bg-white/10 px-3 py-1.5">SEPT 15 – OCT 15</span>
-            <span className="rounded-full border border-white/15 bg-white/10 px-3 py-1.5">16 SLOTS</span>
-            <span className="rounded-full bg-[#38bdf8] px-3 py-1.5 font-bold text-black">APPLY NOW</span>
-          </div>
-          <button
-            onClick={open}
-            className="mt-7 w-full rounded-2xl bg-[#3b82f6] py-4 font-display text-[17px] font-bold text-white shadow-[0_12px_30px_rgba(59,130,246,0.35)] active:scale-[0.99]"
-          >
-            Apply to Hack47 →
-          </button>
-        </div>
-      </section>
-
-      {/* ── Stats ── */}
-      <section className="grid grid-cols-3 gap-3 px-5 pt-6">
-        {[
-          ["30", "days"],
-          ["16", "builders"],
-          ["1", "villa"],
-        ].map(([v, l]) => (
-          <div key={l} className="rounded-2xl border border-white/10 bg-white/5 py-5 text-center">
-            <div className="font-display text-3xl font-extrabold text-[#38bdf8]">{v}</div>
-            <div className="mt-1 text-[11px] uppercase tracking-wider text-white/50">{l}</div>
-          </div>
-        ))}
-      </section>
-
-      {/* ── What you get ── */}
-      <section className="px-5 pt-9">
-        <MobileLabel>What you get</MobileLabel>
-        <h2 className="mb-5 font-display text-2xl font-bold text-white">Built to ship. Built to live.</h2>
-        <ContentCard>
-          <PerkRow n="01" title="16 desks, real monitors" desc="Work when it flows." />
-          <PerkRow n="02" title="1Gbps fiber + failsafe" desc="Lag is a build error." />
-          <PerkRow n="03" title="3 meals a day" desc="Fuel, not feasts. Snack bar 24/7." />
-          <PerkRow n="04" title="Unlimited chai & coffee" desc="Pick your poison, we stock it." />
-          <PerkRow n="05" title="Terrace + sunsets" desc="Build by day, unwind by dusk." />
-          <PerkRow n="06" title="Your work stays yours" desc="We host, you keep the IP." />
-        </ContentCard>
-      </section>
-
-      {/* ── The house (photos) ── */}
-      <section className="px-5 pt-9">
-        <MobileLabel>The house</MobileLabel>
-        <h2 className="mb-5 font-display text-2xl font-bold text-white">A villa, not an office.</h2>
-        <div className="-mx-5 flex snap-x gap-3 overflow-x-auto px-5 pb-2">
-          {HOUSE_PHOTOS.map((p, i) => (
-            <figure key={i} className="w-[80%] max-w-[320px] shrink-0 snap-center">
-              <img
-                src={p.src}
-                alt={p.caption}
-                loading="lazy"
-                className="aspect-[4/3] w-full rounded-2xl border border-white/10 object-cover"
-              />
-              <figcaption className="mt-2 text-[12px] text-white/60">{p.caption}</figcaption>
-            </figure>
+        {/* Desktop app icons — tap one, its window opens below */}
+        <div className="mt-5 grid grid-cols-4 gap-x-0 gap-y-2.5 px-0.5">
+          {MOBILE_APPS.map((app) => (
+            <DesktopIcon
+              key={app.id}
+              icon={app.icon}
+              tile={app.tile}
+              label={app.label}
+              onClick={() => openApp(app.id)}
+            />
           ))}
         </div>
       </section>
 
-      {/* ── Offgrid golden ticket ── */}
-      <section id="offgrid" className="px-5 pt-9">
-        <MobileLabel>Offgrid — the golden ticket</MobileLabel>
-        <div className="rounded-3xl bg-gradient-to-br from-[#38bdf8] to-[#3b82f6] p-5 text-white shadow-[0_16px_40px_rgba(56,189,248,0.25)]">
-          <div className="flex items-center justify-between font-code text-[11px] font-bold uppercase tracking-widest text-[#eaf3ff]">
-            <span>Virtual hackathon</span><span>30 days</span>
-          </div>
-          <h2 className="mt-3 font-display text-3xl font-extrabold uppercase leading-none">Win a seat</h2>
-          <p className="mt-2 max-w-[300px] text-[14px] leading-relaxed text-[#eaf3ff]">
-            Fully remote. Pure chaos. Win Offgrid and get a guaranteed spot in the next Hack47 cohort.
-          </p>
-          <a
-            href={OFFGRID_URL}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="mt-4 block w-full rounded-xl bg-black py-3 text-center font-display text-[15px] font-bold text-[#38bdf8] active:scale-[0.99]"
-          >
-            Enter the arena ↗
-          </a>
-        </div>
-      </section>
-
-      {/* ── Cities / nodes ── */}
-      <section id="nodes" className="px-5 pt-9">
-        <MobileLabel>Next nodes</MobileLabel>
-        <ContentCard>
-          <div className="mb-1 flex items-center justify-between">
-            <h2 className="text-xl font-bold text-[#0c1524]">India node map</h2>
-            <span className="font-code text-[11px] font-bold text-green-700">● DELHI LIVE</span>
-          </div>
-          <div className="mt-2">
-            {CITIES.map((c) => (
-              <div key={c.name} className="flex items-center justify-between border-b border-black/5 py-2.5 last:border-0">
-                <div>
-                  <p className="text-[14px] font-semibold text-[#0c1524]">
-                    {c.icon} {c.name}
-                  </p>
-                  <p className="text-[12px] text-[#62708c]">{c.detail}</p>
-                </div>
-                <span
-                  className={cn(
-                    "shrink-0 rounded-full border px-2 py-0.5 font-code text-[10px] font-bold uppercase",
-                    c.status === "LIVE"
-                      ? "border-green-600 bg-green-50 text-green-700"
-                      : c.status === "CO-RUN"
-                        ? "border-purple-600 bg-purple-50 text-purple-700"
-                        : c.status === "QUEUED"
-                          ? "border-amber-600 bg-amber-50 text-amber-700"
-                          : "border-zinc-400 bg-zinc-100 text-zinc-500"
-                  )}
-                >
-                  {c.status}
-                </span>
-              </div>
-            ))}
-          </div>
-          <p className="mt-3 text-[12px] italic text-[#62708c]">
-            Node announcements drop on X + LinkedIn first. Follow to know when your city goes live.
-          </p>
-        </ContentCard>
-      </section>
-
-      {/* ── Variance partner ── */}
-      <section id="partner" className="px-5 pt-9">
-        <MobileLabel>Partner node</MobileLabel>
-        <div className="rounded-3xl bg-gradient-to-br from-[#4f46e5] to-[#818cf8] p-5 text-white shadow-[0_16px_40px_rgba(79,70,229,0.3)]">
-          <div className="flex items-center justify-between font-code text-[11px] font-bold uppercase tracking-widest">
-            <span>Variance.house</span><span className="text-green-300">● CONNECTED</span>
-          </div>
-          <h2 className="mt-3 font-display text-3xl font-extrabold uppercase leading-none">Variance</h2>
-          <p className="mt-2 max-w-[320px] text-[14px] leading-relaxed text-white/85">
-            30-day deep-tech residency in Bengaluru. Same month as Delhi — shared mentors, shared sponsors, stacked credits. No fee. No equity.
-          </p>
-          <a
-            href="https://www.variance.house"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="mt-4 block w-full rounded-xl bg-white py-3 text-center font-display text-[15px] font-bold text-[#4f46e5] active:scale-[0.99]"
-          >
-            Learn more ↗
-          </a>
-        </div>
-      </section>
-
-      {/* ── Sponsors ── */}
-      <section id="sponsors" className="px-5 pt-9">
-        <MobileLabel>Power supply</MobileLabel>
-        <ContentCard>
-          <p className="mb-3 font-code text-[11px] font-bold uppercase tracking-widest text-[#0c1524]">
-            Powering the machine
-          </p>
-          <div className="flex gap-3">
-            <div className="flex flex-1 flex-col items-center justify-center rounded-xl border border-zinc-200 bg-white p-4">
-              <img src="/sponsors/redbull.png" alt="Red Bull" className="h-9 w-auto" />
-              <p className="mt-2 text-center font-code text-[10px] text-[#62708c]">Fuel</p>
-            </div>
-            <div className="flex flex-1 flex-col items-center justify-center rounded-xl border border-zinc-200 bg-white p-4">
-              <img src="/sponsors/openai.png" alt="OpenAI" className="h-9 w-auto" />
-              <p className="mt-2 text-center font-code text-[10px] text-[#62708c]">Compute</p>
-            </div>
-          </div>
-          <p className="mt-3 text-[12px] text-[#62708c]">
-            Plus the shared Variance credit stack. Want to power the machine?{" "}
-            <a href={`mailto:${CONTACT.email}`} className="font-bold text-blue-700 underline">
-              hello@hack47.org
-            </a>
-          </p>
-        </ContentCard>
-      </section>
-
-      {/* ── News ── */}
-      <section id="news" className="px-5 pt-9">
-        <MobileLabel>Press + signals</MobileLabel>
-        <a
-          href={feed.mint.url}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="block rounded-3xl border border-white/10 bg-white/5 p-5 transition-colors hover:border-[#38bdf8]/50"
+      {/* ── Open windows, stacked — same apps as the desktop ── */}
+      <main className="mt-5">
+        <MobileWin
+          id="main"
+          title="C:\SYSTEM\HACK47_OS.EXE"
+          open={open.main}
+          onToggle={() => toggle("main")}
         >
-          <p className="font-code text-[11px] font-bold uppercase tracking-widest text-[#38bdf8]">
-            ★ Featured in The Mint — {feed.mint.date}
-          </p>
-          <p className="mt-2 text-[16px] font-semibold text-white">{feed.mint.title}</p>
-          <p className="mt-2 text-[13px] leading-relaxed text-white/60">{feed.mint.snippet}</p>
-          <p className="mt-3 font-code text-[11px] font-bold text-[#38bdf8]">Read article ↗</p>
-        </a>
-        <div className="mt-3 space-y-3">
-          {feed.x.slice(0, 1).map((p, i) => (
-            <a key={i} href={p.url} target="_blank" rel="noopener noreferrer" className="block rounded-2xl border border-white/10 bg-white/[0.03] p-4">
-              <p className="font-code text-[12px] font-bold text-white">
-                {p.author} <span className="font-normal text-white/50">· {p.date}</span>
-              </p>
-              <p className="mt-1 line-clamp-3 text-[13px] leading-relaxed text-white/65">{p.text}</p>
-              <p className="mt-2 font-code text-[11px] font-bold text-[#3b82f6]">Open on X ↗</p>
-            </a>
-          ))}
-          {feed.linkedin.slice(0, 1).map((p, i) => (
-            <a key={i} href={p.url} target="_blank" rel="noopener noreferrer" className="block rounded-2xl border border-white/10 bg-white/[0.03] p-4">
-              <p className="font-code text-[12px] font-bold text-white">{p.author}</p>
-              <p className="mt-1 line-clamp-3 text-[13px] leading-relaxed text-white/65">{p.text}</p>
-              <p className="mt-2 font-code text-[11px] font-bold text-[#3b82f6]">Open on LinkedIn ↗</p>
-            </a>
-          ))}
-        </div>
-      </section>
+          <div className="p-3.5">
+            <h2 className="font-anton text-[46px] leading-none tracking-tight text-black uppercase select-none">
+              HACK
+              <a
+                href="https://en.wikipedia.org/wiki/Indian_independence_movement"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="px-0.5 transition-colors hover:bg-black hover:text-electric-yellow"
+              >
+                47
+              </a>
+            </h2>
+            <div className="mb-3 mt-3 border-l-4 border-electric-yellow bg-black p-3 font-mono text-[11px] leading-relaxed text-electric-yellow">
+              <p>&gt; INITIALIZING DELHI&apos;S FIRST HACKER HOUSE...</p>
+              <p>&gt; STATUS: PURE CHAOS DETECTED</p>
+              <p>&gt; LOCATION: DELHI VILLA</p>
+              <p>&gt; SEPT 15 - OCT 15</p>
+              <p>&gt; PARTNER NODE: VARIANCE.HOUSE — CONNECTED</p>
+              <p className="animate-pulse">&gt; NEXT NODE: TBD — INDIA IS THE NETWORK ▊</p>
+            </div>
+            <p className="border-l-4 border-gray-300 pl-2 font-serif text-[15px] leading-snug text-gray-700 italic">
+              &quot;A 30-day residency for 16 builders who care more about their
+              Git history than their sleep schedule.&quot;
+            </p>
+          </div>
+        </MobileWin>
 
-      {/* ── House protocols ── */}
-      <section className="px-5 pt-9">
-        <MobileLabel>House protocols</MobileLabel>
-        <ContentCard>
-          <p className="mb-3 font-code text-[11px] font-bold uppercase tracking-widest text-[#0c1524]">Read me first</p>
-          <div className="space-y-3">
+        <MobileWin
+          id="error"
+          title="System Error"
+          titleClass="bg-[#808080]"
+          open={open.error}
+          onToggle={() => toggle("error")}
+        >
+          <div className="flex items-start gap-3 p-3.5">
+            <AlertTriangle className="mt-0.5 h-6 w-6 shrink-0 text-yellow-500" />
+            <div>
+              <p className="text-[14px] font-bold text-gray-800">
+                404: Tribe Not Found?
+              </p>
+              <p className="mt-1 text-[13px] leading-relaxed text-gray-600">
+                If you can&apos;t find your tribe in the wild, you must build one
+                at Hack47. Delhi is waiting for your next big thing.
+              </p>
+              <button
+                onClick={() => toggle("error")}
+                className="mt-3 win-border-outset bg-win-grey px-6 py-1.5 text-[13px] font-bold hover:brightness-105 active:translate-x-px active:translate-y-px"
+              >
+                OK
+              </button>
+            </div>
+          </div>
+        </MobileWin>
+
+        <MobileWin
+          id="perks"
+          title="README_FIRST.TXT"
+          titleClass="bg-[#800000]"
+          open={open.perks}
+          onToggle={() => toggle("perks")}
+        >
+          <div className="p-3.5 font-mono text-[13px] text-black">
+            <p className="mb-3 font-bold uppercase underline">House protocols:</p>
+            <ul className="mb-4 space-y-3">
+              <li>
+                - <span className="font-bold">LAUNDRY.SYS</span>: We wash the
+                socks. You build the robots.
+              </li>
+              <li>
+                - <span className="font-bold">FOOD.EXE</span>: High-protein fuel.
+                Optimized for latency.
+              </li>
+              <li>
+                - <span className="font-bold">SLEEP.DLL</span>: Optional. Not
+                recommended during demo day.
+              </li>
+            </ul>
+            <div className="border-2 border-dashed border-red-500 bg-red-50/70 p-3">
+              <p className="text-[13px] leading-relaxed text-black">
+                Highly addictive environment. May cause sudden career pivots.
+              </p>
+            </div>
+          </div>
+        </MobileWin>
+
+        <MobileWin
+          id="photos"
+          title="HOUSE_PHOTOS.EXE"
+          open={open.photos}
+          onToggle={() => toggle("photos")}
+        >
+          <HousePhotosGallery />
+        </MobileWin>
+
+        <MobileWin
+          id="offgrid"
+          title="OFFGRID.EXE"
+          titleClass="bg-[#8b6914]"
+          open={open.offgrid}
+          onToggle={() => toggle("offgrid")}
+        >
+          <OffgridPanel />
+        </MobileWin>
+
+        <MobileWin
+          id="soul"
+          title="⚠ SELL_YOUR_SOUL.EXE"
+          titleClass="bg-[#cc0000]"
+          open={open.soul}
+          onToggle={() => toggle("soul")}
+        >
+          <div className="p-4 text-center font-mono">
+            <p className="mb-2 text-2xl font-bold">👹</p>
+            <p className="mb-2 text-[15px] font-bold tracking-wide uppercase">
+              SELL US YOUR SOUL
+            </p>
+            <p className="mb-4 text-[13px] leading-relaxed text-gray-600">
+              30 days. No distractions. Pure building.
+              <br />
+              In exchange, we take your soul (and your sleep schedule).
+            </p>
+            <button
+              onClick={() => setShowForm(true)}
+              className="w-full bg-red-600 py-3 text-[13px] font-bold tracking-wider text-white uppercase shadow-[3px_3px_0px_rgba(0,0,0,0.3)] transition-all hover:bg-red-700 active:translate-y-px"
+            >
+              ✦ I ACCEPT — APPLY NOW ✦
+            </button>
+            <p className="mt-2 text-[11px] text-gray-400 italic">
+              Terms: No refunds on sleep lost.
+            </p>
+          </div>
+        </MobileWin>
+
+        <MobileWin
+          id="sponsors"
+          title="POWER_SUPPLY.INI"
+          titleClass="bg-[#4a0080]"
+          open={open.sponsors}
+          onToggle={() => toggle("sponsors")}
+        >
+          <SponsorsPanel />
+        </MobileWin>
+
+        <MobileWin
+          id="news"
+          title="NEWS_SIGNAL.EXE"
+          titleClass="bg-[#000080]"
+          open={open.news}
+          onToggle={() => toggle("news")}
+        >
+          <NewsPanel />
+        </MobileWin>
+
+        <MobileWin
+          id="cities"
+          title="NEXT_NODES.EXE"
+          titleClass="bg-[#006400]"
+          open={open.cities}
+          onToggle={() => toggle("cities")}
+        >
+          <CitiesPanel />
+        </MobileWin>
+
+        <MobileWin
+          id="network"
+          title="NETWORK_NEIGHBORHOOD.EXE"
+          open={open.network}
+          onToggle={() => toggle("network")}
+        >
+          <NetworkNeighborhood />
+        </MobileWin>
+
+        <MobileWin
+          id="partner"
+          title="PARTNER_NODE.SYS"
+          titleClass="bg-[#7a007a]"
+          open={open.partner}
+          onToggle={() => toggle("partner")}
+        >
+          <div className="p-3 font-mono">
+            <div className="relative overflow-hidden border-2 border-purple-700/60 bg-linear-to-b from-[#1a001a] to-[#000000] p-3.5">
+              <div className="mb-2 flex justify-between text-[10px] font-bold tracking-widest text-purple-400">
+                <span>PARTNER_NODE.SYS</span>
+                <span>NODE: VARIANCE.HOUSE</span>
+              </div>
+              <p className="mb-1.5 font-anton text-3xl leading-none text-purple-300 uppercase">
+                Variance
+              </p>
+              <p className="mb-2.5 text-[12px] leading-relaxed text-purple-100/80">
+                30-day deep-tech residency. Bengaluru. Same month as Delhi — Sept
+                15 to Oct 15. Shared mentors, shared sponsors, stacked credits.
+                No fee. No equity. Your work stays yours.
+              </p>
+              <a
+                href="https://www.variance.house"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="block win-border-outset bg-purple-600 py-2.5 text-center text-[12px] font-bold text-white uppercase hover:brightness-110 active:translate-y-px"
+              >
+                ✦ LEARN MORE ↗
+              </a>
+              <p className="mt-2 text-center text-[10px] text-purple-400/70 italic">
+                Mentors, supporters &amp; full credit stack — listed on
+                variance.house.
+              </p>
+            </div>
+          </div>
+        </MobileWin>
+
+        <MobileWin
+          id="devils"
+          title="ARCHDEMONS.SYS"
+          titleClass="bg-[#4a0000]"
+          open={open.devils}
+          onToggle={() => toggle("devils")}
+        >
+          <TheDevils />
+        </MobileWin>
+
+        <MobileWin
+          id="residents"
+          title="RESIDENTS.DAT"
+          titleClass="bg-[#006400]"
+          open={open.residents}
+          onToggle={() => toggle("residents")}
+        >
+          <ResidentsPanel />
+        </MobileWin>
+
+        <MobileWin
+          id="specs"
+          title="SYSTEM_SPECS.INF"
+          open={open.specs}
+          onToggle={() => toggle("specs")}
+        >
+          <SystemSpecs />
+        </MobileWin>
+
+        <MobileWin
+          id="faq"
+          title="FAQ.TXT"
+          open={open.faq}
+          onToggle={() => toggle("faq")}
+        >
+          <div className="p-3.5 font-mono">
             {[
-              ["LAUNDRY.SYS", "We wash the socks. You build the robots."],
-              ["FOOD.EXE", "High-protein fuel. Optimized for latency."],
-              ["SLEEP.DLL", "Optional. Not recommended during demo day."],
-            ].map(([f, l]) => (
-              <div key={f} className="flex items-start gap-2">
-                <span className="font-code text-[13px] font-bold text-[#3b82f6]">{f}</span>
-                <span className="text-[13.5px] text-[#2a3450]">{l}</span>
+              [
+                "Who is this for?",
+                "Builders. Students, founders, indie hackers — anyone who ships. The bar is momentum, not pedigree.",
+              ],
+              [
+                "What does it cost?",
+                "We ask if you can contribute, but it never affects your application. Be honest — need-based support exists and nobody is turned away over money.",
+              ],
+              [
+                "Where is it?",
+                "A premium villa in Delhi. 4BHK, terrace, garden. Sept 15 – Oct 15.",
+              ],
+              [
+                "Do I need to know how to code already?",
+                "Being a builder is the real requirement. Code helps; momentum wins.",
+              ],
+              [
+                "Is it really about the good life?",
+                "Yes. Ship like you mean it, then actually enjoy the best 30 days of your year. That is the whole point.",
+              ],
+            ].map(([q, a]) => (
+              <div key={q} className="border-b border-gray-200 py-3 last:border-0">
+                <p className="text-[14px] font-bold text-black">&gt; {q}</p>
+                <p className="mt-1.5 text-[13px] leading-relaxed text-gray-600">{a}</p>
               </div>
             ))}
           </div>
-          <p className="mt-4 text-[12px] italic text-[#62708c]">
-            Highly addictive environment. May cause sudden career pivots.
-          </p>
-        </ContentCard>
-      </section>
+        </MobileWin>
 
-      {/* ── Archdemons ── */}
-      <section id="devils" className="px-5 pt-9">
-        <MobileLabel>The archdemons</MobileLabel>
-        <ContentCard>
-          <p className="mb-3 text-center text-[12px] italic text-[#62708c]">The ones who summoned this chaos into existence</p>
-          <DevilRow name="Rishul Chanana" role="Archdemon I" img="/rishul.jpeg" links={[{ label: "LinkedIn ↗", url: "https://www.linkedin.com/in/rishul-chanana/" }, { label: "𝕏 ↗", url: "https://x.com/rishhul" }]} />
-          <DevilRow name="Pratyush Pandey" role="Archdemon II" img="/pratyush.jpeg" links={[{ label: "LinkedIn ↗", url: "https://www.linkedin.com/in/pratyush-pandey-09b35b219" }, { label: "𝕏 ↗", url: "https://x.com/P_Pratyush7" }]} />
-          <DevilRow name="Raghwender Vasisth" role="Archdemon III" initials="RV" links={[{ label: "LinkedIn ↗", url: "https://www.linkedin.com/in/raghwender-vasist" }, { label: "𝕏 ↗", url: "https://x.com/Hawthorn_thinks" }, { label: "IG ↗", url: "https://www.instagram.com/hawthorn_laments" }]} />
-        </ContentCard>
-      </section>
+        <MobileWin
+          id="helpdesk"
+          title="HELPDESK.EXE"
+          titleClass="bg-[#008080]"
+          open={open.helpdesk}
+          onToggle={() => toggle("helpdesk")}
+        >
+          <ContactPanel />
+        </MobileWin>
 
-      {/* ── Residents ── */}
-      <section className="px-5 pt-9">
-        <MobileLabel>Residents</MobileLabel>
-        <ContentCard>
-          <ResidentsPanel />
-        </ContentCard>
-      </section>
-
-      {/* ── System specs ── */}
-      <section className="px-5 pt-9">
-        <MobileLabel>System specs</MobileLabel>
-        <ContentCard>
-          <SystemSpecs />
-        </ContentCard>
-      </section>
-
-      {/* ── FAQ ── */}
-      <section className="px-5 pt-9">
-        <MobileLabel>FAQ</MobileLabel>
-        <h2 className="mb-4 font-display text-2xl font-bold text-white">A few practical questions.</h2>
-        <div className="divide-y divide-white/10">
-          {[
-            ["Who is this for?", "Builders. Students, founders, indie hackers — anyone who ships. The bar is momentum, not pedigree."],
-            ["What does it cost?", "We ask if you can contribute, but it never affects your application. Be honest — need-based support exists and nobody is turned away over money."],
-            ["Where is it?", "A premium villa in Delhi. 4BHK, terrace, garden. Sept 15 – Oct 15."],
-            ["Do I need to know how to code already?", "Being a builder is the real requirement. Code helps; momentum wins."],
-            ["Is it really about the good life?", "Yes. Ship like you mean it, then actually enjoy the best 30 days of your year. That is the whole point."],
-          ].map(([q, a]) => (
-            <div key={q} className="py-4">
-              <h3 className="text-[15px] font-semibold text-white">{q}</h3>
-              <p className="mt-1.5 text-[13.5px] leading-relaxed text-white/65">{a}</p>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* ── Contact ── */}
-      <section id="contact" className="px-5 pt-9">
-        <MobileLabel>Contact</MobileLabel>
-        <ContentCard>
-          <p className="mb-3 text-[13.5px] text-[#62708c]">Summon an organizer. We reply fast (or when the WiFi drops).</p>
-          <a href={`mailto:${CONTACT.email}`} className="block rounded-xl border border-zinc-200 bg-white p-3">
-            <p className="font-code text-[10px] font-bold uppercase text-[#62708c]">Email</p>
-            <p className="text-[16px] font-semibold text-blue-800">{CONTACT.email}</p>
-          </a>
-          <a href={`tel:${CONTACT.phoneRaw}`} className="mt-2 block rounded-xl border border-zinc-200 bg-white p-3">
-            <p className="font-code text-[10px] font-bold uppercase text-[#62708c]">Phone / WhatsApp</p>
-            <p className="text-[16px] font-semibold text-blue-800">{CONTACT.phone}</p>
-          </a>
-          <p className="mt-3 text-[12px] italic text-[#62708c]">Response time: 24-48h. Faster if you bribe us with chai.</p>
-        </ContentCard>
-      </section>
-
-      {/* ── Footer ── */}
-      <footer className="mt-10 px-5 pb-8 text-center">
-        <div className="flex gap-2">
-          {SOCIALS.map((s) => (
-            <a
-              key={s.id}
-              href={s.url}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex-1 rounded-xl border border-white/10 bg-white/5 py-3 text-center text-[12px] font-semibold text-white/80 transition-colors hover:border-[#3b82f6]/50"
-            >
-              {s.icon} {s.label.split(" ")[0]} ↗
-            </a>
-          ))}
-        </div>
-        <p className="mt-5 text-[11px] leading-relaxed text-white/40">
+        <footer className="px-6 pt-4 pb-2 text-center font-mono text-[10px] leading-relaxed text-white/60">
           HACK47 © 2026 — Delhi&apos;s first hacker house.
           <br />
           Batch #001: Sept 15 – Oct 15 · More cities loading…
           <br />
           Co-conducted with{" "}
-          <a href="https://www.variance.house" target="_blank" rel="noopener noreferrer" className="underline hover:text-white">
+          <a
+            href="https://www.variance.house"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="font-bold text-white/90 underline"
+          >
             variance.house
           </a>
-        </p>
-      </footer>
-
-      {/* ── Bottom dock ── */}
-      <nav className="fixed inset-x-0 bottom-0 z-50 border-t border-white/10 bg-[#0c0b09]/90 px-4 pt-2 pb-[max(10px,calc(env(safe-area-inset-bottom)))] backdrop-blur">
-        <div className="flex items-center gap-2">
-          <button onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })} className="flex flex-1 flex-col items-center gap-1 py-1 text-white/50 hover:text-white">
-            <ArrowUp className="h-5 w-5" />
-            <span className="text-[10px] font-bold tracking-wider">Top</span>
-          </button>
-          <button onClick={() => scrollTo("nodes")} className="flex flex-1 flex-col items-center gap-1 py-1 text-white/50 hover:text-white">
-            <MapPin className="h-5 w-5" />
-            <span className="text-[10px] font-bold tracking-wider">Nodes</span>
-          </button>
-          <button onClick={() => scrollTo("news")} className="flex flex-1 flex-col items-center gap-1 py-1 text-white/50 hover:text-white">
-            <Newspaper className="h-5 w-5" />
-            <span className="text-[10px] font-bold tracking-wider">News</span>
-          </button>
-          <button onClick={() => (window.location.href = `tel:${CONTACT.phoneRaw}`)} className="flex flex-1 flex-col items-center gap-1 py-1 text-white/50 hover:text-white">
-            <Phone className="h-5 w-5" />
-            <span className="text-[10px] font-bold tracking-wider">Call</span>
-          </button>
-          <button onClick={open} className="flex items-center gap-1.5 rounded-xl bg-[#3b82f6] px-5 py-3 text-[13px] font-bold text-white shadow-[0_6px_18px_rgba(59,130,246,0.4)] active:scale-95">
-            <Flame className="h-4 w-4" />
-            Apply
-          </button>
-        </div>
-      </nav>
+        </footer>
+      </main>
 
       {showForm && <SoulForm onClose={() => setShowForm(false)} />}
+
+      {/* ── XP taskbar — docked CTA + jump pills ── */}
+      <nav className="fixed inset-x-0 bottom-0 z-[9500] flex items-center gap-1.5 bg-linear-to-b from-[#245edb] via-[#3f8cf3] to-[#245edb] px-2 pt-1.5 pb-[max(6px,env(safe-area-inset-bottom))] shadow-[0_-2px_6px_rgba(0,0,0,0.45)]">
+        <button
+          onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+          className="flex h-9 shrink-0 items-center gap-1 rounded-[3px] bg-linear-to-b from-[#388e3c] via-[#4caf50] to-[#388e3c] px-2.5 text-white shadow-[inset_2px_2px_2px_rgba(255,255,255,0.35),inset_-2px_-2px_3px_rgba(0,0,0,0.25)] transition-all hover:brightness-110 active:brightness-90"
+        >
+          <ShieldCheck className="h-4 w-4 text-white brightness-200" />
+          <span className="text-[12px] font-bold italic tracking-tight uppercase drop-shadow-[1px_1px_1px_rgba(0,0,0,0.5)]">
+            start
+          </span>
+        </button>
+        <div className="no-scrollbar flex flex-1 items-center gap-1 overflow-x-auto px-0.5">
+          {[
+            { id: "photos", label: "Photos" },
+            { id: "offgrid", label: "Offgrid" },
+            { id: "cities", label: "Nodes" },
+            { id: "news", label: "News" },
+          ].map((t) => (
+            <button
+              key={t.id}
+              onClick={() => openApp(t.id)}
+              className="h-8 shrink-0 rounded-[2px] border border-white/30 border-r-black/40 border-b-black/40 bg-[#3c81f3] px-2.5 text-[11px] font-bold text-white uppercase transition-colors hover:bg-[#4a90e2] active:bg-[#2c6ecb]"
+            >
+              {t.label}
+            </button>
+          ))}
+        </div>
+        <button
+          onClick={() => setShowForm(true)}
+          className="flex h-9 shrink-0 items-center gap-1.5 rounded-[3px] bg-[#e81123] px-3 text-[12px] font-bold tracking-wide text-white uppercase win-border-outset shadow-[0_1px_0_rgba(255,255,255,0.4)_inset] transition-all hover:brightness-110 active:translate-y-px"
+        >
+          <Flame className="h-3.5 w-3.5" />
+          Apply
+        </button>
+      </nav>
     </div>
   )
 }

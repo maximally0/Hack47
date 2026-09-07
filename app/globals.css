@@ -11,11 +11,6 @@
     --font-mono: "IBM Plex Mono", monospace;
     --font-win: "Tahoma", "Segoe UI", sans-serif;
 
-    /* Mobile-first display/body/code fonts — bold & modern, different from the desktop XP theme */
-    --font-display: var(--font-unbounded);
-    --font-body: var(--font-space-grotesk);
-    --font-code: var(--font-space-mono);
-
     --color-toxic-green: #32CD32;
     --color-win-blue: #000080;
     --color-win-grey: #c0c0c0;
@@ -154,9 +149,9 @@
 }
 
 /* ── Mobile readability floor ──
-   The desktop is a dense XP terminal where tiny mono text is thematic.
-   On mobile we enforce a legible minimum so nothing is 7-11px. Scoped to
-   .mobile-page so the desktop experience is untouched. */
+   The desktop runs dense XP terminal text at 7-11px, which works on a wide
+   monitor. On mobile we clamp anything below 10px up to 10px so tiny labels
+   stay legible. Scoped to .mobile-page; the desktop experience is untouched. */
 @media (max-width: 767px) {
   .mobile-page p,
   .mobile-page span,
@@ -164,8 +159,7 @@
   .mobile-page a,
   .mobile-page button,
   .mobile-page figcaption {
-    font-size: max(13px, 1em) !important;
-    line-height: 1.45 !important;
+    font-size: max(10px, 1em) !important;
   }
 }
 

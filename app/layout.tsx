@@ -1,4 +1,4 @@
-import { Anton, IBM_Plex_Mono, Unbounded, Space_Grotesk, Space_Mono } from "next/font/google"
+import { Anton, IBM_Plex_Mono } from "next/font/google"
 import { Metadata } from "next"
 
 import "./globals.css"
@@ -16,25 +16,6 @@ const fontMono = IBM_Plex_Mono({
   weight: ["400", "700"],
   variable: "--font-mono",
 });
-
-// Mobile-first fonts — bold, modern, deliberately different from the desktop theme.
-const unbounded = Unbounded({
-  subsets: ["latin"],
-  weight: ["500", "600", "700", "800", "900"],
-  variable: "--font-unbounded",
-});
-
-const spaceGrotesk = Space_Grotesk({
-  subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
-  variable: "--font-space-grotesk",
-});
-
-const spaceMono = Space_Mono({
-  subsets: ["latin"],
-  weight: ["400", "700"],
-  variable: "--font-space-mono",
-})
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://hack47.org"),
@@ -102,7 +83,7 @@ export default function RootLayout({
     <html
       lang="en"
       suppressHydrationWarning
-      className={cn("antialiased", fontMono.variable, anton.variable, unbounded.variable, spaceGrotesk.variable, spaceMono.variable)}
+      className={cn("antialiased", fontMono.variable, anton.variable)}
     >
       <body className="bg-black">
         <ThemeProvider>{children}</ThemeProvider>
