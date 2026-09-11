@@ -147,7 +147,7 @@ export function ApplyForm({ onClose }: { onClose: () => void }) {
 
   return (
     <div
-      className="fixed inset-0 z-[9999] flex items-stretch justify-center overflow-y-auto bg-coal/95 backdrop-blur-sm sm:items-center sm:p-6"
+      className="fixed inset-0 z-[9999] flex items-stretch justify-center overflow-y-auto safe-bottom safe-x bg-coal/95 backdrop-blur-sm sm:items-center sm:p-6"
       role="dialog"
       aria-modal="true"
       aria-label="Apply to hack47"

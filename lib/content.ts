@@ -256,6 +256,8 @@ export const GALLERY: GalleryItem[] = [
 
 export const HERO_IMAGE = {
   src: "https://images.unsplash.com/photo-1562439427-b53f43a453bc?auto=format&w=2000&q=80&fit=crop",
+  srcSmall:
+    "https://images.unsplash.com/photo-1562439427-b53f43a453bc?auto=format&w=800&q=80&fit=crop",
   alt: "Villa facade at night with warm illuminated windows, photograph by Anahita on Unsplash",
 };
 

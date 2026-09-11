@@ -5,7 +5,8 @@ import { useEffect, useRef } from "react";
 const GATE = 0.68;
 const GATE_WIDTH = 0.13;
 const CELLS = 16;
-const PARTICLES = 900;
+const PARTICLES_DESKTOP = 900;
+const PARTICLES_MOBILE = 320;
 const PRE_LIT = 6;
 
 type Particle = { x: number; y: number; v: number; w: number; o: number };
@@ -32,10 +33,16 @@ export function SelectionFunnel() {
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
 
-    const dpr = Math.min(2, window.devicePixelRatio || 1);
+    const mobile = window.matchMedia("(max-width: 639.98px)").matches;
+    const reduceMotion = window.matchMedia(
+      "(prefers-reduced-motion: reduce)",
+    ).matches;
+    const PARTICLES = mobile ? PARTICLES_MOBILE : PARTICLES_DESKTOP;
+    const dpr = Math.min(mobile ? 1.5 : 2, window.devicePixelRatio || 1);
     let width = 1;
     let height = 1;
     let frameId = 0;
+    let running = false;
     let absorbed = 0;
     let nextCell = PRE_LIT;
     const lit = Array.from({ length: CELLS }, (_, i) => i < PRE_LIT);
@@ -53,47 +60,52 @@ export function SelectionFunnel() {
       canvas.width = Math.round(width * dpr);
       canvas.height = Math.round(height * dpr);
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      // Under reduced motion the loop is off, so repaint the static frame
+      // whenever the canvas is resized.
+      if (reduceMotion) draw(false);
     };
 
-    const draw = () => {
-      ctx.clearRect(0, 0, width, height);
+    function draw(advance = true) {
+      ctx!.clearRect(0, 0, width, height);
       const gateY = Math.round(height * GATE);
       const cx = width * 0.5;
       const halfGate = width * GATE_WIDTH * 0.5;
 
       // funnel walls
-      ctx.strokeStyle = "rgba(242,239,232,.26)";
-      ctx.lineWidth = 1;
-      ctx.beginPath();
-      ctx.moveTo(0.5, 0);
-      ctx.lineTo(cx - halfGate, gateY);
-      ctx.moveTo(width - 0.5, 0);
-      ctx.lineTo(cx + halfGate, gateY);
-      ctx.stroke();
+      ctx!.strokeStyle = "rgba(242,239,232,.26)";
+      ctx!.lineWidth = 1;
+      ctx!.beginPath();
+      ctx!.moveTo(0.5, 0);
+      ctx!.lineTo(cx - halfGate, gateY);
+      ctx!.moveTo(width - 0.5, 0);
+      ctx!.lineTo(cx + halfGate, gateY);
+      ctx!.stroke();
 
       // falling applications
       for (const p of particles) {
-        p.y += p.v;
-        if (p.y >= GATE) {
-          absorbed += 1;
-          if (absorbed % 70 === 0 && nextCell < CELLS) {
-            lit[nextCell] = true;
-            nextCell += 1;
+        if (advance) {
+          p.y += p.v;
+          if (p.y >= GATE) {
+            absorbed += 1;
+            if (absorbed % 70 === 0 && nextCell < CELLS) {
+              lit[nextCell] = true;
+              nextCell += 1;
+            }
+            seed(p);
+            continue;
           }
-          seed(p);
-          continue;
         }
-        if (p.y <= 0) continue;
+        if (p.y <= 0 || p.y >= GATE) continue;
         const t = p.y / GATE;
         const eased = t * t;
         const x = cx + (p.x - 0.5) * width * (1 - eased * (1 - GATE_WIDTH));
-        ctx.fillStyle = `rgba(242,239,232,${(p.o * (0.4 + 0.6 * t)).toFixed(3)})`;
-        ctx.fillRect(x, p.y * height, p.w, p.w * 2.6);
+        ctx!.fillStyle = `rgba(242,239,232,${(p.o * (0.4 + 0.6 * t)).toFixed(3)})`;
+        ctx!.fillRect(x, p.y * height, p.w, p.w * 2.6);
       }
 
       // the gate
-      ctx.fillStyle = "rgba(242,239,232,.92)";
-      ctx.fillRect(cx - halfGate, gateY, halfGate * 2, 2);
+      ctx!.fillStyle = "rgba(242,239,232,.92)";
+      ctx!.fillRect(cx - halfGate, gateY, halfGate * 2, 2);
 
       // sixteen lights
       const top = gateY + 30;
@@ -105,23 +117,59 @@ export function SelectionFunnel() {
         const bx = x0 + k * cellWidth + cellWidth * 0.2;
         const bw = cellWidth * 0.6;
         if (lit[k]) {
-          ctx.fillStyle = "rgba(242,239,232,.96)";
-          ctx.fillRect(bx, top, bw, barHeight);
+          ctx!.fillStyle = "rgba(242,239,232,.96)";
+          ctx!.fillRect(bx, top, bw, barHeight);
         } else {
-          ctx.strokeStyle = "rgba(242,239,232,.32)";
-          ctx.strokeRect(Math.round(bx) + 0.5, top + 0.5, Math.round(bw), barHeight);
+          ctx!.strokeStyle = "rgba(242,239,232,.32)";
+          ctx!.strokeRect(
+            Math.round(bx) + 0.5,
+            top + 0.5,
+            Math.round(bw),
+            barHeight,
+          );
         }
       }
+    }
 
-      frameId = requestAnimationFrame(draw);
+    const loop = () => {
+      draw(true);
+      frameId = requestAnimationFrame(loop);
+    };
+
+    const start = () => {
+      if (running || reduceMotion) return;
+      running = true;
+      frameId = requestAnimationFrame(loop);
+    };
+
+    const stop = () => {
+      running = false;
+      cancelAnimationFrame(frameId);
     };
 
     resize();
     window.addEventListener("resize", resize);
-    frameId = requestAnimationFrame(draw);
+
+    // Under reduced motion: draw exactly one static frame and never loop.
+    if (reduceMotion) {
+      draw(false);
+    }
+
+    // Pause the RAF loop whenever the canvas is scrolled out of view so it
+    // isn't redrawing at 60fps off-screen.
+    const io = new IntersectionObserver(
+      (entries) => {
+        const visible = entries[0]?.isIntersecting ?? false;
+        if (visible) start();
+        else stop();
+      },
+      { rootMargin: "120px" },
+    );
+    io.observe(canvas);
 
     return () => {
-      cancelAnimationFrame(frameId);
+      stop();
+      io.disconnect();
       window.removeEventListener("resize", resize);
     };
   }, []);

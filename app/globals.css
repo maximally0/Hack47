@@ -53,8 +53,8 @@
   /* ---------- typographic marks ---------- */
   .lbl {
     font-family: var(--font-mono);
-    font-size: 10px;
-    letter-spacing: 0.16em;
+    font-size: var(--lbl-size, 10px);
+    letter-spacing: var(--lbl-track, 0.16em);
     text-transform: uppercase;
   }
 
@@ -325,5 +325,65 @@
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
+  }
+}
+
+/* ============================================================
+   Mobile scope — everything below the `sm` (640px) breakpoint.
+   Desktop (>= 640px) is intentionally untouched by this block.
+   ============================================================ */
+@media (max-width: 639.98px) {
+  /* 1b. Bump the mono label scale so it clears the 12px legibility
+     floor on phones. One change instead of 114 per-node overrides. */
+  :root {
+    --lbl-size: 11px;
+    --lbl-track: 0.12em;
+  }
+
+  /* 1a. Safe-area insets where content meets a screen edge. These
+     resolve to 0 on devices without a notch/home indicator, so they
+     are inert on Android/most phones and only pad iOS hardware. */
+  .safe-top {
+    padding-top: env(safe-area-inset-top);
+  }
+
+  .safe-bottom {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+
+  .safe-x {
+    padding-left: env(safe-area-inset-left);
+    padding-right: env(safe-area-inset-right);
+  }
+}
+
+/* 1c. Touch devices have no hover, so any affordance that only reveals
+   meaning on :hover is permanently in its dim/off state on a phone.
+   Give each a static resting "on" state. Scoped to (hover: none) so
+   desktop hover behaviour is unchanged. */
+@media (hover: none) {
+  /* brand logos must not sit at 50% on a device that can't brighten them */
+  .logo-cell {
+    opacity: 1;
+  }
+
+  /* mentor + team portraits: show them in colour at rest */
+  .mentor-card .mentor-image,
+  .team-member .team-image {
+    filter: grayscale(0) contrast(1.02);
+  }
+
+  /* hackathon rows: give the resting row the hovered tint + city colour */
+  .hk-row {
+    background: rgba(8, 8, 7, 0.045);
+  }
+
+  .hk-city {
+    color: var(--color-volt);
+  }
+
+  /* thirty-day clock keys read as active at rest */
+  .clock-row .clock-key {
+    color: var(--color-chalk);
   }
 }

@@ -42,7 +42,7 @@ export function SiteFooter() {
   });
 
   return (
-    <footer ref={scopeRef} className="bg-coal">
+    <footer ref={scopeRef} className="bg-coal safe-bottom safe-x">
       {/* status strip */}
       <div className="lbl flex flex-wrap items-center justify-between gap-4 bg-volt px-6 py-4 text-chalk sm:px-8">
         <div className="flex items-center gap-3">
