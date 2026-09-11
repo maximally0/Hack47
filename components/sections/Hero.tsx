@@ -13,14 +13,16 @@ export function Hero() {
     const content = scope.querySelector<HTMLElement>("[data-hero-content]");
 
     // Fixed-media parallax is imperceptible at phone width and costs real
-    // scroll work (4 scrub ScrollTriggers). Only run it on large screens.
+    // scroll work. Only run the *parallax* on large screens. The visibility
+    // scrub below is NOT parallax and must run at every width — see the note.
     const desktop = window.matchMedia("(min-width: 1024px)").matches;
 
-    // The media layer is a real fixed, full-viewport element (not a GSAP pin,
-    // which collapses zero-size `absolute inset-0` layers). The section itself
-    // reserves the scroll height, and the sections below — which live in a
-    // solid, higher stacking context — simply scroll up and over this fixed
-    // image. As they cover it, the image drifts, scales and dims.
+    // The media layer is a real full-viewport element (not a GSAP pin, which
+    // collapses zero-size `absolute inset-0` layers). Below lg it is `absolute`
+    // inside this section, so the section's own stacking context contains it.
+    // At lg+ it becomes `fixed`, the section reserves the scroll height, and the
+    // sections below — which live in a solid, higher stacking context — scroll up
+    // and over it.
     if (image && desktop) {
       gsap.to(image, {
         scale: 1.12,
@@ -44,21 +46,29 @@ export function Hero() {
           scrub: true,
         },
       });
-
-      // Once the hero is fully scrolled past, hide the fixed layer entirely so
-      // it can't sit under (or bleed through) later sections or cost paint.
-      gsap.set(scope, { "--hero-media-visible": 1 });
-      gsap.to(scope, {
-        "--hero-media-visible": 0,
-        ease: "none",
-        scrollTrigger: {
-          trigger: scope,
-          start: "bottom 60%",
-          end: "bottom top",
-          scrub: true,
-        },
-      });
     }
+
+    // Once the hero is fully scrolled past, hide the media layer entirely so it
+    // can't sit under (or bleed through) later sections or cost paint.
+    //
+    // THIS MUST RUN AT EVERY WIDTH. It is not decoration — it is the mechanism
+    // that removes the layer. Gating it to desktop left the layer opaque on
+    // mobile, where it covered the FOOTER outright: the layer is
+    // `position: fixed`, and the footer is a non-positioned sibling, so the
+    // footer's backgrounds (painting-order step 3) and its text (step 5) both
+    // land *beneath* a positioned element with z-index >= 0 (step 6). Sections
+    // 01-07 were unaffected only because they sit in a `z-10` wrapper.
+    gsap.set(scope, { "--hero-media-visible": 1 });
+    gsap.to(scope, {
+      "--hero-media-visible": 0,
+      ease: "none",
+      scrollTrigger: {
+        trigger: scope,
+        start: "bottom 60%",
+        end: "bottom top",
+        scrub: true,
+      },
+    });
 
     if (content && desktop) {
       gsap.to(content, {
@@ -109,7 +119,7 @@ export function Hero() {
       {/* Fixed full-viewport media layer */}
       <div
         data-hero-media
-        className="hero-media fixed inset-0 -z-10 overflow-hidden"
+        className="hero-media absolute inset-0 -z-10 overflow-hidden lg:fixed"
       >
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
