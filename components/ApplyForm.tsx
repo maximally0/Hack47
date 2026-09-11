@@ -56,11 +56,77 @@ export function ApplyForm({ onClose }: { onClose: () => void }) {
   const total = APPLICATION_QUESTIONS.length;
   const value = answers[q?.id] ?? "";
 
-  // Lock body scroll while open.
+  // Per-field mobile input attributes. autoComplete lets phones offer autofill
+  // for the identity fields; the three social-handle fields must opt out of
+  // iOS auto-capitalisation / autocorrect so handles and URLs aren't mangled.
+  const fieldAttrs: Record<
+    string,
+    React.InputHTMLAttributes<HTMLInputElement>
+  > = {
+    name: { autoComplete: "name" },
+    email: { autoComplete: "email", inputMode: "email" },
+    phone: { autoComplete: "tel", inputMode: "tel" },
+    instagram: {
+      autoCapitalize: "none",
+      autoCorrect: "off",
+      spellCheck: false,
+    },
+    linkedin: {
+      autoCapitalize: "none",
+      autoCorrect: "off",
+      spellCheck: false,
+    },
+    twitter: {
+      autoCapitalize: "none",
+      autoCorrect: "off",
+      spellCheck: false,
+    },
+  };
+  const enterKeyHint: React.HTMLAttributes<HTMLElement>["enterKeyHint"] = isLast
+    ? "send"
+    : "next";
+
+  // Lock body scroll while open. Using position: fixed on <body> with
+  // scroll-position restore is reliable on iOS Safari, where toggling
+  // overflow: hidden alone is not.
   useEffect(() => {
-    document.body.style.overflow = "hidden";
+    const scrollY = window.scrollY;
+    const body = document.body;
+    const prev = {
+      position: body.style.position,
+      top: body.style.top,
+      width: body.style.width,
+      overflow: body.style.overflow,
+    };
+    body.style.position = "fixed";
+    body.style.top = `-${scrollY}px`;
+    body.style.width = "100%";
+    body.style.overflow = "hidden";
     return () => {
-      document.body.style.overflow = "";
+      body.style.position = prev.position;
+      body.style.top = prev.top;
+      body.style.width = prev.width;
+      body.style.overflow = prev.overflow;
+      window.scrollTo(0, scrollY);
+    };
+  }, []);
+
+  // Keep the focused field visible when the soft keyboard opens. A fixed
+  // dialog does not reflow around the keyboard, so react to visualViewport
+  // resize and nudge the active field into view.
+  useEffect(() => {
+    const vv = window.visualViewport;
+    if (!vv) return;
+    const onViewport = () => {
+      const el = inputRef.current;
+      if (!el) return;
+      el.scrollIntoView({ block: "center", behavior: "smooth" });
+    };
+    vv.addEventListener("resize", onViewport);
+    vv.addEventListener("scroll", onViewport);
+    return () => {
+      vv.removeEventListener("resize", onViewport);
+      vv.removeEventListener("scroll", onViewport);
     };
   }, []);
 
@@ -87,6 +153,9 @@ export function ApplyForm({ onClose }: { onClose: () => void }) {
       );
     }
     inputRef.current?.focus();
+    // On mobile the focused field can sit behind the soft keyboard; ensure it
+    // is centred in the visible area once focus is taken.
+    inputRef.current?.scrollIntoView({ block: "center" });
   }, [step, done]);
 
   const submit = (finalAnswers: Answers) => {
@@ -147,7 +216,7 @@ export function ApplyForm({ onClose }: { onClose: () => void }) {
 
   return (
     <div
-      className="fixed inset-0 z-[9999] flex items-stretch justify-center overflow-y-auto safe-bottom safe-x bg-coal/95 backdrop-blur-sm sm:items-center sm:p-6"
+      className="fixed inset-0 z-[9999] flex items-center justify-center overflow-y-auto overscroll-contain safe-bottom safe-x bg-coal/97 sm:bg-coal/95 sm:p-6 sm:backdrop-blur-sm"
       role="dialog"
       aria-modal="true"
       aria-label="Apply to hack47"
@@ -161,7 +230,7 @@ export function ApplyForm({ onClose }: { onClose: () => void }) {
         <X size={22} strokeWidth={1.6} />
       </button>
 
-      <div className="flex w-full max-w-[720px] flex-col px-6 py-20 sm:px-10">
+      <div className="flex w-full max-w-[720px] flex-col px-6 py-8 sm:px-10 sm:py-20">
         {done ? (
           <div className="text-center">
             <div className="mx-auto mb-6 flex h-14 w-14 items-center justify-center rounded-full bg-volt">
@@ -290,6 +359,8 @@ export function ApplyForm({ onClose }: { onClose: () => void }) {
                     value={value}
                     onChange={(e) => setValue(e.target.value)}
                     placeholder={q.placeholder}
+                    enterKeyHint={enterKeyHint}
+                    {...fieldAttrs[q.id]}
                     className="w-full border-b border-line bg-transparent pb-3 text-[19px] text-chalk placeholder:text-chalk/30 focus:border-volt focus:outline-none"
                   />
                 )}

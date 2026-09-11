@@ -37,7 +37,7 @@ export function Partners() {
           working with the people building it
           <span className="text-volt">.</span>
         </h2>
-        <SectionLabel>04 — partners &amp; support</SectionLabel>
+        <SectionLabel>03 — partners &amp; support</SectionLabel>
       </div>
 
       <p className="mb-14 max-w-[560px] text-[15px] leading-[1.6] text-chalk/50">

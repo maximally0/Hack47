@@ -50,7 +50,7 @@ export function Campus() {
         >
           the house is a rehearsal for a campus.
         </h2>
-        <SectionLabel>06 — what comes after</SectionLabel>
+        <SectionLabel>05 — what comes after</SectionLabel>
       </div>
 
       <div className="grid items-start gap-12 lg:grid-cols-[1.25fr_1fr] lg:gap-16">

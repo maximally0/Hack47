@@ -40,7 +40,7 @@ export function ThirtyDays() {
         >
           thirty days, and how they are spent.
         </h2>
-        <div className="lbl text-chalk/72">05 — the operating rhythm</div>
+        <div className="lbl text-chalk/72">04 — the operating rhythm</div>
       </div>
 
       <div className="px-6 pb-3 sm:px-8">

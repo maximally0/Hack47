@@ -6,7 +6,7 @@ export function Apply() {
       id="apply"
       className="border-t border-line-dark bg-chalk px-6 py-20 text-ink sm:px-8 lg:py-40"
     >
-      <div className="lbl mb-14 text-ink/42">08 — apply</div>
+      <div className="lbl mb-14 text-ink/42">07 — apply</div>
       <h2
         className="max-w-[1000px] font-medium"
         style={{

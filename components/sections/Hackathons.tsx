@@ -32,7 +32,7 @@ export function Hackathons() {
     >
       <div className="mb-12 flex flex-wrap items-end justify-between gap-8">
         <div>
-          <div className="lbl mb-6 text-ink/42">07 — hackathons</div>
+          <div className="lbl mb-6 text-ink/42">06 — hackathons</div>
           <h2
             className="max-w-[720px] font-medium"
             style={{

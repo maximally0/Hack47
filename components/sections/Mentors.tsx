@@ -1,5 +1,15 @@
 "use client";
 
+// NOT RENDERED. app/page.tsx does not import this component, so it is dead code.
+// It is the reason the visible section numbering used to skip 03: it carried the
+// "03 — who is in the room" label while nothing rendered it. The live sections
+// have since been renumbered 01-07 to close that gap.
+//
+// Before restoring this section: the MENTORS data below is all placeholder
+// ("[mentor name]", pravatar.cc portraits), so it cannot ship as-is. Replacing
+// it would also require bumping Partners/ThirtyDays/Campus/Hackathons/Apply back
+// up one number each, or this section takes 03 and duplicates Partners.
+
 import { useCallback, useEffect, useRef, useState } from "react";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import { UnderlineLink } from "@/components/ui/ArrowLink";
