@@ -1,11 +1,11 @@
 "use client";
 
-import { ArrowUpRight, PencilLine } from "lucide-react";
+import { ArrowUpRight } from "lucide-react";
 import { UnderlineLink } from "@/components/ui/ArrowLink";
 import { SectionLabel } from "@/components/ui/SectionLabel";
 import { useGsapScope } from "@/hooks/useGsapScope";
 import { gsap } from "@/lib/gsap";
-import { CAMPUS_STAGES } from "@/lib/content";
+import { CAMPUS_STAGES, CAMPUS_STUDY } from "@/lib/content";
 
 const MARKER_CLASS: Record<string, string> = {
   filled: "bg-volt",
@@ -50,25 +50,21 @@ export function Campus() {
       <div className="grid items-start gap-12 lg:grid-cols-[1.25fr_1fr] lg:gap-16">
         <figure className="m-0">
           <div
-            className="relative flex items-center justify-center border border-dashed border-chalk/34 bg-chalk/3"
+            className="relative overflow-hidden border border-dashed border-chalk/34 bg-chalk/3"
             style={{ aspectRatio: "16 / 10" }}
           >
-            <span className="absolute left-3.5 top-3.5 h-[22px] w-[22px] border-l border-t border-volt" />
-            <span className="absolute right-3.5 top-3.5 h-[22px] w-[22px] border-r border-t border-volt" />
-            <span className="absolute bottom-3.5 left-3.5 h-[22px] w-[22px] border-b border-l border-volt" />
-            <span className="absolute bottom-3.5 right-3.5 h-[22px] w-[22px] border-b border-r border-volt" />
-            <div className="px-8 text-center">
-              <PencilLine
-                size={30}
-                strokeWidth={1.4}
-                className="mx-auto mb-4 text-chalk/34"
-                aria-hidden
-              />
-              <div className="lbl mb-2 text-chalk/60">sketch — the campus</div>
-              <p className="mono mx-auto max-w-[280px] text-[12px] leading-[1.7] text-chalk/34">
-                drawing goes here / 16:10 / delhi site plan
-              </p>
-            </div>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={CAMPUS_STUDY.src}
+              alt={CAMPUS_STUDY.alt}
+              className="h-full w-full object-cover"
+              loading="lazy"
+              decoding="async"
+            />
+            <span className="absolute left-3.5 top-3.5 h-[22px] w-[22px] border-l border-t border-chalk/70" />
+            <span className="absolute right-3.5 top-3.5 h-[22px] w-[22px] border-r border-t border-chalk/70" />
+            <span className="absolute bottom-3.5 left-3.5 h-[22px] w-[22px] border-b border-l border-chalk/70" />
+            <span className="absolute bottom-3.5 right-3.5 h-[22px] w-[22px] border-b border-r border-chalk/70" />
           </div>
           <figcaption className="lbl mt-4 flex flex-wrap justify-between gap-4 text-chalk/42">
             <span>fig. 01 — founder campus, delhi</span>

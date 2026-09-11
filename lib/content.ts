@@ -259,6 +259,11 @@ export const HERO_IMAGE = {
   alt: "Villa facade at night with warm illuminated windows, photograph by Anahita on Unsplash",
 };
 
+export const CAMPUS_STUDY = {
+  src: "/campus/campus-facade-delhi.webp",
+  alt: "Architectural study of the proposed Delhi founder campus: five stacked floors of glazed balconies behind vertical fins, framed by a mature tree and street-level planting.",
+};
+
 export const CAMPUS_STAGES: CampusStage[] = [
   {
     title: "the house",
