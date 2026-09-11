@@ -37,7 +37,7 @@ export function Selection() {
   return (
     <section ref={scopeRef} id="selection" className="bg-volt text-chalk">
       <div className="grid lg:grid-cols-[1.62fr_1fr]">
-        <div className="flex min-h-[560px] flex-col px-6 py-16 sm:min-h-[700px] sm:px-8 sm:py-20 lg:py-24">
+        <div className="flex flex-col px-6 py-16 sm:min-h-[700px] sm:px-8 sm:py-20 lg:py-24">
           <div className="flex items-baseline justify-between gap-6">
             <div className="lbl text-chalk/70">01 — selection</div>
             <div className="lbl text-chalk/55">live intake · funnel</div>
@@ -70,12 +70,12 @@ export function Selection() {
           </div>
         </div>
 
-        <div className="bg-ink text-chalk">
+        <div className="bg-ink text-center text-chalk sm:text-left">
           {SELECTION_STATS.map((stat) => (
             <div key={stat.label} className="border-b border-line px-6 py-7 sm:px-8 sm:py-9">
               <div className="lbl mb-3 text-chalk/45">{stat.label}</div>
               <div
-                className={`tnum text-right font-medium ${
+                className={`tnum text-center font-medium sm:text-right ${
                   stat.accent === "volt" ? "text-volt" : ""
                 }`}
                 style={{
@@ -89,7 +89,7 @@ export function Selection() {
             </div>
           ))}
           <div className="px-6 py-7 sm:px-8 sm:py-9">
-            <p className="max-w-[340px] text-sm leading-[1.6] text-chalk/62">
+            <p className="mx-auto max-w-[340px] text-sm leading-[1.6] text-chalk/62 sm:mx-0">
               Outreach reached more than forty thousand builders across India.
               Sixteen of them will live and work in the Delhi house.
             </p>

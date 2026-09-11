@@ -175,7 +175,7 @@ export function SelectionFunnel() {
   }, []);
 
   return (
-    <div className="relative mt-10 mb-12 min-h-[400px] flex-1">
+    <div className="relative mt-10 mb-12 hidden min-h-[400px] flex-1 sm:block">
       <canvas
         ref={canvasRef}
         className="block h-full w-full"
