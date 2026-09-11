@@ -25,7 +25,12 @@ URL = sys.argv[1] if len(sys.argv) > 1 else "http://localhost:3200/"
 UA = ("Mozilla/5.0 (iPhone; CPU iPhone OS 17_0 like Mac OS X) AppleWebKit/605.1.15 "
       "(KHTML, like Gecko) Version/17.0 Mobile/15E148 Safari/604.1")
 
-TOGGLES = """() => Array.from(document.querySelectorAll('button[aria-controls]')).map(b => {
+TOGGLES = """() => Array.from(document.querySelectorAll('button[aria-controls]'))
+  // Exclude the site header's hamburger: it also carries aria-controls (#site-menu)
+  // but it is navigation chrome, not a collapsible section, and it is `lg:hidden`
+  // so it measures 0x0 on desktop and gets clicked first in DOM order on mobile.
+  .filter(b => !b.closest('header'))
+  .map(b => {
   const id = b.getAttribute('aria-controls');
   const panel = id ? document.getElementById(id) : null;
   const cs = panel ? getComputedStyle(panel) : null;
@@ -94,7 +99,10 @@ with sync_playwright() as p:
         # expand every collapsible, re-querying each time (indices shift)
         clicked = 0
         for _ in range(12):
-            btn = pg.locator("button[aria-controls][aria-expanded='false']:visible").first
+            btn = pg.locator(
+                "main button[aria-controls][aria-expanded='false']:visible, "
+                "footer button[aria-controls][aria-expanded='false']:visible"
+            ).first
             if btn.count() == 0:
                 break
             try:
