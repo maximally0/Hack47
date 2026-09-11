@@ -1,0 +1,329 @@
+@import "tailwindcss";
+
+@theme {
+  /* ---- palette ---- */
+  --color-coal: #080807;
+  --color-soot: #1a1815;
+  --color-ink: #0b0a09;
+  --color-chalk: #f2efe8;
+  --color-volt: #285af7;
+  --color-volt-deep: #1b3fb4;
+
+  /* ---- type ---- */
+  --font-display: var(--font-archivo), system-ui, sans-serif;
+  --font-mono: var(--font-dm-mono), ui-monospace, monospace;
+}
+
+@theme inline {
+  --color-line: rgba(242, 239, 232, 0.14);
+  --color-line-dark: rgba(8, 8, 7, 0.18);
+}
+
+@layer base {
+  /* NB: no `scroll-behavior: smooth` here. CSS smooth-scroll fights GSAP
+     ScrollTrigger scrubbing and produces visible jitter. Anchor links are
+     handled with GSAP's scrollTo instead. */
+
+  body {
+    background: var(--color-coal);
+    color: var(--color-chalk);
+    font-family: var(--font-display);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  ::selection {
+    background: var(--color-volt);
+    color: var(--color-chalk);
+  }
+}
+
+@utility scrollbar-hidden {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+@utility tnum {
+  font-variant-numeric: tabular-nums;
+}
+
+@layer components {
+  /* ---------- typographic marks ---------- */
+  .lbl {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+  }
+
+  .mono {
+    font-family: var(--font-mono);
+  }
+
+  /* ---------- rules ---------- */
+  .rule {
+    height: 1px;
+    background: var(--color-line);
+  }
+
+  .rule-dark {
+    height: 1px;
+    background: var(--color-line-dark);
+  }
+
+  /* ---------- sixteen-light apertures ---------- */
+  .aperture {
+    position: relative;
+    overflow: hidden;
+    border: 1px solid rgba(242, 239, 232, 0.28);
+  }
+
+  .aperture-glow {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      180deg,
+      rgba(40, 90, 247, 0.92),
+      rgba(40, 90, 247, 0.22)
+    );
+    opacity: 0;
+  }
+
+  .aperture-fill {
+    position: absolute;
+    inset: 0;
+    background: var(--color-volt);
+    opacity: 0;
+  }
+
+  /* ---------- buttons ---------- */
+  .btn-volt,
+  .btn-ink,
+  .btn-chalk {
+    display: inline-flex;
+    align-items: center;
+    border-radius: 0;
+    text-decoration: none;
+  }
+
+  .btn-volt {
+    background: var(--color-volt);
+    color: var(--color-chalk);
+    transition: background 0.2s ease;
+  }
+
+  .btn-volt:hover {
+    background: var(--color-volt-deep);
+  }
+
+  .btn-ink {
+    background: var(--color-ink);
+    color: var(--color-chalk);
+  }
+
+  .btn-chalk {
+    background: var(--color-chalk);
+    color: var(--color-ink);
+    border-radius: 999px;
+    transition: transform 0.2s ease;
+  }
+
+  .btn-chalk:hover {
+    transform: translateY(-2px);
+  }
+
+  .arrow {
+    display: inline-block;
+    transition: transform 0.18s ease;
+  }
+
+  .btn-volt:hover .arrow,
+  .btn-ink:hover .arrow,
+  .link-underline:hover .arrow {
+    transform: translateX(5px);
+  }
+
+  .link-underline {
+    text-decoration: none;
+    border-bottom: 1px solid currentColor;
+    padding-bottom: 2px;
+  }
+
+  /* ---------- media ---------- */
+  .photo-grade {
+    filter: grayscale(0.35) contrast(1.05) brightness(0.82);
+  }
+
+  /* The fixed hero image layer. Its visibility is driven by a custom property
+     the hero animation scrubs from 1 -> 0, so the layer is fully removed from
+     paint once the hero has been scrolled past. */
+  .hero-section {
+    --hero-media-visible: 1;
+  }
+
+  .hero-media {
+    opacity: var(--hero-media-visible);
+    pointer-events: none;
+  }
+
+  /* ---------- mentor slider ---------- */
+  .mentor-track {
+    scroll-snap-type: x mandatory;
+  }
+
+  .mentor-card {
+    scroll-snap-align: start;
+    flex: 0 0 clamp(272px, 29vw, 376px);
+  }
+
+  .mentor-image {
+    filter: grayscale(1) contrast(1.06);
+    transition:
+      filter 0.4s ease,
+      transform 0.5s ease;
+  }
+
+  .mentor-card:hover .mentor-image {
+    filter: grayscale(0) contrast(1.02);
+    transform: scale(1.03);
+  }
+
+  .slider-btn {
+    width: 44px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid rgba(8, 8, 7, 0.24);
+    background: transparent;
+    color: var(--color-ink);
+    cursor: pointer;
+    transition:
+      background 0.2s ease,
+      color 0.2s ease,
+      border-color 0.2s ease;
+  }
+
+  .slider-btn:hover:not(:disabled) {
+    background: var(--color-volt);
+    border-color: var(--color-volt);
+    color: var(--color-chalk);
+  }
+
+  .slider-btn:disabled {
+    opacity: 0.35;
+    cursor: not-allowed;
+  }
+
+  /* ---------- partner wall ---------- */
+  .logo-cell {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 9px;
+    height: 78px;
+    opacity: 0.5;
+    transition: opacity 0.25s ease;
+  }
+
+  .logo-cell:hover {
+    opacity: 1;
+  }
+
+  .logo-cell img {
+    filter: invert(1);
+    width: 22px;
+    height: 22px;
+    flex: none;
+  }
+
+  .logo-cell span {
+    font-size: 14px;
+    letter-spacing: -0.01em;
+    color: var(--color-chalk);
+    white-space: nowrap;
+  }
+
+  /* ---------- thirty-day clock ---------- */
+  .tick {
+    flex: 1;
+    height: 100%;
+    background: rgba(242, 239, 232, 0.24);
+  }
+
+  .tick-on {
+    background: var(--color-chalk);
+  }
+
+  .clock-key {
+    transition: color 0.2s ease;
+  }
+
+  .clock-row:hover .clock-key {
+    color: var(--color-chalk);
+  }
+
+  /* ---------- hackathon rows ---------- */
+  .hk-row {
+    transition: background 0.22s ease;
+  }
+
+  .hk-row:hover {
+    background: rgba(8, 8, 7, 0.045);
+  }
+
+  .hk-city {
+    transition: color 0.22s ease;
+  }
+
+  .hk-row:hover .hk-city {
+    color: var(--color-volt);
+  }
+
+  .hk-status {
+    border: 1px solid rgba(8, 8, 7, 0.28);
+  }
+
+  .hk-status-live {
+    background: var(--color-volt);
+    color: var(--color-chalk);
+    border-color: var(--color-volt);
+  }
+
+  .hk-band {
+    border-top: 1px solid var(--color-line-dark);
+    border-bottom: 1px solid var(--color-line-dark);
+  }
+
+  /* ---------- footer ---------- */
+  .footer-mark {
+    background: rgba(242, 239, 232, 0.16);
+  }
+
+  .footer-link {
+    color: rgba(242, 239, 232, 0.72);
+    text-decoration: none;
+    transition: color 0.2s ease;
+  }
+
+  .footer-link:hover {
+    color: var(--color-volt);
+  }
+
+  .team-image {
+    filter: grayscale(1) contrast(1.05);
+    transition: filter 0.3s ease;
+  }
+
+  .team-member:hover .team-image {
+    filter: grayscale(0) contrast(1);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
