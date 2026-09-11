@@ -6,7 +6,7 @@ values and target values were measured from the running site.
 
 ```
 cd C:\Users\rishh\workspace\Hack47
-"/c/Users/rishh/AppData/Local/Kiro-Cli/kiro-cli.exe" chat "$(cat mobile-rebuild/ticket-1.md)" --no-interactive -a
+"/c/Users/rishh/AppData/Local/Kiro-Cli/kiro-cli.exe" chat "$(cat docs/mobile-rebuild/ticket-1.md)" --no-interactive -a
 ```
 
 After each ticket: `git diff --stat`, read the diff, start the dev server, re-run
