@@ -199,7 +199,7 @@ export function Hero() {
           </div>
           <ArrowLink
             href="#apply"
-            className="justify-center border-t border-line py-3 sm:items-center sm:border-t-0 sm:px-8 sm:py-0"
+            className="justify-center border-t border-line py-3.5 sm:items-center sm:border-t-0 sm:px-8 sm:py-0"
           >
             apply for a place
           </ArrowLink>

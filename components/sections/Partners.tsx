@@ -47,7 +47,7 @@ export function Partners() {
 
       <div
         id="logo-wall"
-        className="grid grid-cols-2 gap-x-4 gap-y-6 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-8"
+        className="grid grid-cols-3 gap-x-4 gap-y-6 md:grid-cols-4 xl:grid-cols-8"
       >
         {PARTNERS.map((partner) => (
           <div key={partner.name} className="logo-cell">

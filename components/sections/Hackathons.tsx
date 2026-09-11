@@ -90,44 +90,90 @@ export function Hackathons() {
 
       <div id="hackathon-list">
         {HACKATHONS.map((edition) => (
-          <div
-            key={edition.edition}
-            className={`hk-row grid items-baseline gap-4 border-b border-ink/14 py-7 ${ROW_GRID}`}
-          >
-            <span
-              className={`lbl mono tnum ${
-                edition.tone === "open" ? "text-ink/25" : "text-ink/35"
-              }`}
+          <div key={edition.edition} className="hk-row">
+            {/* Desktop / md+ : the original 5-column table row, unchanged. */}
+            <div
+              className={`hidden items-baseline gap-4 border-b border-ink/14 py-7 md:grid ${ROW_GRID}`}
             >
-              {edition.edition}
-            </span>
-            <span
-              className={`hk-city text-2xl font-medium ${
-                edition.tone === "open" ? "text-ink/42" : ""
-              }`}
-              style={{ letterSpacing: "-.02em" }}
-            >
-              {edition.city}
-            </span>
-            <span
-              className={`lbl mono ${
-                edition.tone === "open" ? "text-ink/40" : "text-ink/60"
-              }`}
-            >
-              {edition.window}
-            </span>
-            <span
-              className={`text-sm leading-[1.5] ${
-                edition.tone === "open" ? "text-ink/50" : "text-ink/66"
-              }`}
-            >
-              {edition.format}
-            </span>
-            <span
-              className={`lbl justify-self-start px-3 py-1.5 md:justify-self-end ${STATUS_TONE[edition.tone]}`}
-            >
-              {edition.status}
-            </span>
+              <span
+                className={`lbl mono tnum ${
+                  edition.tone === "open" ? "text-ink/25" : "text-ink/35"
+                }`}
+              >
+                {edition.edition}
+              </span>
+              <span
+                className={`hk-city text-2xl font-medium ${
+                  edition.tone === "open" ? "text-ink/42" : ""
+                }`}
+                style={{ letterSpacing: "-.02em" }}
+              >
+                {edition.city}
+              </span>
+              <span
+                className={`lbl mono ${
+                  edition.tone === "open" ? "text-ink/40" : "text-ink/60"
+                }`}
+              >
+                {edition.window}
+              </span>
+              <span
+                className={`text-sm leading-[1.5] ${
+                  edition.tone === "open" ? "text-ink/50" : "text-ink/66"
+                }`}
+              >
+                {edition.format}
+              </span>
+              <span
+                className={`lbl justify-self-start px-3 py-1.5 md:justify-self-end ${STATUS_TONE[edition.tone]}`}
+              >
+                {edition.status}
+              </span>
+            </div>
+
+            {/* Mobile ( < md ): grouped card — city is the heading, the
+                edition · window · status meta sits on one line above it, and
+                the format reads beneath. Stronger top border + more vertical
+                space separates one edition from the next. */}
+            <div className="border-t-2 border-ink/20 py-8 md:hidden">
+              <div className="lbl mono flex flex-wrap items-center gap-x-3 gap-y-1">
+                <span
+                  className={`tnum ${
+                    edition.tone === "open" ? "text-ink/30" : "text-ink/40"
+                  }`}
+                >
+                  ed. {edition.edition}
+                </span>
+                <span aria-hidden className="text-ink/25">
+                  ·
+                </span>
+                <span
+                  className={edition.tone === "open" ? "text-ink/40" : "text-ink/60"}
+                >
+                  {edition.window}
+                </span>
+                <span
+                  className={`lbl ml-auto px-3 py-1.5 ${STATUS_TONE[edition.tone]}`}
+                >
+                  {edition.status}
+                </span>
+              </div>
+              <div
+                className={`hk-city mt-3 text-2xl font-medium ${
+                  edition.tone === "open" ? "text-ink/42" : ""
+                }`}
+                style={{ letterSpacing: "-.02em" }}
+              >
+                {edition.city}
+              </div>
+              <p
+                className={`mt-2 text-sm leading-[1.5] ${
+                  edition.tone === "open" ? "text-ink/50" : "text-ink/66"
+                }`}
+              >
+                {edition.format}
+              </p>
+            </div>
           </div>
         ))}
       </div>
@@ -142,7 +188,7 @@ export function Hackathons() {
         </ArrowLink>
         <UnderlineLink
           href="mailto:hello@hack47.org?subject=Hosting%20a%20hack47%20edition"
-          className="text-ink/70"
+          className="-my-3 inline-flex min-h-[44px] items-center py-3 text-ink/70 sm:my-0 sm:min-h-0 sm:py-0"
         >
           host an edition in your city
         </UnderlineLink>

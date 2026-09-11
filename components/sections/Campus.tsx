@@ -15,15 +15,21 @@ const MARKER_CLASS: Record<string, string> = {
 
 export function Campus() {
   const scopeRef = useGsapScope<HTMLElement>((scope) => {
-    gsap.to("#campus-line", {
-      width: "100%",
-      ease: "none",
-      scrollTrigger: {
-        trigger: scope,
-        start: "top 62%",
-        end: "bottom 85%",
-        scrub: 0.8,
-      },
+    // The horizontal progress line only exists at sm+; below sm the roadmap
+    // is a vertical stack, so restrict the width-scrub to sm+ to avoid
+    // animating a line that isn't laid out horizontally on mobile.
+    const mm = gsap.matchMedia();
+    mm.add("(min-width: 640px)", () => {
+      gsap.to("#campus-line", {
+        width: "100%",
+        ease: "none",
+        scrollTrigger: {
+          trigger: scope,
+          start: "top 62%",
+          end: "bottom 85%",
+          scrub: 0.8,
+        },
+      });
     });
   });
 
@@ -87,16 +93,20 @@ export function Campus() {
           </p>
 
           <div className="relative mt-12 pt-[30px]">
-            <div className="absolute inset-x-0 top-11 h-px bg-line" />
+            {/* Desktop: horizontal progress rule across the top of the row. */}
+            <div className="absolute inset-x-0 top-11 hidden h-px bg-line sm:block" />
             <div
               id="campus-line"
-              className="absolute left-0 top-11 h-px w-0 bg-volt"
+              className="absolute left-0 top-11 hidden h-px w-0 bg-volt sm:block"
             />
-            <div className="grid grid-cols-3 gap-6">
+            {/* Mobile: a static vertical rule down the left of the stacked
+                stages (no scrub — the markers sit on it). */}
+            <div className="absolute bottom-0 left-[6px] top-[30px] w-px bg-line sm:hidden" />
+            <div className="grid grid-cols-1 gap-8 sm:grid-cols-3 sm:gap-6">
               {CAMPUS_STAGES.map((stage) => (
-                <div key={stage.title}>
+                <div key={stage.title} className="relative pl-7 sm:pl-0">
                   <div
-                    className={`mb-5 h-[13px] w-[13px] ${MARKER_CLASS[stage.marker]}`}
+                    className={`mb-5 h-[13px] w-[13px] ${MARKER_CLASS[stage.marker]} absolute left-0 top-1 sm:static sm:top-auto sm:left-auto`}
                   />
                   <div
                     className={`text-[19px] font-medium ${
@@ -135,7 +145,7 @@ export function Campus() {
 
           <UnderlineLink
             href="mailto:hello@hack47.org?subject=The%20hack47%20campus"
-            className="mt-12 inline-flex items-center gap-1 text-volt"
+            className="-my-3 mt-9 inline-flex min-h-[44px] items-center gap-1 py-3 text-volt sm:my-0 sm:mt-12 sm:min-h-0 sm:py-0"
           >
             help us build the campus
             <ArrowUpRight size={12} strokeWidth={2} aria-hidden />

@@ -7,9 +7,9 @@ import { gsap } from "@/lib/gsap";
 
 export function Premise() {
   const scopeRef = useGsapScope<HTMLElement>((scope) => {
-    const grid = scope.querySelector("#premise-grid");
+    const grid = scope.querySelector(".premise-grid");
     if (grid) {
-      gsap.to("#premise-grid .aperture-fill", {
+      gsap.to(".premise-grid .aperture-fill", {
         scrollTrigger: { trigger: grid, start: "top 80%", once: true },
         opacity: 1,
         duration: 0.45,
@@ -32,14 +32,25 @@ export function Premise() {
       <SectionLabel className="mb-16">02 — the premise</SectionLabel>
 
       <div className="grid items-start gap-14 lg:grid-cols-[auto_1fr] lg:gap-24">
+        {/* Mobile: a single horizontal row of the sixteen-aperture motif so
+            it reads as intentional identity, not a stranded vertical ladder. */}
         <ApertureGrid
           id="premise-grid"
+          columns={16}
+          cellWidth={14}
+          rowHeight={22}
+          gap={5}
+          variant="fill"
+          className="premise-grid shrink-0 sm:hidden"
+        />
+        {/* Desktop: unchanged 2-column vertical grid. */}
+        <ApertureGrid
           columns={2}
           cellWidth={20}
           rowHeight={44}
           gap={7}
           variant="fill"
-          className="shrink-0"
+          className="premise-grid hidden shrink-0 sm:grid"
         />
 
         <div className="max-w-[720px]">

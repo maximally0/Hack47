@@ -96,7 +96,7 @@ export function Selection() {
             <UnderlineLink
               href="#apply"
               glyph="→"
-              className="mt-6 inline-block text-volt"
+              className="tap-link mt-6 inline-block text-volt"
             >
               apply for one
             </UnderlineLink>

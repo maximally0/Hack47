@@ -151,6 +151,33 @@
     padding-bottom: 2px;
   }
 
+  /* ---------- tap-target expansion for standalone text links ----------
+     .link-underline draws its rule with border-bottom, so simply padding the
+     element would detach the underline from the text and move it 12px down.
+     Below sm we grow the hit box to the 44px minimum and redraw the rule with
+     a pseudo-element pinned 2px under the text, so the visual position is
+     unchanged and the measured box is a real, tappable 44px. */
+  @media (max-width: 639px) {
+    .tap-link {
+      position: relative;
+      border-bottom: 0;
+      /* the .lbl text box is only ~17px tall, so 14px each side lands the
+         element at ~45px — comfortably over the 44px minimum. */
+      padding-top: 14px;
+      padding-bottom: 14px;
+    }
+
+    .tap-link::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 12px;
+      height: 1px;
+      background: currentColor;
+    }
+  }
+
   /* ---------- media ---------- */
   .photo-grade {
     filter: grayscale(0.35) contrast(1.05) brightness(0.82);
@@ -362,7 +389,9 @@
    Give each a static resting "on" state. Scoped to (hover: none) so
    desktop hover behaviour is unchanged. */
 @media (hover: none) {
-  /* brand logos must not sit at 50% on a device that can't brighten them */
+  /* brand logos must not sit at 50% on a device that can't brighten them.
+     On tablets (>= sm) we lift them fully; the phone override below sets a
+     slightly softer resting state so the wall doesn't glare. */
   .logo-cell {
     opacity: 1;
   }
@@ -385,5 +414,66 @@
   /* thirty-day clock keys read as active at rest */
   .clock-row .clock-key {
     color: var(--color-chalk);
+  }
+}
+
+/* ============================================================
+   Mobile scope — body-section layout tweaks (Ticket 2).
+   Placed after the (hover: none) block so phone-width rules win
+   the cascade over the tablet resting states above.
+   ============================================================ */
+@media (max-width: 639.98px) {
+  /* 2b. Compact partner wall: 3 columns, shorter cells, smaller marks.
+     Resting opacity ~0.78 so the wall reads present, not disabled. */
+  #logo-wall {
+    column-gap: 0.75rem;
+    row-gap: 0.5rem;
+  }
+
+  .logo-cell {
+    height: 54px;
+    gap: 6px;
+    opacity: 0.78;
+    min-width: 0;
+  }
+
+  .logo-cell img {
+    width: 18px;
+    height: 18px;
+  }
+
+  /* Allow the label to shrink / ellipsis rather than push the 3-col grid
+     wide at 320px (the nowrap labels are the overflow risk). */
+  .logo-cell span {
+    font-size: 11px;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  /* 2c. Tighter tick spacing so the 30-step chart doesn't smear at 320px. */
+  #day-ticks {
+    gap: 2px;
+  }
+
+  /* 2d. Gallery rail: swipe affordances below sm. Snap each card to the
+     content edge, keep the first card off the viewport edge via
+     scroll-padding matching the px-6 rail padding, and fade the right edge
+     so it's obvious the rail scrolls. */
+  .gallery-rail {
+    scroll-snap-type: x mandatory;
+    scroll-padding-inline: 24px;
+  }
+
+  .gallery-figure {
+    scroll-snap-align: start;
+  }
+
+  .gallery-edge-fade {
+    background: linear-gradient(
+      to right,
+      rgba(8, 8, 7, 0),
+      var(--color-coal)
+    );
   }
 }

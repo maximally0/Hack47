@@ -58,9 +58,18 @@ export function ThirtyDays() {
           ))}
         </div>
         <div className="lbl mt-3 flex justify-between text-chalk/60">
-          <span>day 01 · arrival</span>
-          <span className="hidden sm:block">day 15 · the cut</span>
-          <span>day 30 · ship</span>
+          <span>
+            <span className="sm:hidden">01 · arrival</span>
+            <span className="hidden sm:inline">day 01 · arrival</span>
+          </span>
+          <span>
+            <span className="sm:hidden">15 · the cut</span>
+            <span className="hidden sm:inline">day 15 · the cut</span>
+          </span>
+          <span>
+            <span className="sm:hidden">30 · ship</span>
+            <span className="hidden sm:inline">day 30 · ship</span>
+          </span>
         </div>
       </div>
 

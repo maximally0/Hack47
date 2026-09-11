@@ -53,7 +53,7 @@ export function SiteFooter() {
           />
           applications open · {SITE.cohort}
         </div>
-        <div className="hidden text-chalk/80 sm:block">
+        <div className="text-chalk/80">
           {SITE.window} · {SITE.days} days · delhi
         </div>
         <div className="tnum">{SITE.places} places</div>
@@ -79,7 +79,7 @@ export function SiteFooter() {
               </ArrowLink>
               <UnderlineLink
                 href={`mailto:${SITE.email}`}
-                className="text-chalk/70"
+                className="-my-3 inline-flex min-h-[44px] items-center py-3 text-chalk/70 sm:my-0 sm:min-h-0 sm:py-0"
               >
                 or just email us
               </UnderlineLink>
@@ -151,7 +151,7 @@ export function SiteFooter() {
                         href={link.href}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="lbl text-chalk/45 transition-colors hover:text-volt"
+                        className="lbl -my-3 inline-flex min-h-[44px] min-w-[44px] items-center justify-center py-3 text-chalk/45 transition-colors hover:text-volt sm:my-0 sm:min-h-0 sm:min-w-0 sm:justify-start sm:py-0"
                       >
                         {link.label}
                       </a>
@@ -162,7 +162,7 @@ export function SiteFooter() {
             ))}
           </div>
           <div className="mt-10 flex flex-wrap items-center gap-6">
-            <UnderlineLink href={`mailto:${SITE.email}`} className="text-volt">
+            <UnderlineLink href={`mailto:${SITE.email}`} className="-my-3 inline-flex min-h-[44px] items-center py-3 text-volt sm:my-0 sm:min-h-0 sm:py-0">
               work on hack47 with us
             </UnderlineLink>
           </div>
@@ -189,7 +189,7 @@ export function SiteFooter() {
                     <li key={`${column.title}-${link.label}`}>
                       <a
                         href={link.href}
-                        className="footer-link"
+                        className="footer-link -my-2 inline-flex min-h-[44px] items-center py-2 sm:my-0 sm:min-h-0 sm:py-0"
                         {...(external
                           ? { target: "_blank", rel: "noopener noreferrer" }
                           : {})}
@@ -211,7 +211,7 @@ export function SiteFooter() {
       {/* oversized wordmark */}
       <div className="overflow-hidden border-t border-line px-6 sm:px-8">
         <div
-          className="pt-[26px] font-semibold select-none"
+          className="pb-1.5 pt-[26px] font-semibold select-none sm:pb-0"
           style={{
             fontSize: "clamp(76px,20.5vw,300px)",
             lineHeight: 0.86,
@@ -226,7 +226,9 @@ export function SiteFooter() {
       </div>
 
       <div className="lbl flex flex-wrap justify-between gap-4 border-t border-line px-6 py-8 text-chalk/34 sm:px-8">
-        <div>© 2026 hack47 · built in delhi</div>
+        <div className="-my-3 inline-flex min-h-[44px] items-center py-3 sm:my-0 sm:min-h-0 sm:py-0">
+          © 2026 hack47 · built in delhi
+        </div>
         <div className="flex flex-wrap gap-6">
           {LEGAL_LINKS.map((link) => {
             const external = link.href.startsWith("http");
@@ -234,7 +236,7 @@ export function SiteFooter() {
               <a
                 key={link.label}
                 href={link.href}
-                className="text-inherit no-underline transition-colors hover:text-chalk"
+                className="-my-3 inline-flex min-h-[44px] items-center py-3 text-inherit no-underline transition-colors hover:text-chalk sm:my-0 sm:min-h-0 sm:py-0"
                 {...(external
                   ? { target: "_blank", rel: "noopener noreferrer" }
                   : {})}
