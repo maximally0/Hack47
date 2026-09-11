@@ -143,6 +143,7 @@ export function SiteHeader() {
             type="button"
             aria-label={open ? "Close menu" : "Open menu"}
             aria-expanded={open}
+            aria-controls="site-menu"
             onClick={() => setOpen((v) => !v)}
             className="relative z-50 flex h-11 w-11 items-center justify-center text-chalk lg:hidden"
           >
@@ -164,6 +165,7 @@ export function SiteHeader() {
       {/* Mobile overlay menu */}
       <div
         ref={menuRef}
+        id="site-menu"
         className={`fixed inset-0 top-16 z-40 safe-bottom safe-x bg-ink transition-[opacity,transform] duration-300 lg:hidden ${
           open
             ? "translate-y-0 opacity-100"

@@ -1,6 +1,7 @@
 "use client";
 
 import { ArrowLink, UnderlineLink } from "@/components/ui/ArrowLink";
+import { Collapsible } from "@/components/ui/Collapsible";
 import { revealFrom, useGsapScope } from "@/hooks/useGsapScope";
 import { HACKATHONS, HACKATHON_STATS } from "@/lib/content";
 
@@ -77,20 +78,25 @@ export function Hackathons() {
         ))}
       </div>
 
-      <div
-        className="lbl hidden gap-4 border-b border-line-dark pb-4 text-ink/40 md:grid"
-        style={{ gridTemplateColumns: "52px 1.1fr 1fr 1.4fr 132px" }}
+      <Collapsible
+        label="all editions"
+        meta={`${HACKATHONS.length} cities`}
+        buttonClassName="border-b border-line-dark text-ink/60"
       >
-        <span>ed.</span>
-        <span>city</span>
-        <span>window</span>
-        <span>format</span>
-        <span className="text-right">status</span>
-      </div>
+        <div
+          className="lbl mt-4 hidden gap-4 border-b border-line-dark pb-4 text-ink/40 md:grid"
+          style={{ gridTemplateColumns: "52px 1.1fr 1fr 1.4fr 132px" }}
+        >
+          <span>ed.</span>
+          <span>city</span>
+          <span>window</span>
+          <span>format</span>
+          <span className="text-right">status</span>
+        </div>
 
-      <div id="hackathon-list">
-        {HACKATHONS.map((edition) => (
-          <div key={edition.edition} className="hk-row">
+        <div id="hackathon-list">
+          {HACKATHONS.map((edition) => (
+            <div key={edition.edition} className="hk-row">
             {/* Desktop / md+ : the original 5-column table row, unchanged. */}
             <div
               className={`hidden items-baseline gap-4 border-b border-ink/14 py-7 md:grid ${ROW_GRID}`}
@@ -176,7 +182,8 @@ export function Hackathons() {
             </div>
           </div>
         ))}
-      </div>
+        </div>
+      </Collapsible>
 
       <div className="mt-14 flex flex-wrap items-center gap-8">
         <ArrowLink

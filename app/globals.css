@@ -353,6 +353,13 @@
   html {
     scroll-behavior: auto;
   }
+
+  /* The collapsible chevron rotates via a CSS transition; the height tween is
+     already skipped in JS. Kill the chevron transition too so the whole
+     open/close is instant under reduced motion. */
+  .collapsible-chevron {
+    transition: none !important;
+  }
 }
 
 /* ============================================================

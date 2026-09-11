@@ -1,6 +1,7 @@
 "use client";
 
 import { revealFrom, useGsapScope } from "@/hooks/useGsapScope";
+import { Collapsible } from "@/components/ui/Collapsible";
 import { RHYTHM } from "@/lib/content";
 
 const MARKED_DAYS = [1, 15, 30];
@@ -74,28 +75,36 @@ export function ThirtyDays() {
       </div>
 
       <div className="border-t border-chalk/30">
-        {RHYTHM.map((entry, i) => (
-          <div
-            key={entry.title}
-            className={`clock-row grid items-baseline gap-2 px-6 py-7 sm:gap-3 sm:px-8 sm:py-8 lg:grid-cols-[132px_248px_1fr] lg:gap-10 ${
-              i < RHYTHM.length - 1 ? "border-b border-chalk/22" : ""
-            }`}
-          >
-            <div className="lbl mono tnum text-chalk/68">{entry.when}</div>
+        <Collapsible
+          label="the 30-day rhythm"
+          meta={`${RHYTHM.length} entries`}
+          buttonClassName="px-6 text-chalk sm:px-8"
+        >
+          {RHYTHM.map((entry, i) => (
             <div
-              className="clock-key mono font-medium text-chalk/90"
-              style={{
-                fontSize: "clamp(21px,2.2vw,29px)",
-                letterSpacing: "-.02em",
-              }}
+              key={entry.title}
+              className={`clock-row grid items-baseline gap-2 px-6 py-7 sm:gap-3 sm:px-8 sm:py-8 lg:grid-cols-[132px_248px_1fr] lg:gap-10 ${
+                i === 0 ? "border-t border-chalk/22" : ""
+              } ${
+                i < RHYTHM.length - 1 ? "border-b border-chalk/22" : ""
+              }`}
             >
-              {entry.title}
+              <div className="lbl mono tnum text-chalk/68">{entry.when}</div>
+              <div
+                className="clock-key mono font-medium text-chalk/90"
+                style={{
+                  fontSize: "clamp(21px,2.2vw,29px)",
+                  letterSpacing: "-.02em",
+                }}
+              >
+                {entry.title}
+              </div>
+              <p className="max-w-[680px] text-[17px] leading-[1.5] text-chalk/88">
+                {entry.body}
+              </p>
             </div>
-            <p className="max-w-[680px] text-[17px] leading-[1.5] text-chalk/88">
-              {entry.body}
-            </p>
-          </div>
-        ))}
+          ))}
+        </Collapsible>
       </div>
     </section>
   );
