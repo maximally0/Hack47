@@ -6,16 +6,28 @@ import { SectionLabel } from "@/components/ui/SectionLabel";
 import { revealFrom, useGsapScope } from "@/hooks/useGsapScope";
 import { PARTNERS, PARTNER_MODES } from "@/lib/content";
 
+// Split the 24 marks into three rows of eight. Each row is a self-contained
+// marquee: the eight cells are rendered twice (the second copy aria-hidden) so
+// a -50% translate loops seamlessly. Row speed + direction alternate so the
+// three tracks never read as one moving block.
+const ROWS = [
+  PARTNERS.slice(0, 8),
+  PARTNERS.slice(8, 16),
+  PARTNERS.slice(16, 24),
+];
+
 export function Partners() {
   const scopeRef = useGsapScope<HTMLElement>((scope) => {
     const wall = scope.querySelector("#logo-wall");
     if (!wall) return;
     // Only the vertical offset is animated — the cells keep their CSS resting
     // opacity (0.5, brightening on hover) so they can never be stranded blank.
-    revealFrom(scope.querySelectorAll("#logo-wall .logo-cell"), {
+    // The reveal targets the row viewports, not individual cells, because the
+    // cells scroll horizontally under the marquee animation.
+    revealFrom(scope.querySelectorAll("#logo-wall .marquee-row-viewport"), {
       trigger: wall,
       start: "top 84%",
-      from: { y: 14, duration: 0.5, stagger: 0.028 },
+      from: { y: 14, duration: 0.5, stagger: 0.06 },
     });
   });
 
@@ -45,15 +57,36 @@ export function Partners() {
         The stack the house runs on.
       </p>
 
-      <div
-        id="logo-wall"
-        className="grid grid-cols-3 gap-x-4 gap-y-6 md:grid-cols-4 xl:grid-cols-8"
-      >
-        {PARTNERS.map((partner) => (
-          <div key={partner.name} className="logo-cell">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src={partner.logo} alt="" aria-hidden loading="lazy" />
-            <span>{partner.name}</span>
+      {/* Three sliding rows. Because there are too many partners for a static
+          grid, each row loops horizontally so every mark comes into view.
+          Motion is pure CSS (@keyframes + translate3d); it pauses on hover and
+          is fully stopped under prefers-reduced-motion, where the rows fall
+          back to a static, non-animated horizontally-scrollable strip. */}
+      <div id="logo-wall" className="marquee-wall">
+        {ROWS.map((row, i) => (
+          <div
+            key={i}
+            className="marquee-row-viewport"
+            data-row={i}
+          >
+            <div className="marquee-row" data-dir={i % 2 === 0 ? "ltr" : "rtl"}>
+              {row.map((partner) => (
+                <div key={partner.name} className="logo-cell">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src={partner.logo} alt="" aria-hidden loading="lazy" />
+                  <span>{partner.name}</span>
+                </div>
+              ))}
+              {/* Seamless-loop duplicate — hidden from the accessibility tree so
+                  a screen reader announces each partner once, not twice. */}
+              {row.map((partner) => (
+                <div key={`dup-${partner.name}`} className="logo-cell" aria-hidden="true">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src={partner.logo} alt="" aria-hidden loading="lazy" />
+                  <span>{partner.name}</span>
+                </div>
+              ))}
+            </div>
           </div>
         ))}
       </div>
