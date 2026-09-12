@@ -1,7 +1,6 @@
 "use client";
 
 import { ArrowLink, UnderlineLink } from "@/components/ui/ArrowLink";
-import { Collapsible } from "@/components/ui/Collapsible";
 import { revealFrom, useGsapScope } from "@/hooks/useGsapScope";
 import { gsap } from "@/lib/gsap";
 import {
@@ -87,7 +86,7 @@ export function SiteFooter() {
             </div>
           </div>
 
-          <div className="flex lg:justify-end">
+          <div className="hidden lg:flex lg:justify-end">
             <div>
               <div
                 id="footer-grid"
@@ -109,13 +108,8 @@ export function SiteFooter() {
         </div>
 
         {/* team */}
-        <div id="team" className="scroll-mt-20 border-b border-line py-6">
-          <Collapsible
-            label="the team behind this"
-            meta={`${TEAM.length} people`}
-            buttonClassName="text-chalk/60"
-          >
-          <div className="mb-10 flex flex-wrap items-end justify-between gap-6 pt-6">
+        <div id="team" className="scroll-mt-20 border-b border-line py-16">
+          <div className="mb-10 flex flex-wrap items-end justify-between gap-6">
             <div className="lbl text-chalk/38">the team behind this</div>
             <div className="lbl text-chalk/28">delhi, india</div>
           </div>
@@ -172,17 +166,11 @@ export function SiteFooter() {
               work on hack47 with us
             </UnderlineLink>
           </div>
-          </Collapsible>
         </div>
 
         {/* sitemap */}
-        <div className="py-6 md:py-8">
-          <Collapsible
-            label="sitemap & links"
-            meta={`${FOOTER_COLUMNS.length + 1} sections`}
-            buttonClassName="text-chalk/60"
-          >
-          <div className="grid gap-10 pt-6 md:grid-cols-4">
+        <div className="py-16">
+          <div className="grid gap-10 md:grid-cols-4">
           <div>
             <div className="mb-4 text-[19px] font-semibold tracking-tight">
               {SITE.wordmark}
@@ -218,8 +206,7 @@ export function SiteFooter() {
               )}
             </div>
           ))}
-        </div>
-          </Collapsible>
+          </div>
         </div>
       </div>
       <div className="overflow-hidden border-t border-line px-6 sm:px-8">

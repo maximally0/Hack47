@@ -20,11 +20,20 @@ export function Partners() {
   const scopeRef = useGsapScope<HTMLElement>((scope) => {
     const wall = scope.querySelector("#logo-wall");
     if (!wall) return;
-    // Only the vertical offset is animated — the cells keep their CSS resting
-    // opacity (0.5, brightening on hover) so they can never be stranded blank.
-    // The reveal targets the row viewports, not individual cells, because the
-    // cells scroll horizontally under the marquee animation.
-    revealFrom(scope.querySelectorAll("#logo-wall .marquee-row-viewport"), {
+    // Only the vertical offset is animated — cells keep their CSS resting
+    // opacity (0.5, brightening on hover) so they're never stranded blank.
+    // Desktop reveals the static grid cells; mobile reveals the sliding-row
+    // viewports (their cells move horizontally, so we can't offset them).
+    const desktopCells = scope.querySelectorAll(
+      "#logo-wall > div:first-child .logo-cell",
+    );
+    const mobileRows = scope.querySelectorAll("#logo-wall .marquee-row-viewport");
+    revealFrom(desktopCells, {
+      trigger: wall,
+      start: "top 84%",
+      from: { y: 14, duration: 0.5, stagger: 0.02 },
+    });
+    revealFrom(mobileRows, {
       trigger: wall,
       start: "top 84%",
       from: { y: 14, duration: 0.5, stagger: 0.06 },
@@ -57,38 +66,52 @@ export function Partners() {
         The stack the house runs on.
       </p>
 
-      {/* Three sliding rows. Because there are too many partners for a static
-          grid, each row loops horizontally so every mark comes into view.
-          Motion is pure CSS (@keyframes + translate3d); it pauses on hover and
-          is fully stopped under prefers-reduced-motion, where the rows fall
-          back to a static, non-animated horizontally-scrollable strip. */}
-      <div id="logo-wall" className="marquee-wall">
-        {ROWS.map((row, i) => (
-          <div
-            key={i}
-            className="marquee-row-viewport"
-            data-row={i}
-          >
-            <div className="marquee-row" data-dir={i % 2 === 0 ? "ltr" : "rtl"}>
-              {row.map((partner) => (
-                <div key={partner.name} className="logo-cell">
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img src={partner.logo} alt="" aria-hidden loading="lazy" />
-                  <span>{partner.name}</span>
-                </div>
-              ))}
-              {/* Seamless-loop duplicate — hidden from the accessibility tree so
-                  a screen reader announces each partner once, not twice. */}
-              {row.map((partner) => (
-                <div key={`dup-${partner.name}`} className="logo-cell" aria-hidden="true">
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img src={partner.logo} alt="" aria-hidden loading="lazy" />
-                  <span>{partner.name}</span>
-                </div>
-              ))}
+      {/* Desktop: a clean static grid — the editorial wall the design intends.
+          Mobile: three horizontally-sliding rows, so the 24 marks fit a narrow
+          screen without a cramped grid. */}
+      <div id="logo-wall">
+        {/* ── static grid (md and up) ── */}
+        <div className="hidden grid-cols-4 gap-x-6 gap-y-8 md:grid lg:grid-cols-6">
+          {PARTNERS.map((partner) => (
+            <div key={partner.name} className="logo-cell">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src={partner.logo} alt="" aria-hidden loading="lazy" />
+              <span>{partner.name}</span>
             </div>
-          </div>
-        ))}
+          ))}
+        </div>
+
+        {/* ── sliding rows (mobile only) ── */}
+        <div className="marquee-wall md:hidden">
+          {ROWS.map((row, i) => (
+            <div key={i} className="marquee-row-viewport" data-row={i}>
+              <div
+                className="marquee-row"
+                data-dir={i % 2 === 0 ? "ltr" : "rtl"}
+              >
+                {row.map((partner) => (
+                  <div key={partner.name} className="logo-cell">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img src={partner.logo} alt="" aria-hidden loading="lazy" />
+                    <span>{partner.name}</span>
+                  </div>
+                ))}
+                {/* Seamless-loop duplicate — hidden from the a11y tree. */}
+                {row.map((partner) => (
+                  <div
+                    key={`dup-${partner.name}`}
+                    className="logo-cell"
+                    aria-hidden="true"
+                  >
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img src={partner.logo} alt="" aria-hidden loading="lazy" />
+                    <span>{partner.name}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          ))}
+        </div>
       </div>
 
       <div className="rule my-16" />
