@@ -37,7 +37,7 @@ export function Selection() {
   return (
     <section ref={scopeRef} id="selection" className="bg-volt text-chalk">
       <div className="grid lg:grid-cols-[1.62fr_1fr]">
-        <div className="flex flex-col px-6 py-16 sm:min-h-[700px] sm:px-8 sm:py-20 lg:py-24">
+        <div className="hidden flex-col px-6 py-16 sm:min-h-[700px] sm:px-8 sm:py-20 lg:flex lg:py-24">
           <div className="flex items-baseline justify-between gap-6">
             <div className="lbl text-chalk/70">01 — selection</div>
             <div className="lbl text-chalk/55">live intake · funnel</div>
