@@ -1,51 +1,34 @@
-import type { Metadata, Viewport } from "next";
-import { Archivo, DM_Mono } from "next/font/google";
-import { ApplyProvider } from "@/components/ApplyProvider";
-import { SmoothAnchors } from "@/components/SmoothAnchors";
-import { SITE } from "@/lib/content";
-import "./globals.css";
+import { Anton, IBM_Plex_Mono } from "next/font/google"
+import { Metadata } from "next"
 
-const archivo = Archivo({
-  variable: "--font-archivo",
-  weight: ["400", "500", "600", "700"],
+import "./globals.css"
+import { ThemeProvider } from "@/components/theme-provider"
+import { cn } from "@/lib/utils";
+
+const anton = Anton({
   subsets: ["latin"],
-  display: "swap",
+  weight: ["400"],
+  variable: "--font-anton",
 });
 
-const dmMono = DM_Mono({
-  variable: "--font-dm-mono",
-  weight: ["300", "400", "500"],
+const fontMono = IBM_Plex_Mono({
   subsets: ["latin"],
-  display: "swap",
+  weight: ["400", "700"],
+  variable: "--font-mono",
 });
-
-const DESCRIPTION =
-  "hack47 is a thirty-day builder residency in a Delhi villa. Sixteen places, one cohort, no distractions — just shipping. Applications open for batch 01, Sept 15 – Oct 15. Expanding across India.";
 
 export const metadata: Metadata = {
-  metadataBase: new URL(SITE.url),
+  metadataBase: new URL("https://hack47.org"),
   title: {
-    default: "hack47 — Delhi's first hacker house",
-    template: "%s | hack47",
+    default: "Hack47",
+    template: "%s | Hack47",
   },
-  description: DESCRIPTION,
-  keywords: [
-    "hacker house",
-    "Delhi",
-    "residency",
-    "builders",
-    "startup",
-    "coliving",
-    "hackathon",
-    "hack47",
-    "India",
-    "founder residency",
-  ],
-  authors: [{ name: "hack47" }],
-  creator: "hack47",
-  publisher: "hack47",
-  applicationName: "hack47",
-  alternates: { canonical: "/" },
+  description:
+    "Delhi's first hacker house. A 30-day residency for 16 builders who ship fast, sleep less, and build what matters. Delhi. Sept 15 – Oct 15. Expanding to Mumbai, Bangalore & Chandigarh.",
+  keywords: ["hacker house", "Delhi", "residency", "builders", "startup", "coliving", "hackathon", "Hack47", "India"],
+  authors: [{ name: "Hack47" }],
+  creator: "Hack47",
+  publisher: "Hack47",
   robots: {
     index: true,
     follow: true,
@@ -60,28 +43,25 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     locale: "en_IN",
-    url: SITE.url,
-    siteName: "hack47",
-    title: "hack47 — Delhi's first hacker house",
-    description:
-      "Thirty days. Sixteen builders. One Delhi villa. No distractions, just shipping. Applications open for batch 01.",
+    url: "https://hack47.org",
+    siteName: "Hack47",
+    title: "Hack47 — Delhi's First Hacker House",
+    description: "30 days. 16 builders. One Delhi villa. No distractions, just shipping. Apply now.",
     images: [
       {
         url: "/og-image.png",
         width: 1200,
         height: 630,
-        alt: "hack47 — Delhi's first hacker house",
+        alt: "Hack47 — Delhi's First Hacker House",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "hack47 — Delhi's first hacker house",
-    description:
-      "Thirty days. Sixteen builders. One Delhi villa. Applications open for batch 01.",
+    title: "Hack47 — Delhi's First Hacker House",
+    description: "30 days. 16 builders. One villa. Pure chaos. Apply now.",
     images: ["/og-image.png"],
     creator: "@hack47org",
-    site: "@hack47org",
   },
   icons: {
     icon: [
@@ -94,70 +74,20 @@ export const metadata: Metadata = {
   manifest: "/site.webmanifest",
 };
 
-export const viewport: Viewport = {
-  themeColor: "#080807",
-  colorScheme: "dark",
-  viewportFit: "cover",
-};
-
-const JSON_LD = {
-  "@context": "https://schema.org",
-  "@graph": [
-    {
-      "@type": "Organization",
-      "@id": `${SITE.url}#organization`,
-      name: "hack47",
-      url: SITE.url,
-      email: SITE.email,
-      description: DESCRIPTION,
-      logo: `${SITE.url}/logo.png`,
-      sameAs: [
-        "https://x.com/hack47org",
-        "https://www.instagram.com/hack47.0rg/",
-        "https://www.linkedin.com/company/hack47",
-      ],
-    },
-    {
-      "@type": "Event",
-      name: "hack47 — batch 01",
-      description:
-        "A thirty-day builder residency in a Delhi villa. Sixteen places.",
-      startDate: "2026-09-15",
-      endDate: "2026-10-15",
-      eventAttendanceMode: "https://schema.org/OfflineEventAttendanceMode",
-      eventStatus: "https://schema.org/EventScheduled",
-      location: {
-        "@type": "Place",
-        name: "hack47 villa",
-        address: {
-          "@type": "PostalAddress",
-          addressLocality: "Delhi",
-          addressCountry: "IN",
-        },
-      },
-      organizer: { "@id": `${SITE.url}#organization` },
-      url: SITE.url,
-    },
-  ],
-};
-
 export default function RootLayout({
   children,
 }: Readonly<{
-  children: React.ReactNode;
+  children: React.ReactNode
 }>) {
   return (
-    <html lang="en" className={`${archivo.variable} ${dmMono.variable}`}>
-      <body className="font-display antialiased">
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(JSON_LD) }}
-        />
-        <ApplyProvider>
-          <SmoothAnchors />
-          {children}
-        </ApplyProvider>
+    <html
+      lang="en"
+      suppressHydrationWarning
+      className={cn("antialiased", fontMono.variable, anton.variable)}
+    >
+      <body className="bg-black">
+        <ThemeProvider>{children}</ThemeProvider>
       </body>
     </html>
-  );
+  )
 }

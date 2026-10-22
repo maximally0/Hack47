@@ -1,10 +1,9 @@
-import type { MetadataRoute } from "next";
-import { SITE } from "@/lib/content";
+import { MetadataRoute } from "next";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   return [
     {
-      url: SITE.url,
+      url: "https://hack47.org",
       lastModified: new Date(),
       changeFrequency: "weekly",
       priority: 1,

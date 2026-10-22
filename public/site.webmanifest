@@ -1,11 +1,11 @@
 {
-  "name": "hack47 — Delhi's first hacker house",
-  "short_name": "hack47",
-  "description": "A thirty-day builder residency in a Delhi villa. Sixteen places, one cohort, no distractions — just shipping.",
+  "name": "Hack47 — Delhi's First Hacker House",
+  "short_name": "Hack47",
+  "description": "Delhi's first hacker house. A 30-day residency for 16 builders who ship fast, sleep less, and build what matters.",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#080807",
-  "theme_color": "#080807",
+  "background_color": "#000000",
+  "theme_color": "#008080",
   "icons": [
     {
       "src": "/web-app-manifest-192x192.png",

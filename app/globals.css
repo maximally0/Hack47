@@ -1,594 +1,176 @@
 @import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
 
-@theme {
-  /* ---- palette ---- */
-  --color-coal: #080807;
-  --color-soot: #1a1815;
-  --color-ink: #0b0a09;
-  --color-chalk: #f2efe8;
-  --color-volt: #285af7;
-  --color-volt-deep: #1b3fb4;
-
-  /* ---- type ---- */
-  --font-display: var(--font-archivo), system-ui, sans-serif;
-  --font-mono: var(--font-dm-mono), ui-monospace, monospace;
-}
+@custom-variant dark (&:is(.dark *));
 
 @theme inline {
-  --color-line: rgba(242, 239, 232, 0.14);
-  --color-line-dark: rgba(8, 8, 7, 0.18);
+    --font-heading: var(--font-anton);
+    --font-sans: var(--font-mono);
+    --font-anton: "Anton", sans-serif;
+    --font-mono: "IBM Plex Mono", monospace;
+    --font-win: "Tahoma", "Segoe UI", sans-serif;
+
+    --color-toxic-green: #32CD32;
+    --color-win-blue: #000080;
+    --color-win-grey: #c0c0c0;
+    --color-win-border-light: #dfdfdf;
+    --color-win-border-dark: #808080;
+    --color-taskbar-bg: #ece9d8;
+    --color-hot-pink: #FF00DD;
+    --color-electric-yellow: #FAFF00;
+
+    --color-sidebar-ring: var(--sidebar-ring);
+    --color-sidebar-border: var(--sidebar-border);
+    --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+    --color-sidebar-accent: var(--sidebar-accent);
+    --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+    --color-sidebar-primary: var(--sidebar-primary);
+    --color-sidebar-foreground: var(--sidebar-foreground);
+    --color-sidebar: var(--sidebar);
+    --color-chart-5: var(--chart-5);
+    --color-chart-4: var(--chart-4);
+    --color-chart-3: var(--chart-3);
+    --color-chart-2: var(--chart-2);
+    --color-chart-1: var(--chart-1);
+    --color-ring: var(--ring);
+    --color-input: var(--input);
+    --color-border: var(--border);
+    --color-destructive: var(--destructive);
+    --color-accent-foreground: var(--accent-foreground);
+    --color-accent: var(--accent);
+    --color-muted-foreground: var(--muted-foreground);
+    --color-muted: var(--muted);
+    --color-secondary-foreground: var(--secondary-foreground);
+    --color-secondary: var(--secondary);
+    --color-primary-foreground: var(--primary-foreground);
+    --color-primary: var(--primary);
+    --color-popover-foreground: var(--popover-foreground);
+    --color-popover: var(--popover);
+    --color-card-foreground: var(--card-foreground);
+    --color-card: var(--card);
+    --color-foreground: var(--foreground);
+    --color-background: var(--background);
+    --radius-sm: calc(var(--radius) * 0.6);
+    --radius-md: calc(var(--radius) * 0.8);
+    --radius-lg: var(--radius);
+    --radius-xl: calc(var(--radius) * 1.4);
+    --radius-2xl: calc(var(--radius) * 1.8);
+    --radius-3xl: calc(var(--radius) * 2.2);
+    --radius-4xl: calc(var(--radius) * 2.6);
+}
+
+:root {
+    --background: oklch(1 0 0);
+    --foreground: oklch(0.145 0 0);
+    --card: oklch(1 0 0);
+    --card-foreground: oklch(0.145 0 0);
+    --popover: oklch(1 0 0);
+    --popover-foreground: oklch(0.145 0 0);
+    --primary: oklch(0.205 0 0);
+    --primary-foreground: oklch(0.985 0 0);
+    --secondary: oklch(0.97 0 0);
+    --secondary-foreground: oklch(0.205 0 0);
+    --muted: oklch(0.97 0 0);
+    --muted-foreground: oklch(0.556 0 0);
+    --accent: oklch(0.97 0 0);
+    --accent-foreground: oklch(0.205 0 0);
+    --destructive: oklch(0.577 0.245 27.325);
+    --border: oklch(0.922 0 0);
+    --input: oklch(0.922 0 0);
+    --ring: oklch(0.708 0 0);
+    --chart-1: oklch(0.87 0 0);
+    --chart-2: oklch(0.556 0 0);
+    --chart-3: oklch(0.439 0 0);
+    --chart-4: oklch(0.371 0 0);
+    --chart-5: oklch(0.269 0 0);
+    --radius: 0.625rem;
+    --sidebar: oklch(0.985 0 0);
+    --sidebar-foreground: oklch(0.145 0 0);
+    --sidebar-primary: oklch(0.205 0 0);
+    --sidebar-primary-foreground: oklch(0.985 0 0);
+    --sidebar-accent: oklch(0.97 0 0);
+    --sidebar-accent-foreground: oklch(0.205 0 0);
+    --sidebar-border: oklch(0.922 0 0);
+    --sidebar-ring: oklch(0.708 0 0);
+}
+
+.dark {
+    --background: oklch(0.145 0 0);
+    --foreground: oklch(0.985 0 0);
+    --card: oklch(0.205 0 0);
+    --card-foreground: oklch(0.985 0 0);
+    --popover: oklch(0.205 0 0);
+    --popover-foreground: oklch(0.985 0 0);
+    --primary: oklch(0.922 0 0);
+    --primary-foreground: oklch(0.205 0 0);
+    --secondary: oklch(0.269 0 0);
+    --secondary-foreground: oklch(0.985 0 0);
+    --muted: oklch(0.269 0 0);
+    --muted-foreground: oklch(0.708 0 0);
+    --accent: oklch(0.269 0 0);
+    --accent-foreground: oklch(0.985 0 0);
+    --destructive: oklch(0.704 0.191 22.216);
+    --border: oklch(1 0 0 / 10%);
+    --input: oklch(1 0 0 / 15%);
+    --ring: oklch(0.556 0 0);
+    --chart-1: oklch(0.87 0 0);
+    --chart-2: oklch(0.556 0 0);
+    --chart-3: oklch(0.439 0 0);
+    --chart-4: oklch(0.371 0 0);
+    --chart-5: oklch(0.269 0 0);
+    --sidebar: oklch(0.205 0 0);
+    --sidebar-foreground: oklch(0.985 0 0);
+    --sidebar-primary: oklch(0.488 0.243 264.376);
+    --sidebar-primary-foreground: oklch(0.985 0 0);
+    --sidebar-accent: oklch(0.269 0 0);
+    --sidebar-accent-foreground: oklch(0.985 0 0);
+    --sidebar-border: oklch(1 0 0 / 10%);
+    --sidebar-ring: oklch(0.556 0 0);
+}
+
+@utility win-border-outset {
+    border: 2px solid;
+    border-color: var(--color-win-border-light) var(--color-win-border-dark) var(--color-win-border-dark) var(--color-win-border-light);
+}
+
+@utility win-border-inset {
+    border: 1px solid var(--color-win-border-dark);
+}
+
+@utility scanlines {
+    background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+    background-size: 100% 2px, 3px 100%;
+}
+
+@utility brutalist-thick {
+    border: 3px solid #000;
+    box-shadow: 4px 4px 0px #000;
+}
+
+/* ── Mobile readability floor ──
+   The desktop runs dense XP terminal text at 7-11px, which works on a wide
+   monitor. On mobile we clamp anything below 10px up to 10px so tiny labels
+   stay legible. Scoped to .mobile-page; the desktop experience is untouched. */
+@media (max-width: 767px) {
+  .mobile-page p,
+  .mobile-page span,
+  .mobile-page li,
+  .mobile-page a,
+  .mobile-page button,
+  .mobile-page figcaption {
+    font-size: max(10px, 1em) !important;
+  }
 }
 
 @layer base {
-  /* NB: no `scroll-behavior: smooth` here. CSS smooth-scroll fights GSAP
-     ScrollTrigger scrubbing and produces visible jitter. Anchor links are
-     handled with GSAP's scrollTo instead. */
-
+  * {
+    @apply border-border outline-ring/50;
+    }
   body {
-    background: var(--color-coal);
-    color: var(--color-chalk);
-    font-family: var(--font-display);
-    -webkit-font-smoothing: antialiased;
-  }
-
-  ::selection {
-    background: var(--color-volt);
-    color: var(--color-chalk);
-  }
-}
-
-@utility scrollbar-hidden {
-  scrollbar-width: none;
-  -ms-overflow-style: none;
-  &::-webkit-scrollbar {
-    display: none;
-  }
-}
-
-@utility tnum {
-  font-variant-numeric: tabular-nums;
-}
-
-@layer components {
-  /* ---------- typographic marks ---------- */
-  .lbl {
-    font-family: var(--font-mono);
-    font-size: var(--lbl-size, 10px);
-    letter-spacing: var(--lbl-track, 0.16em);
-    text-transform: uppercase;
-  }
-
-  .mono {
-    font-family: var(--font-mono);
-  }
-
-  /* ---------- rules ---------- */
-  .rule {
-    height: 1px;
-    background: var(--color-line);
-  }
-
-  .rule-dark {
-    height: 1px;
-    background: var(--color-line-dark);
-  }
-
-  /* ---------- sixteen-light apertures ---------- */
-  .aperture {
-    position: relative;
-    overflow: hidden;
-    border: 1px solid rgba(242, 239, 232, 0.28);
-  }
-
-  .aperture-glow {
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(
-      180deg,
-      rgba(40, 90, 247, 0.92),
-      rgba(40, 90, 247, 0.22)
-    );
-    opacity: 0;
-  }
-
-  .aperture-fill {
-    position: absolute;
-    inset: 0;
-    background: var(--color-volt);
-    opacity: 0;
-  }
-
-  /* ---------- buttons ---------- */
-  .btn-volt,
-  .btn-ink,
-  .btn-chalk {
-    display: inline-flex;
-    align-items: center;
-    border-radius: 0;
-    text-decoration: none;
-  }
-
-  .btn-volt {
-    background: var(--color-volt);
-    color: var(--color-chalk);
-    transition: background 0.2s ease;
-  }
-
-  .btn-volt:hover {
-    background: var(--color-volt-deep);
-  }
-
-  .btn-ink {
-    background: var(--color-ink);
-    color: var(--color-chalk);
-  }
-
-  .btn-chalk {
-    background: var(--color-chalk);
-    color: var(--color-ink);
-    border-radius: 999px;
-    transition: transform 0.2s ease;
-  }
-
-  .btn-chalk:hover {
-    transform: translateY(-2px);
-  }
-
-  .arrow {
-    display: inline-block;
-    transition: transform 0.18s ease;
-  }
-
-  .btn-volt:hover .arrow,
-  .btn-ink:hover .arrow,
-  .link-underline:hover .arrow {
-    transform: translateX(5px);
-  }
-
-  .link-underline {
-    text-decoration: none;
-    border-bottom: 1px solid currentColor;
-    padding-bottom: 2px;
-  }
-
-  /* ---------- tap-target expansion for standalone text links ----------
-     .link-underline draws its rule with border-bottom, so simply padding the
-     element would detach the underline from the text and move it 12px down.
-     Below sm we grow the hit box to the 44px minimum and redraw the rule with
-     a pseudo-element pinned 2px under the text, so the visual position is
-     unchanged and the measured box is a real, tappable 44px. */
-  @media (max-width: 639px) {
-    .tap-link {
-      position: relative;
-      border-bottom: 0;
-      /* the .lbl text box is only ~17px tall, so 14px each side lands the
-         element at ~45px — comfortably over the 44px minimum. */
-      padding-top: 14px;
-      padding-bottom: 14px;
+    @apply bg-background text-foreground;
     }
-
-    .tap-link::after {
-      content: "";
-      position: absolute;
-      left: 0;
-      right: 0;
-      bottom: 12px;
-      height: 1px;
-      background: currentColor;
-    }
-  }
-
-  /* ---------- media ---------- */
-  .photo-grade {
-    filter: grayscale(0.35) contrast(1.05) brightness(0.82);
-  }
-
-  /* The fixed hero image layer. Its visibility is driven by a custom property
-     the hero animation scrubs from 1 -> 0, so the layer is fully removed from
-     paint once the hero has been scrolled past. */
-  .hero-section {
-    --hero-media-visible: 1;
-  }
-
-  .hero-media {
-    opacity: var(--hero-media-visible);
-    pointer-events: none;
-  }
-
-  /* ---------- mentor slider ---------- */
-  .mentor-track {
-    scroll-snap-type: x mandatory;
-  }
-
-  .mentor-card {
-    scroll-snap-align: start;
-    flex: 0 0 clamp(272px, 29vw, 376px);
-  }
-
-  .mentor-image {
-    filter: grayscale(1) contrast(1.06);
-    transition:
-      filter 0.4s ease,
-      transform 0.5s ease;
-  }
-
-  .mentor-card:hover .mentor-image {
-    filter: grayscale(0) contrast(1.02);
-    transform: scale(1.03);
-  }
-
-  .slider-btn {
-    width: 44px;
-    height: 44px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border: 1px solid rgba(8, 8, 7, 0.24);
-    background: transparent;
-    color: var(--color-ink);
-    cursor: pointer;
-    transition:
-      background 0.2s ease,
-      color 0.2s ease,
-      border-color 0.2s ease;
-  }
-
-  .slider-btn:hover:not(:disabled) {
-    background: var(--color-volt);
-    border-color: var(--color-volt);
-    color: var(--color-chalk);
-  }
-
-  .slider-btn:disabled {
-    opacity: 0.35;
-    cursor: not-allowed;
-  }
-
-  /* ---------- partner wall ---------- */
-  .logo-cell {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 9px;
-    height: 78px;
-    opacity: 0.5;
-    transition: opacity 0.25s ease;
-  }
-
-  .logo-cell:hover {
-    opacity: 1;
-  }
-
-  .logo-cell img {
-    filter: invert(1);
-    width: 22px;
-    height: 22px;
-    flex: none;
-  }
-
-  .logo-cell span {
-    font-size: 14px;
-    letter-spacing: -0.01em;
-    color: var(--color-chalk);
-    white-space: nowrap;
-  }
-
-  /* ---------- partner marquee (three sliding rows) ----------
-     There are too many partners for a static grid, so the wall is three rows
-     that loop horizontally. Each .marquee-row holds its eight cells twice; a
-     translate of -50% therefore lands exactly on the start of the duplicate
-     set, so the loop is seamless. Rows alternate direction and run at slightly
-     different speeds so they don't read as one block. */
-  .marquee-wall {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-  }
-
-  .marquee-row-viewport {
-    /* Clip so a row can never widen the page. This is the guarantee that the
-       marquee cannot create page-level horizontal overflow. */
-    overflow: hidden;
-    width: 100%;
-  }
-
-  .marquee-row {
-    display: flex;
-    flex-wrap: nowrap;
-    width: max-content;
-    /* min-width keeps the loop wide enough to fill the viewport even if a row's
-       marks are narrow, so there's never a visible gap at the wrap point. */
-    min-width: 200%;
-    gap: 0;
-    will-change: transform;
-    animation: marquee-ltr linear infinite;
-  }
-
-  /* Each cell gets breathing room via padding rather than the flex gap, so the
-     duplicated set lines up pixel-for-pixel with the first at the -50% mark. */
-  .marquee-row .logo-cell {
-    flex: none;
-    padding: 0 1.75rem;
-    height: 78px;
-  }
-
-  .marquee-row[data-dir="ltr"] {
-    animation-name: marquee-ltr;
-  }
-
-  .marquee-row[data-dir="rtl"] {
-    animation-name: marquee-rtl;
-  }
-
-  /* Three distinct speeds. */
-  .marquee-row-viewport[data-row="0"] .marquee-row {
-    animation-duration: 46s;
-  }
-  .marquee-row-viewport[data-row="1"] .marquee-row {
-    animation-duration: 60s;
-  }
-  .marquee-row-viewport[data-row="2"] .marquee-row {
-    animation-duration: 52s;
-  }
-
-  /* Pause on hover (desktop pointer). */
-  .marquee-wall:hover .marquee-row {
-    animation-play-state: paused;
-  }
-
-  @keyframes marquee-ltr {
-    from {
-      transform: translate3d(0, 0, 0);
-    }
-    to {
-      transform: translate3d(-50%, 0, 0);
-    }
-  }
-
-  @keyframes marquee-rtl {
-    from {
-      transform: translate3d(-50%, 0, 0);
-    }
-    to {
-      transform: translate3d(0, 0, 0);
-    }
-  }
-
-  /* ---------- thirty-day clock ---------- */
-  .tick {
-    flex: 1;
-    height: 100%;
-    background: rgba(242, 239, 232, 0.24);
-  }
-
-  .tick-on {
-    background: var(--color-chalk);
-  }
-
-  .clock-key {
-    transition: color 0.2s ease;
-  }
-
-  .clock-row:hover .clock-key {
-    color: var(--color-chalk);
-  }
-
-  /* ---------- hackathon rows ---------- */
-  .hk-row {
-    transition: background 0.22s ease;
-  }
-
-  .hk-row:hover {
-    background: rgba(8, 8, 7, 0.045);
-  }
-
-  .hk-city {
-    transition: color 0.22s ease;
-  }
-
-  .hk-row:hover .hk-city {
-    color: var(--color-volt);
-  }
-
-  .hk-status {
-    border: 1px solid rgba(8, 8, 7, 0.28);
-  }
-
-  .hk-status-live {
-    background: var(--color-volt);
-    color: var(--color-chalk);
-    border-color: var(--color-volt);
-  }
-
-  .hk-band {
-    border-top: 1px solid var(--color-line-dark);
-    border-bottom: 1px solid var(--color-line-dark);
-  }
-
-  /* ---------- footer ---------- */
-  .footer-mark {
-    background: rgba(242, 239, 232, 0.16);
-  }
-
-  .footer-link {
-    color: rgba(242, 239, 232, 0.72);
-    text-decoration: none;
-    transition: color 0.2s ease;
-  }
-
-  .footer-link:hover {
-    color: var(--color-volt);
-  }
-
-  .team-image {
-    filter: grayscale(1) contrast(1.05);
-    transition: filter 0.3s ease;
-  }
-
-  .team-member:hover .team-image {
-    filter: grayscale(0) contrast(1);
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
   html {
-    scroll-behavior: auto;
-  }
-
-  /* The collapsible chevron rotates via a CSS transition; the height tween is
-     already skipped in JS. Kill the chevron transition too so the whole
-     open/close is instant under reduced motion. */
-  .collapsible-chevron {
-    transition: none !important;
-  }
-
-  /* The partner marquee is exactly the kind of continuous motion this
-     preference exists to disable. Stop the animation and reset the transform,
-     then let each row rest as a static, manually-scrollable strip instead. */
-  .marquee-row {
-    animation: none !important;
-    transform: none !important;
-  }
-
-  .marquee-row-viewport {
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
-  }
-
-  /* The duplicated (aria-hidden) set is only there to make the loop seamless;
-     with no animation it's redundant, so hide it to avoid a doubled strip. */
-  .marquee-row [aria-hidden="true"].logo-cell {
-    display: none;
-  }
-}
-
-/* ============================================================
-   Mobile scope — everything below the `sm` (640px) breakpoint.
-   Desktop (>= 640px) is intentionally untouched by this block.
-   ============================================================ */
-@media (max-width: 639.98px) {
-  /* 1b. Bump the mono label scale so it clears the 12px legibility
-     floor on phones. One change instead of 114 per-node overrides. */
-  :root {
-    --lbl-size: 11px;
-    --lbl-track: 0.12em;
-  }
-
-  /* 1a. Safe-area insets where content meets a screen edge. These
-     resolve to 0 on devices without a notch/home indicator, so they
-     are inert on Android/most phones and only pad iOS hardware. */
-  .safe-top {
-    padding-top: env(safe-area-inset-top);
-  }
-
-  .safe-bottom {
-    padding-bottom: env(safe-area-inset-bottom);
-  }
-
-  .safe-x {
-    padding-left: env(safe-area-inset-left);
-    padding-right: env(safe-area-inset-right);
-  }
-}
-
-/* 1c. Touch devices have no hover, so any affordance that only reveals
-   meaning on :hover is permanently in its dim/off state on a phone.
-   Give each a static resting "on" state. Scoped to (hover: none) so
-   desktop hover behaviour is unchanged. */
-@media (hover: none) {
-  /* brand logos must not sit at 50% on a device that can't brighten them.
-     On tablets (>= sm) we lift them fully; the phone override below sets a
-     slightly softer resting state so the wall doesn't glare. */
-  .logo-cell {
-    opacity: 1;
-  }
-
-  /* mentor + team portraits: show them in colour at rest */
-  .mentor-card .mentor-image,
-  .team-member .team-image {
-    filter: grayscale(0) contrast(1.02);
-  }
-
-  /* hackathon rows: give the resting row the hovered tint + city colour */
-  .hk-row {
-    background: rgba(8, 8, 7, 0.045);
-  }
-
-  .hk-city {
-    color: var(--color-volt);
-  }
-
-  /* thirty-day clock keys read as active at rest */
-  .clock-row .clock-key {
-    color: var(--color-chalk);
-  }
-}
-
-/* ============================================================
-   Mobile scope — body-section layout tweaks (Ticket 2).
-   Placed after the (hover: none) block so phone-width rules win
-   the cascade over the tablet resting states above.
-   ============================================================ */
-@media (max-width: 639.98px) {
-  /* 2b. Compact partner wall: shorter cells, smaller marks, tighter row gap.
-     Resting opacity ~0.78 so the wall reads present, not disabled. */
-  #logo-wall {
-    column-gap: 0.75rem;
-    row-gap: 0.5rem;
-  }
-
-  /* Marquee rows are shorter on phones; the base-layer .marquee-row .logo-cell
-     rule is more specific than plain .logo-cell, so override it explicitly and
-     tighten the horizontal padding for the narrower viewport. */
-  .marquee-row .logo-cell {
-    height: 54px;
-    padding: 0 1.1rem;
-  }
-
-  .logo-cell {
-    height: 54px;
-    gap: 6px;
-    opacity: 0.78;
-    min-width: 0;
-  }
-
-  .logo-cell img {
-    width: 18px;
-    height: 18px;
-  }
-
-  /* Allow the label to shrink / ellipsis rather than push the 3-col grid
-     wide at 320px (the nowrap labels are the overflow risk). */
-  .logo-cell span {
-    font-size: 11px;
-    min-width: 0;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-
-  /* 2c. Tighter tick spacing so the 30-step chart doesn't smear at 320px. */
-  #day-ticks {
-    gap: 2px;
-  }
-
-  /* 2d. Gallery rail: swipe affordances below sm. Snap each card to the
-     content edge, keep the first card off the viewport edge via
-     scroll-padding matching the px-6 rail padding, and fade the right edge
-     so it's obvious the rail scrolls. */
-  .gallery-rail {
-    scroll-snap-type: x mandatory;
-    scroll-padding-inline: 24px;
-  }
-
-  .gallery-figure {
-    scroll-snap-align: start;
-  }
-
-  .gallery-edge-fade {
-    background: linear-gradient(
-      to right,
-      rgba(8, 8, 7, 0),
-      var(--color-coal)
-    );
-  }
+    @apply font-sans;
+    }
 }
